@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Raphael Ramos</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <!-- NAVIGATION -->
+        <nav id="navbar">
+            <a href="#hero" class="nav-logo">rr</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <section id="hero">
+            <h1>Raphael Ramos</h1>
+            <p class="handle">erenpaper</p>
+            <p class="tagline">Computer Engineer who builds whatever's on my mind.</p>
+            <p class="location">Edmonton, AB - Open to remote</p>
+        </section>
+
+        <!-- ABOUT ME SECTION-->
+        <section id="about">
+            <h2>About</h2>
+            <p>5th-year Computer Engineer at the University of Alberta. I build things from 16-bit CPUs in VHDL to 
+                file-sharing systems in C to Android apps with Firebase. Currently VP Academics at the Computer Engineering Club, and actively
+                looking for 2026 graduating roles in embedded systems, firmware, or hardware/software integration.
+            </p>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+
+                <!-- Project 1: Capstone -->
+                <div class="project-card featured">
+                    <span class="project-tag">Embedded · ML · Cloud · IoT</span>
+                    <h3> Smart Stove Safety Monitor</h3>
+                    <p>Non-invasive elder care monitoring system built for aging-in-place safety. 
+                        Three subsystems — stove detection, water usage, and appliance monitoring — all running edge ML 
+                        on Raspberry Pi Pico 2W microcontrollers with a full AWS IoT cloud pipeline and caregiver mobile app.</p>
+                    <div class="project-stats">
+                        <span>97.73% ML accuracy</span>
+                        <span>29hr standalone</span>
+                        <span>Under $200 CAD</span>
+                        <span>3 subsystems</span>
+                    </div>
+                <div class="project-tech">
+                    <span>C++</span>
+                    <span>MicroPython</span>
+                    <span>Edge Impulse</span>
+                    <span>AWS IoT</span>
+                    <span>MQTT/TLS</span>
+                    <span>DynamoDB</span>
+                    <span>Lambda</span>
+                    <span>React Native</span>
+                </div>
+            </div>
+
+            <!-- Project 2: CPU -->
+            <div class="project-card">
+                <span class="project-tag">Hardware · Digital Logic</span>
+                <h3>16-bit CPU Design</h3>
+                <p>Designed and implemented a 16-bit CPU from scratch using VHDL.</p>
+                <div class="project-tech">
+                    <span>VHDL</span>
+                    <span>Vivado</span>
+                    <span>FPGA</span>
+                </div>
+            </div>
+
+            <!-- Project 3: File Sharing -->
+             <div class="project-card">
+                <span class="project-tag">Systems · Networking</span>
+                <h3>File Sharing System</h3>
+                <p>Built a robust client-server file sharing application in C using custom TCP/UDP socket protocols and 
+                    nonblocking I/O to handle multiple concurrent connections.</p>
+                <div class="project-tech">
+                    <span>C</span>
+                    <span>Sockets</span>
+                    <span>TCP/UDP</span>
+                </div>
+            </div>
+
+            <!-- Project 4: Android -->
+            <div class="project-card">
+                <span class="project-tag">Mobile · Backend</span>
+                <h3>Event Lottery App</h3>
+                <p>Android app implementing a fair lottery-based signup system for high-demand events. 
+                    Real-time Firebase backend with local notifications and deep linking.</p>
+                <div class="project-tech">
+                    <span>Java</span>
+                    <span>Android</span>
+                    <span>Firebase</span>
+                </div>
+            </div>
+        </div>
+        </section>
+        <!-- SKILLS SECTION -->
+        <section id="skills">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Languages</h4>
+                    <div class="skill-tags">
+                        <span>Python</span>
+                        <span>C</span>
+                        <span>C++</span>
+                        <span>VHDL</span>
+                        <span>Java</span>
+                        <span>HTML</span>
+                        <span>MATLAB</span>
+                        <span>ARM</span>
+                        <span>MIPS</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Embedded & Hardware</h4>
+                    <div class="skill-tags">
+                        <span>Raspberry Pi Pico 2W</span>
+                        <span>Edge Impulse</span>
+                        <span>Vivado</span>
+                        <span>LTSpice</span>
+                        <span>Cadence</span>
+                        <span>WaveForms</span>
+                        <span>Thonny</span>
+                        <span>GDB</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h4>Cloud & Backend</h4>
+                    <div class="skill-tags">
+                        <span>AWS IoT Core</span>
+                        <span>Lambda</span>
+                        <span>DynamoDB</span>
+                        <span>Firebase</span>
+                        <span>MQTT/TLS</span>
+                    </div>
+                    </div>
+
+                <div class="skill-category">
+                    <h4>Dev Tools</h4>
+                    <div class="skill-tags">
+                        <span>Git</span>
+                        <span>GitHub</span>
+                        <span>Android Studio</span>
+                        <span>VS Code</span>
+                        <span>Linux</span>
+                    </div>
+                    </div>
+
+                <div class="skill-category">
+                    <h4>Libraries</h4>
+                    <div class="skill-tags">
+                        <span>NumPy</span>
+                        <span>Pandas</span>
+                        <span>Matplotlib</span>
+                        <span>Scikit-learn</span>
+                        <span>OpenMP</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact">
+            <h2>Let's Talk</h2>
+            <p class="contact-intro">I'm actively looking for 2026 graduate roles in embedded systems and firmware engineering. If you wanna chat, feel free to reach out! We can have a dad joke-off >:)</p>
+            
+            <div class="contact-links">
+                <a href="mailto:raphaelramos19@gmail.com" class="contact-btn primary">
+                    Email Me
+                </a>
+                <a href="https://www.linkedin.com/in/raphael-ramos1/" target="_blank" class="contact-btn">
+                    LinkedIn
+                </a>
+                <a href="https://github.com/ErenPaper" target="_blank" class="contact-btn">
+                    GitHub
+                </a>
+            </div>
+        </section>
+
+        <script>
+        // Scroll animation
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            } 
+            else {
+                entry.target.classList.remove('visible');  // removes on scroll away
+            }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+        </script>
+    </body>
+</html>
