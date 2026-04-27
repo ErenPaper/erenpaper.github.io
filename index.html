@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Raphael Ramos</title>
         <link rel="stylesheet" href="style.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     </head>
     <body>
         <!-- NAVIGATION -->
@@ -12,27 +13,127 @@
             <a href="#hero" class="nav-logo">rr</a>
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
+            <a href="assets/Raphael_Ramos_Resume.pdf" target="_blank" class="nav-resume">Resume</a>
         </nav>
 
         <!-- HERO SECTION -->
         <section id="hero">
-            <h1>Raphael Ramos</h1>
-            <p class="handle">erenpaper</p>
-            <p class="tagline">Computer Engineer who builds whatever's on my mind.</p>
-            <p class="location">Edmonton, AB - Open to remote</p>
+            <div class="hero-text">
+                <p class="hero-eyebrow">Computer Engineer · Edmonton, AB</p>
+                <h1>Raphael<br>Ramos.</h1>
+                <div class="hero-divider"></div>
+                <p class="hero-tagline">
+                    <em>I build where circuits meet code</em> —
+                    firmware, embedded systems, hardware that actually does something.
+                    Computer Engineering grad, June 2026. Open to where the interesting problems are.
+                </p>
+                <div class="hero-meta">
+                    <span class="hero-location">Edmonton, AB · Open to remote</span>
+                </div>
+                <div class="hero-ctas">
+                    <a href="#contact" class="btn btn-primary">Let's Talk</a>
+                    <a href="#projects" class="btn btn-secondary">See my work</a>
+                </div>
+            </div>
+
+            <div class="hero-photo-wrap">
+                <div class="photo-glow"></div>
+                <div class="photo-ring"></div>
+                <div class="photo-circle">
+                    <!--
+                        PHOTO INSTRUCTIONS:
+                        1. Put your photo in an "assets" folder next to index.html
+                        2. Replace "raphael.jpg" with your actual filename
+                        3. Delete this comment once confirmed working
+                    -->
+                    <img src="assets/raphael.jpg" alt="Raphael Ramos">
+                </div>
+            </div>
         </section>
 
-        <!-- ABOUT ME SECTION-->
+        <!-- ABOUT ME SECTION -->
         <section id="about">
             <h2>About</h2>
-            <p>5th-year Computer Engineer at the University of Alberta. I build things from 16-bit CPUs in VHDL to 
-                file-sharing systems in C to Android apps with Firebase. Currently VP Academics at the Computer Engineering Club, and actively
-                looking for 2026 graduating roles in embedded systems, firmware, or hardware/software integration.
+            <p>
+                I'm a Computer Engineer from the University of Alberta, graduating June 2026.
+                I gravitate toward work that's hands-on and grounded — firmware, embedded systems,
+                hardware that actually does something in the world. The fact that my capstone ended
+                up being a safety monitor for elderly people living alone probably says something about that.
+                Currently VP Academics at the Computer Engineering Club.
             </p>
+            <br>
+            <p>
+                Outside of engineering I make music with my family, watch too much anime — the GitHub
+                handle gives it away — and believe a good dad joke can get you through almost anything...almost.
+            </p>
+        </section>
+
+        <!-- WORK EXPERIENCE SECTION -->
+        <section id="experience">
+            <h2>Experience</h2>
+            <div class="experience-list">
+
+                <!-- Job 1: Turbine-X -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Turbine-X Energy Inc.</span>
+                            <span class="experience-role">Product Development Intern</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">May 2024 – Aug 2024</span>
+                            <span class="experience-location">Nisku, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Performed system-level testing and validation for fully integrated prototypes to ensure specification compliance.</li>
+                        <li>Calibrated advanced electrical, optical, and sensor equipment ensuring precise measurements.</li>
+                        <li>Built and brought up servers for internal data sharing, including physical construction and digital configuration.</li>
+                        <li>Created technical documentation for testing equipment covering training, specifications, and conditions.</li>
+                        <li>Enhanced internal Power Apps application for resource tracking, increasing usability and reliability.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Hardware Testing</span>
+                        <span>Sensor Calibration</span>
+                        <span>System Validation</span>
+                        <span>Power Apps</span>
+                        <span>Technical Documentation</span>
+                    </div>
+                </div>
+
+                <!-- Job 2: Vertical City -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Vertical City</span>
+                            <span class="experience-role">Software Deployment Intern</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Jul 2023 – Sep 2023</span>
+                            <span class="experience-location">Edmonton, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Updated Linux-based software from Ubuntu 18 to Ubuntu 20 on elevator and lobby screens across 250+ units.</li>
+                        <li>Troubleshot LTE signal processing with antennas, optimizing network connectivity for uninterrupted communication.</li>
+                        <li>Executed hardware re-wiring on elevator TVs to ensure seamless functionality of critical systems.</li>
+                        <li>Collaborated with Lead Supervisor, Property Manager, and Building Technicians to coordinate deployment and resolve issues.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Linux</span>
+                        <span>Ubuntu</span>
+                        <span>LTE / Networking</span>
+                        <span>Hardware Wiring</span>
+                        <span>Software Deployment</span>
+                    </div>
+                </div>
+
+            </div>
         </section>
 
         <!-- PROJECTS SECTION -->
@@ -43,9 +144,9 @@
                 <!-- Project 1: Capstone -->
                 <div class="project-card featured">
                     <span class="project-tag">Embedded · ML · Cloud · IoT</span>
-                    <h3> Smart Stove Safety Monitor</h3>
-                    <p>Non-invasive elder care monitoring system built for aging-in-place safety. 
-                        Three subsystems — stove detection, water usage, and appliance monitoring — all running edge ML 
+                    <h3>Smart Stove Safety Monitor</h3>
+                    <p>Non-invasive elder care monitoring system built for aging-in-place safety.
+                        Three subsystems — stove detection, water usage, and appliance monitoring — all running edge ML
                         on Raspberry Pi Pico 2W microcontrollers with a full AWS IoT cloud pipeline and caregiver mobile app.</p>
                     <div class="project-stats">
                         <span>97.73% ML accuracy</span>
@@ -53,57 +154,62 @@
                         <span>Under $200 CAD</span>
                         <span>3 subsystems</span>
                     </div>
-                <div class="project-tech">
-                    <span>C++</span>
-                    <span>MicroPython</span>
-                    <span>Edge Impulse</span>
-                    <span>AWS IoT</span>
-                    <span>MQTT/TLS</span>
-                    <span>DynamoDB</span>
-                    <span>Lambda</span>
-                    <span>React Native</span>
+                    <div class="project-tech">
+                        <span>C++</span>
+                        <span>MicroPython</span>
+                        <span>Edge Impulse</span>
+                        <span>AWS IoT</span>
+                        <span>MQTT/TLS</span>
+                        <span>DynamoDB</span>
+                        <span>Lambda</span>
+                        <span>React Native</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Project 2: CPU -->
-            <div class="project-card">
-                <span class="project-tag">Hardware · Digital Logic</span>
-                <h3>16-bit CPU Design</h3>
-                <p>Designed and implemented a 16-bit CPU from scratch using VHDL.</p>
-                <div class="project-tech">
-                    <span>VHDL</span>
-                    <span>Vivado</span>
-                    <span>FPGA</span>
+                <!-- Project 2: CPU -->
+                <div class="project-card">
+                    <span class="project-tag">Hardware · Digital Logic</span>
+                    <h3>16-bit CPU Design</h3>
+                    <p>Designed and implemented a 16-bit CPU from scratch in VHDL on a Xilinx Zybo Z7 FPGA.
+                        Full controller-datapath architecture with ALU, register file, and an FSM executing
+                        13 custom instructions including a bitwise multiplier.</p>
+                    <div class="project-tech">
+                        <span>VHDL</span>
+                        <span>Vivado</span>
+                        <span>FPGA</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Project 3: File Sharing -->
-             <div class="project-card">
-                <span class="project-tag">Systems · Networking</span>
-                <h3>File Sharing System</h3>
-                <p>Built a robust client-server file sharing application in C using custom TCP/UDP socket protocols and 
-                    nonblocking I/O to handle multiple concurrent connections.</p>
-                <div class="project-tech">
-                    <span>C</span>
-                    <span>Sockets</span>
-                    <span>TCP/UDP</span>
+                <!-- Project 3: File Sharing -->
+                <div class="project-card">
+                    <span class="project-tag">Systems · Networking</span>
+                    <h3>File Sharing System</h3>
+                    <p>Client-server file sharing app in C using custom TCP/UDP socket protocols
+                        and nonblocking I/O to handle multiple concurrent connections with
+                        enforced packet formats and proper error handling.</p>
+                    <div class="project-tech">
+                        <span>C</span>
+                        <span>Sockets</span>
+                        <span>TCP/UDP</span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Project 4: Android -->
-            <div class="project-card">
-                <span class="project-tag">Mobile · Backend</span>
-                <h3>Event Lottery App</h3>
-                <p>Android app implementing a fair lottery-based signup system for high-demand events. 
-                    Real-time Firebase backend with local notifications and deep linking.</p>
-                <div class="project-tech">
-                    <span>Java</span>
-                    <span>Android</span>
-                    <span>Firebase</span>
+                <!-- Project 4: Android -->
+                <div class="project-card">
+                    <span class="project-tag">Mobile · Backend</span>
+                    <h3>Event Lottery App</h3>
+                    <p>Android app implementing a fair lottery-based signup system for high-demand events.
+                        Real-time Firebase backend with local notifications, deep linking, and
+                        full OOP design with UML and JUnit testing.</p>
+                    <div class="project-tech">
+                        <span>Java</span>
+                        <span>Android</span>
+                        <span>Firebase</span>
+                    </div>
                 </div>
             </div>
-        </div>
         </section>
+
         <!-- SKILLS SECTION -->
         <section id="skills">
             <h2>Skills</h2>
@@ -146,7 +252,7 @@
                         <span>Firebase</span>
                         <span>MQTT/TLS</span>
                     </div>
-                    </div>
+                </div>
 
                 <div class="skill-category">
                     <h4>Dev Tools</h4>
@@ -157,7 +263,7 @@
                         <span>VS Code</span>
                         <span>Linux</span>
                     </div>
-                    </div>
+                </div>
 
                 <div class="skill-category">
                     <h4>Libraries</h4>
@@ -175,11 +281,13 @@
         <!-- CONTACT SECTION -->
         <section id="contact">
             <h2>Let's Talk</h2>
-            <p class="contact-intro">I'm actively looking for 2026 graduate roles in embedded systems and firmware engineering. If you wanna chat, feel free to reach out! We can have a dad joke-off >:)</p>
-            
+            <p class="contact-intro">
+                Available June 2026 — embedded, firmware, software, whatever has interesting problems.
+                Dad jokes welcome.
+            </p>
             <div class="contact-links">
                 <a href="mailto:raphaelramos19@gmail.com" class="contact-btn primary">
-                    Email Me
+                    raphaelramos19@gmail.com
                 </a>
                 <a href="https://www.linkedin.com/in/raphael-ramos1/" target="_blank" class="contact-btn">
                     LinkedIn
@@ -191,19 +299,17 @@
         </section>
 
         <script>
-        // Scroll animation
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            } 
-            else {
-                entry.target.classList.remove('visible');  // removes on scroll away
-            }
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible');
+                }
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('section').forEach(section => {
+        document.querySelectorAll('section:not(#hero)').forEach(section => {
             observer.observe(section);
         });
         </script>
