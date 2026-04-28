@@ -229,9 +229,6 @@ nav {
     -webkit-mask:
         linear-gradient(#fff 0 0) padding-box,
         linear-gradient(#fff 0 0);
-    mask:
-        linear-gradient(#fff 0 0) padding-box,
-        linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
     mask-composite: exclude;
     animation: spin 8s linear infinite;
@@ -668,4 +665,43 @@ h2 {
     .nav-resume {
         display: none;
     }
+}
+
+/* ─── WIP PROJECT CARD ──────────────────────────────────────── */
+.project-card.wip {
+    border-color: #2a2a2a;
+    position: relative;
+}
+
+.project-card.wip:hover {
+    border-color: #e63946;
+}
+
+.wip-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    color: #e63946;
+    background: rgba(230, 57, 70, 0.08);
+    border: 0.5px solid rgba(230, 57, 70, 0.3);
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+/* ─── PROJECT LINK ──────────────────────────────────────────── */
+.project-link {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 12px;
+    color: #e63946;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s;
+}
+
+.project-link:hover {
+    opacity: 0.7;
 }
