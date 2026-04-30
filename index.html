@@ -5,7 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Raphael Ramos</title>
         <link rel="stylesheet" href="style.css" />
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <!-- Favicon: inline SVG as data URI — no extra file needed -->
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230a0a0a'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='700' fill='%23e63946' text-anchor='middle'>rr</text></svg>">
     </head>
     <body>
         <!-- NAVIGATION -->
@@ -25,12 +27,12 @@
         <section id="hero">
             <div class="hero-text">
                 <p class="hero-eyebrow">Computer Engineer · Edmonton, AB</p>
-                <h1>Raphael<br>Ramos.</h1>
+                <h1><span id="typing-name"></span><span class="cursor-blink">|</span></h1>
                 <div class="hero-divider"></div>
                 <p class="hero-tagline">
                     <em>I build where circuits meet code</em> —
                     firmware, embedded systems, hardware that actually does something.
-                    Computer Engineering grad, June 2026. Open to where the interesting problems are.
+                    Computer Engineering grad, June 2026.
                 </p>
                 <div class="hero-meta">
                     <span class="hero-location">Edmonton, AB · Open to remote</span>
@@ -78,7 +80,6 @@
             <h2>Experience</h2>
             <div class="experience-list">
 
-                <!-- Job 1: Turbine-X -->
                 <div class="experience-item">
                     <div class="experience-header">
                         <div class="experience-left">
@@ -106,7 +107,6 @@
                     </div>
                 </div>
 
-                <!-- Job 2: Vertical City -->
                 <div class="experience-item">
                     <div class="experience-header">
                         <div class="experience-left">
@@ -141,38 +141,50 @@
             <h2>Projects</h2>
             <div class="projects-grid">
 
-                <!-- Project 1: Capstone -->
+                <!-- CAPSTONE — full width, YouTube embed -->
                 <div class="project-card featured">
-                    <span class="project-tag">Embedded · ML · Cloud · IoT</span>
-                    <h3>Smart Stove Safety Monitor</h3>
-                    <p>Non-invasive elder care monitoring system built for aging-in-place safety.
-                        Three subsystems — stove detection, water usage, and appliance monitoring — all running edge ML
-                        on Raspberry Pi Pico 2W microcontrollers with a full AWS IoT cloud pipeline and caregiver mobile app.</p>
-                    <div class="project-stats">
-                        <span>97.73% ML accuracy</span>
-                        <span>29hr standalone</span>
-                        <span>Under $200 CAD</span>
-                        <span>3 subsystems</span>
+                    <div class="project-video-wrap">
+                        <iframe
+                            src="https://www.youtube.com/embed/SDkYA16DcgQ"
+                            title="CCHAM-II Capstone Demo"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
                     </div>
-                    <div class="project-tech">
-                        <span>C++</span>
-                        <span>MicroPython</span>
-                        <span>Edge Impulse</span>
-                        <span>AWS IoT</span>
-                        <span>MQTT/TLS</span>
-                        <span>DynamoDB</span>
-                        <span>Lambda</span>
-                        <span>React Native</span>
+                    <div class="project-card-body">
+                        <span class="project-tag">Capstone · Embedded · ML · Cloud · IoT</span>
+                        <h3>Continuing Care Home Activity Monitor</h3>
+                        <p>Non-invasive elder care monitoring system for aging-in-place safety.
+                            Three subsystems — stove detection, water usage, and appliance monitoring —
+                            all running edge ML on Raspberry Pi Pico 2W microcontrollers with a full
+                            AWS IoT cloud pipeline and caregiver mobile app.</p>
+                        <div class="project-stats">
+                            <span>97.73% ML accuracy</span>
+                            <span>29hr standalone</span>
+                            <span>Under $200 CAD</span>
+                            <span>3 subsystems</span>
+                        </div>
+                        <div class="project-tech">
+                            <span>C++</span>
+                            <span>MicroPython</span>
+                            <span>Edge Impulse</span>
+                            <span>AWS IoT</span>
+                            <span>MQTT/TLS</span>
+                            <span>DynamoDB</span>
+                            <span>Lambda</span>
+                            <span>React Native</span>
+                        </div>
                     </div>
                 </div>
 
-                <!-- Project 2: Anomaly Detection -->
+                <!-- Anomaly Detection -->
                 <div class="project-card">
                     <span class="project-tag">ML · Data Science</span>
                     <h3>Anomaly Detection System</h3>
                     <p>Full anomaly detection pipeline using statistical, distance-based (k-NN, DBSCAN),
                         and ML (One-Class SVM) techniques. Evaluated via precision, recall, F1-score,
-                        ROC/PR curves, documented end-to-end in a reproducible Jupyter notebook.</p>
+                        and ROC/PR curves. Documented end-to-end in a reproducible Jupyter notebook.</p>
                     <div class="project-tech">
                         <span>Python</span>
                         <span>Scikit-learn</span>
@@ -182,7 +194,36 @@
                     <a href="https://github.com/ErenPaper/Anomaly-Detection-System" target="_blank" class="project-link">GitHub →</a>
                 </div>
 
-                <!-- Project 3: File Sharing -->
+                <!-- 16-bit CPU -->
+                <div class="project-card">
+                    <span class="project-tag">Hardware · Digital Logic</span>
+                    <h3>16-bit CPU Design</h3>
+                    <p>Designed and implemented a 16-bit CPU from scratch on a Xilinx Zybo Z7 FPGA.
+                        Full controller-datapath architecture with ALU, register file, and an FSM
+                        executing 13 custom instructions including a bitwise multiplier.</p>
+                    <div class="project-tech">
+                        <span>VHDL</span>
+                        <span>Vivado</span>
+                        <span>FPGA</span>
+                    </div>
+                </div>
+
+                <!-- Event Lottery -->
+                <div class="project-card">
+                    <span class="project-tag">Mobile · Backend</span>
+                    <h3>Event Lottery App</h3>
+                    <p>Android app implementing a fair lottery-based signup system for high-demand events.
+                        Real-time Firebase backend with local notifications, deep linking,
+                        and full OOP design with UML and JUnit testing.</p>
+                    <div class="project-tech">
+                        <span>Java</span>
+                        <span>Android</span>
+                        <span>Firebase</span>
+                    </div>
+                    <a href="https://github.com/ErenPaper/EventLotteryApp" target="_blank" class="project-link">GitHub →</a>
+                </div>
+
+                <!-- File Sharing -->
                 <div class="project-card">
                     <span class="project-tag">Systems · Networking</span>
                     <h3>File Sharing System</h3>
@@ -196,36 +237,24 @@
                     </div>
                 </div>
 
-                <!-- Project 4: Android -->
+                <!-- ECE 407 Grouped -->
                 <div class="project-card">
-                    <span class="project-tag">Mobile · Backend</span>
-                    <h3>Event Lottery App</h3>
-                    <p>Android app implementing a fair lottery-based signup system for high-demand events.
-                        Real-time Firebase backend with local notifications, deep linking, and
-                        full OOP design with UML and JUnit testing.</p>
+                    <span class="project-tag">Embedded · Firmware · Hardware</span>
+                    <h3>Embedded Systems Projects — ECE 407</h3>
+                    <p>Three progressive embedded projects on the Raspberry Pi Pico (RP2040):
+                        a quadrature encoder HMI with WS2812 LED ring, an open-loop DC motor
+                        speed controller with PWM and ADC, and a voice-controlled fan using
+                        on-device wake-word ML and I2S microphone input.</p>
                     <div class="project-tech">
-                        <span>Java</span>
-                        <span>Android</span>
-                        <span>Firebase</span>
+                        <span>C / C++</span>
+                        <span>RP2040 PIO</span>
+                        <span>PWM / ADC</span>
+                        <span>I2S</span>
+                        <span>TinyML</span>
+                        <span>GDB</span>
                     </div>
-                    <a href="https://github.com/ErenPaper/EventLotteryApp" target="_blank" class="project-link">GitHub →</a>
                 </div>
 
-                <!-- Project 5: Dining App (WIP) -->
-                <div class="project-card wip">
-                    <div class="wip-badge">In Progress</div>
-                    <span class="project-tag">Mobile · Real-time · Social</span>
-                    <h3>Group Dining Decision App</h3>
-                    <p>Tinder-style restaurant picker for groups. Join a session via QR code or link,
-                        filter by cuisine, price range, and drive radius, then swipe on nearby spots.
-                        A ranked voting algorithm surfaces the highest-consensus pick across all group members in real time.</p>
-                    <div class="project-tech">
-                        <span>Java</span>
-                        <span>Android Studio</span>
-                        <span>Firebase</span>
-                        <span>Google Places API</span>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -247,7 +276,6 @@
                         <span>MIPS</span>
                     </div>
                 </div>
-
                 <div class="skill-category">
                     <h4>Embedded & Hardware</h4>
                     <div class="skill-tags">
@@ -261,7 +289,6 @@
                         <span>GDB</span>
                     </div>
                 </div>
-
                 <div class="skill-category">
                     <h4>Cloud & Backend</h4>
                     <div class="skill-tags">
@@ -272,7 +299,6 @@
                         <span>MQTT/TLS</span>
                     </div>
                 </div>
-
                 <div class="skill-category">
                     <h4>Dev Tools</h4>
                     <div class="skill-tags">
@@ -283,7 +309,6 @@
                         <span>Linux</span>
                     </div>
                 </div>
-
                 <div class="skill-category">
                     <h4>Libraries</h4>
                     <div class="skill-tags">
@@ -305,20 +330,115 @@
                 Dad jokes welcome.
             </p>
             <div class="contact-links">
-                <a href="mailto:raphaelramos19@gmail.com" class="contact-btn primary">
-                    raphaelramos19@gmail.com
+                <!-- Email -->
+                <a href="mailto:raphaelramos19@gmail.com" class="contact-icon-btn primary" aria-label="Email">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                    </svg>
+                    <span>raphaelramos19@gmail.com</span>
                 </a>
-                <a href="https://www.linkedin.com/in/raphael-ramos1/" target="_blank" class="contact-btn">
-                    LinkedIn
+                <!-- LinkedIn -->
+                <a href="https://www.linkedin.com/in/raphael-ramos1/" target="_blank" class="contact-icon-btn" aria-label="LinkedIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+                    </svg>
+                    <span>LinkedIn</span>
                 </a>
-                <a href="https://github.com/ErenPaper" target="_blank" class="contact-btn">
-                    GitHub
+                <!-- GitHub -->
+                <a href="https://github.com/ErenPaper" target="_blank" class="contact-icon-btn" aria-label="GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
+                    </svg>
+                    <span>GitHub</span>
                 </a>
             </div>
         </section>
 
+        <!-- FOOTER -->
+        <footer>
+            <p class="footer-name">Raphael Ramos</p>
+            <p class="footer-sub">Edmonton, AB · 2026</p>
+        </footer>
+
         <script>
-        const observer = new IntersectionObserver((entries) => {
+        // ── TYPING EFFECT ─────────────────────────────────────────
+        const typingEl = document.getElementById('typing-name');
+        const lines = ['Raphael', 'Ramos.'];
+        let lineIndex = 0;
+        let charIndex = 0;
+        let currentText = '';
+
+        function type() {
+            if (lineIndex >= lines.length) {
+                // Done typing — hide blinking cursor after a beat
+                setTimeout(() => {
+                    document.querySelector('.cursor-blink').style.opacity = '0';
+                }, 1800);
+                return;
+            }
+
+            if (charIndex < lines[lineIndex].length) {
+                currentText += lines[lineIndex][charIndex];
+                // Add line break between the two lines
+                typingEl.innerHTML = lines[0].substring(0, lineIndex === 0 ? charIndex + 1 : lines[0].length)
+                    + (lineIndex === 1 ? '<br>' + lines[1].substring(0, charIndex + 1) : '');
+                charIndex++;
+                setTimeout(type, 80);
+            } else {
+                lineIndex++;
+                charIndex = 0;
+                if (lineIndex < lines.length) {
+                    setTimeout(type, 200); // pause between lines
+                } else {
+                    setTimeout(() => {
+                        document.querySelector('.cursor-blink').style.opacity = '0';
+                    }, 1800);
+                }
+            }
+        }
+
+        // Start typing after a short delay so page loads first
+        setTimeout(type, 300);
+
+        // ── CURSOR TRAIL ──────────────────────────────────────────
+        const TRAIL_COUNT = 12;
+        const trail = [];
+
+        for (let i = 0; i < TRAIL_COUNT; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'cursor-dot';
+            dot.style.opacity = (1 - i / TRAIL_COUNT) * 0.6;
+            dot.style.width = dot.style.height = `${8 - i * 0.4}px`;
+            document.body.appendChild(dot);
+            trail.push({ el: dot, x: -100, y: -100 });
+        }
+
+        let mouseX = -100, mouseY = -100;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateTrail() {
+            let x = mouseX, y = mouseY;
+            trail.forEach((dot, i) => {
+                dot.el.style.left = `${x - 4}px`;
+                dot.el.style.top = `${y - 4}px`;
+                // Each dot follows the one before it with lag
+                const next = trail[i + 1] || { x, y };
+                dot.x += (x - dot.x) * 0.25;
+                dot.y += (y - dot.y) * 0.25;
+                x = dot.x;
+                y = dot.y;
+            });
+            requestAnimationFrame(animateTrail);
+        }
+
+        animateTrail();
+
+        // ── SCROLL ANIMATIONS ─────────────────────────────────────
+        const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
@@ -326,11 +446,29 @@
                     entry.target.classList.remove('visible');
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.08 });
 
         document.querySelectorAll('section:not(#hero)').forEach(section => {
-            observer.observe(section);
+            sectionObserver.observe(section);
         });
+
+        const cardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('card-visible');
+                } else {
+                    entry.target.classList.remove('card-visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.project-card:not(.featured), .experience-item, .skill-category').forEach((card, i) => {
+            card.classList.add(i % 2 === 0 ? 'slide-left' : 'slide-right');
+            cardObserver.observe(card);
+        });
+
+        const featured = document.querySelector('.project-card.featured');
+        if (featured) sectionObserver.observe(featured);
         </script>
     </body>
 </html>

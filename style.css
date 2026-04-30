@@ -229,6 +229,9 @@ nav {
     -webkit-mask:
         linear-gradient(#fff 0 0) padding-box,
         linear-gradient(#fff 0 0);
+    mask:
+        linear-gradient(#fff 0 0) padding-box,
+        linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
     mask-composite: exclude;
     animation: spin 8s linear infinite;
@@ -704,4 +707,245 @@ h2 {
 
 .project-link:hover {
     opacity: 0.7;
+}
+
+/* ─── CAPSTONE VIDEO EMBED ──────────────────────────────────── */
+.project-card.featured {
+    padding: 0;
+    overflow: hidden;
+}
+
+.project-video-wrap {
+    position: relative;
+    width: 100%;
+    padding-bottom: 42%;
+    background: #000;
+}
+
+.project-video-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.project-card-body {
+    padding: 1.5rem;
+}
+
+/* ─── FOOTER ────────────────────────────────────────────────── */
+footer {
+    padding: 40px 10%;
+    border-top: 0.5px solid #1a1a1a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.footer-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e63946;
+    letter-spacing: 1px;
+}
+
+.footer-sub {
+    font-size: 12px;
+    color: #333333;
+}
+
+@media (max-width: 600px) {
+    footer {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 30px 6%;
+    }
+
+    .project-video-wrap {
+        padding-bottom: 56%;
+    }
+}
+
+/* ─── ICON CONTACT BUTTONS ──────────────────────────────────── */
+.contact-links {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.contact-icon-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 0.5px solid #2a2a2a;
+    color: #aaaaaa;
+    transition: all 0.25s ease;
+    background: transparent;
+}
+
+.contact-icon-btn svg {
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+}
+
+.contact-icon-btn:hover {
+    border-color: #e63946;
+    color: #e63946;
+}
+
+.contact-icon-btn:hover svg {
+    transform: scale(1.15);
+}
+
+.contact-icon-btn.primary {
+    background: #e63946;
+    border-color: #e63946;
+    color: #ffffff;
+}
+
+.contact-icon-btn.primary:hover {
+    background: transparent;
+    color: #e63946;
+}
+
+/* ─── DIRECTIONAL CARD ANIMATIONS ───────────────────────────── */
+.slide-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.slide-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.slide-left.card-visible,
+.slide-right.card-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Stagger delay for cards in a row */
+.project-card:nth-child(2) { transition-delay: 0.05s; }
+.project-card:nth-child(3) { transition-delay: 0.1s; }
+.project-card:nth-child(4) { transition-delay: 0.05s; }
+.project-card:nth-child(5) { transition-delay: 0.1s; }
+.project-card:nth-child(6) { transition-delay: 0.15s; }
+
+.skill-category:nth-child(2) { transition-delay: 0.05s; }
+.skill-category:nth-child(3) { transition-delay: 0.1s; }
+.skill-category:nth-child(4) { transition-delay: 0.05s; }
+.skill-category:nth-child(5) { transition-delay: 0.1s; }
+
+.experience-item:nth-child(2) { transition-delay: 0.1s; }
+
+/* ─── SMOOTHER SECTION TRANSITIONS ──────────────────────────── */
+section:not(#hero) {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+section:not(#hero).visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─── HOVER LIFT ON CARDS ────────────────────────────────────── */
+.project-card:not(.featured),
+.experience-item,
+.skill-category {
+    transition: border-color 0.2s ease,
+                transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.project-card:not(.featured):hover,
+.experience-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(230, 57, 70, 0.06);
+}
+
+/* ─── TYPING CURSOR ──────────────────────────────────────────── */
+.cursor-blink {
+    display: inline-block;
+    color: #e63946;
+    font-weight: 300;
+    margin-left: 2px;
+    animation: blink 0.8s step-end infinite;
+    transition: opacity 0.5s ease;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+/* ─── CURSOR TRAIL DOTS ──────────────────────────────────────── */
+.cursor-dot {
+    position: fixed;
+    border-radius: 50%;
+    background: #e63946;
+    pointer-events: none;
+    z-index: 9999;
+    transition: left 0.05s linear, top 0.05s linear;
+    will-change: left, top;
+}
+
+/* Hide cursor trail on touch devices */
+@media (hover: none) {
+    .cursor-dot { display: none; }
+}
+
+/* ─── MONOSPACE ACCENTS ─────────────────────────────────────── */
+/* Applied to: project tags, experience role, eyebrow, tech tags,
+   skill category headings, experience tags, date labels         */
+
+.project-tag,
+.hero-eyebrow,
+.experience-role,
+.experience-date,
+.experience-location,
+.experience-tags span,
+.project-tech span,
+.skill-category h4,
+.project-link,
+.wip-badge,
+.footer-sub {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Slightly tighten letter spacing on mono elements */
+.project-tag,
+.hero-eyebrow,
+.experience-role {
+    letter-spacing: 0.5px;
+}
+
+/* Skill headings get a terminal-style prefix */
+.skill-category h4::before {
+    content: '> ';
+    color: #e63946;
+    opacity: 0.6;
+}
+
+/* Experience role gets a subtle terminal feel */
+.experience-role::before {
+    content: '$ ';
+    color: #e63946;
+    opacity: 0.5;
+    font-size: 11px;
 }
