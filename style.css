@@ -230,9 +230,6 @@ nav {
         linear-gradient(#fff 0 0) padding-box,
         linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
-    mask:
-        linear-gradient(#fff 0 0) padding-box,
-        linear-gradient(#fff 0 0);
     mask-composite: exclude;
     animation: spin 8s linear infinite;
     pointer-events: none;
@@ -1067,4 +1064,165 @@ section:not(#hero).visible {
     color: #e63946;
     letter-spacing: 2px;
     opacity: 0.7;
+}
+
+/* ─── NAV RIGHT GROUP ───────────────────────────────────────── */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ─── HAMBURGER BUTTON ──────────────────────────────────────── */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #aaaaaa;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+    background: #e63946;
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+    background: #e63946;
+}
+
+/* ─── MOBILE NAV ────────────────────────────────────────────── */
+@media (max-width: 860px) {
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-resume {
+        display: none;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(10, 10, 10, 0.97);
+        backdrop-filter: blur(16px);
+        border-bottom: 0.5px solid #1a1a1a;
+        flex-direction: column;
+        gap: 0;
+        padding: 12px 0;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 14px 6%;
+        font-size: 15px;
+        border-bottom: 0.5px solid #111;
+    }
+
+    .nav-links a:hover {
+        color: #e63946;
+        background: rgba(230, 57, 70, 0.04);
+    }
+}
+
+/* ─── CONTACT SECTION OVERRIDES ─────────────────────────────── */
+#contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 10%;
+}
+
+#contact .contact-links {
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#contact .contact-icon-btn {
+    padding: 16px 28px;
+    font-size: 15px;
+    gap: 12px;
+}
+
+/* ─── ABOUT GRID WITH PHOTO ─────────────────────────────────── */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 500px;
+    gap: 60px;
+    align-items: center;
+}
+
+.about-text p {
+    font-size: 18px;
+    color: #aaaaaa;
+    max-width: 600px;
+    line-height: 1.8;
+}
+
+.about-photo {
+    position: relative;
+}
+
+.about-photo img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    object-position: center center;
+    border-radius: 12px;
+    border: 0.5px solid #222222;
+    filter: grayscale(20%);
+    transition: filter 0.3s ease;
+}
+
+.about-photo img:hover {
+    filter: grayscale(0%);
+}
+
+.about-photo::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 16px;
+    border: 0.5px solid #e63946;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+@media (max-width: 900px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .about-photo {
+        max-width: 280px;
+    }
 }

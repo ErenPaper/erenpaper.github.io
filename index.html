@@ -32,7 +32,7 @@
         <!-- NAVIGATION -->
         <nav id="navbar">
             <a href="#hero" class="nav-logo">rr</a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#experience">Experience</a></li>
                 <li><a href="#projects">Projects</a></li>
@@ -40,7 +40,12 @@
                 <li><a href="#beyond">Beyond</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <a href="assets/Raphael_Ramos_Resume.pdf" target="_blank" class="nav-resume">Resume</a>
+            <div class="nav-right">
+                <a href="assets/Raphael_Ramos_Resume.pdf" target="_blank" class="nav-resume">Resume</a>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </nav>
 
         <!-- HERO SECTION -->
@@ -58,8 +63,7 @@
                     <span class="hero-location">Edmonton, AB · Open to remote</span>
                 </div>
                 <div class="hero-ctas">
-                    <a href="#contact" class="btn btn-primary">Let's Talk</a>
-                    <a href="#projects" class="btn btn-secondary">See my work</a>
+                    <a href="#projects" class="btn btn-primary">See my work</a>
                 </div>
             </div>
             <div class="hero-photo-wrap">
@@ -74,20 +78,25 @@
         <!-- ABOUT ME SECTION -->
         <section id="about">
             <h2>About</h2>
-            <p>
-                I'm a Computer Engineer from the University of Alberta, graduating June 2026.
-                I gravitate toward work that's hands-on and grounded — firmware, embedded systems,
-                hardware that actually does something in the world. I've been playing piano at
-                elderly care homes and charity runs since I was a kid, so building a safety monitor
-                for people aging at home felt like the right capstone.
-                Currently VP Academics at the Computer Engineering Club.
-            </p>
-            <br>
-            <p>
-                Outside of engineering I play piano and make music with my family, watch too much anime —
-                the GitHub handle gives it away — and believe a good dad joke can get you
-                through almost anything...almost.
-            </p>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                        I'm a Computer Engineer from the University of Alberta, graduating June 2026.
+                        I gravitate toward work that's hands-on and grounded — firmware, embedded systems,
+                        hardware that actually does something in the world.
+                        Currently VP Academics at the Computer Engineering Club.
+                    </p>
+                    <br>
+                    <p>
+                        Outside of engineering I play piano and make music with my family, watch too much anime —
+                        the GitHub handle gives it away — and believe a good dad joke can get you
+                        through almost anything...almost.
+                    </p>
+                </div>
+                <div class="about-photo">
+                    <img src="assets/about_me.jpg" alt="Raphael Ramos">
+                </div>
+            </div>
         </section>
 
         <!-- WORK EXPERIENCE SECTION -->
@@ -145,10 +154,30 @@
                         <span>Software Deployment</span>
                     </div>
                 </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Private Tutoring</span>
+                            <span class="experience-role">Academic Tutor</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Sept 2025 – Present</span>
+                            <span class="experience-location">Edmonton, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Provide one-on-one tutoring across Math, English, and Social Studies for students from Grade 9 to 12.</li>
+                        <li>Adapt teaching approach to individual learning needs across multiple clients and learning environments.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Mathematics</span>
+                        <span>English</span>
+                        <span>Social Studies</span>
+                        <span>One-on-one Instruction</span>
+                    </div>
+                </div>
             </div>
         </section>
-
-        <!-- PROJECTS SECTION -->
         <section id="projects">
             <h2>Projects</h2>
             <div class="projects-grid">
@@ -249,23 +278,58 @@
                     </div>
                 </div>
 
-                <!-- ECE 407 Grouped -->
+                <!-- RP2040 Project 1: Encoder HMI -->
                 <div class="project-card">
                     <span class="project-tag">Embedded · Firmware · Hardware</span>
-                    <h3>Embedded Systems Projects — ECE 407</h3>
-                    <p>Three progressive embedded projects on the Raspberry Pi Pico (RP2040):
-                        a quadrature encoder HMI with WS2812 LED ring, an open-loop DC motor
-                        speed controller with PWM and ADC, and a voice-controlled fan using
-                        on-device wake-word ML and I2S microphone input.</p>
+                    <h3>Rotary Encoder HMI</h3>
+                    <p>Embedded human-machine interface using a mechanical quadrature encoder and
+                        WS2812B RGB LED ring on the RP2040. Implemented a Russian roulette-inspired
+                        game with real-time LED animations driven by encoder rotation and button input.</p>
                     <div class="project-tech">
-                        <span>C / C++</span>
+                        <span>C</span>
                         <span>RP2040 PIO</span>
-                        <span>PWM / ADC</span>
-                        <span>I2S</span>
-                        <span>TinyML</span>
+                        <span>WS2812B</span>
+                        <span>Quadrature Decode</span>
                         <span>GDB</span>
                     </div>
-                    <!-- ADD ECE 407 VIDEO LINKS HERE when ready -->
+                    <!-- ADD: YouTube video embed when ready -->
+                    <!-- ADD: github.com/ErenPaper/rp2040-embedded-projects/tree/main/project1-encoder-hmi after June -->
+                </div>
+
+                <!-- RP2040 Project 2: Motor Control -->
+                <div class="project-card">
+                    <span class="project-tag">Embedded · Control Systems</span>
+                    <h3>DC Motor Speed Controller</h3>
+                    <p>Open-loop DC motor controller using PWM and ADC on the RP2040. Potentiometer
+                        sets speed and direction via H-bridge driver, with a tachometer-style
+                        RGB LED ring animation responding in real time. Prototyped in Wokwi first.</p>
+                    <div class="project-tech">
+                        <span>C</span>
+                        <span>PWM</span>
+                        <span>ADC</span>
+                        <span>H-bridge</span>
+                        <span>Wokwi</span>
+                    </div>
+                    <!-- ADD: YouTube video embed when ready -->
+                    <!-- ADD: github.com/ErenPaper/rp2040-embedded-projects/tree/main/project2-motor-control after June -->
+                </div>
+
+                <!-- RP2040 Project 3: Voice Fan -->
+                <div class="project-card">
+                    <span class="project-tag">Embedded · TinyML · Audio</span>
+                    <h3>Voice-Controlled Fan</h3>
+                    <p>Wake-word controlled DC fan using on-device ML on the RP2040. INMP441
+                        microphone captured audio via I2S, processed by a TensorFlow Lite model
+                        to detect "yes" and "no" commands — fan on, fan off, no internet needed.</p>
+                    <div class="project-tech">
+                        <span>C / C++</span>
+                        <span>TinyML</span>
+                        <span>I2S</span>
+                        <span>INMP441</span>
+                        <span>TensorFlow Lite</span>
+                    </div>
+                    <!-- ADD: YouTube video embed when ready -->
+                    <!-- ADD: github.com/ErenPaper/rp2040-embedded-projects/tree/main/project3-voice-fan after June -->
                 </div>
 
                 <!-- PLACEHOLDER: Dining App -->
@@ -343,7 +407,7 @@
             </div>
         </section>
 
-        <!-- BEYOND ZONE — Extracurriculars, Music, Making -->
+        <!-- BEYOND ZONE — Extracurriculars and more -->
         <div class="beyond-zone" id="beyond">
             <div class="beyond-label">
                 <span>// beyond engineering</span>
@@ -443,61 +507,23 @@
             </div>
         </section>
 
-        <!-- MUSIC SECTION — placeholder, fill in when tracks are ready -->
-        <section id="music">
-            <h2>Music</h2>
-            <p class="section-placeholder">
-                I've been playing piano since I was a kid — church services, charity runs, family jams.
-                Currently producing tracks on Cubase. Links coming soon.
-            </p>
-            <!-- ADD: embed or link to tracks when ready -->
-            <!-- Example: <a href="https://soundcloud.com/yourprofile" class="placeholder-link">Listen on SoundCloud →</a> -->
-        </section>
-
-        <!-- MAKING / LAB SECTION — placeholder for hardware builds -->
-        <section id="making">
-            <h2>Making</h2>
-            <p class="section-placeholder">
-                Outside of software, I build physical things — 3D printed enclosures, custom hardware,
-                whatever idea I can't stop thinking about. Projects and build logs coming as they happen.
-            </p>
-            <div class="projects-grid">
-                <!-- PLACEHOLDER: BMO -->
-                <div class="project-card placeholder-card">
-                    <span class="project-tag">In Progress · Hardware · 3D Print</span>
-                    <h3>BMO Build</h3>
-                    <p>A custom BMO from Adventure Time — 3D printed enclosure with embedded hardware inside.
-                        Schematics, print files, and build log coming as it progresses.</p>
-                    <div class="project-tech">
-                        <span>3D Printing</span><span>Embedded C</span><span>CAD</span>
-                    </div>
-                </div>
-                <!-- ADD more hardware builds here as they happen -->
-            </div>
-        </section>
-
         <!-- CONTACT SECTION -->
         <section id="contact">
-            <h2>Let's Talk</h2>
-            <p class="contact-intro">
-                Graduating June 2026 and ready to build something.
-                Hit me up about roles, collabs, or dad jokes.
-            </p>
             <div class="contact-links">
                 <a href="mailto:raphaelramos19@gmail.com" class="contact-icon-btn primary" aria-label="Email">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                     </svg>
                     <span>raphaelramos19@gmail.com</span>
                 </a>
                 <a href="https://www.linkedin.com/in/raphael-ramos1/" target="_blank" class="contact-icon-btn" aria-label="LinkedIn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
                     </svg>
                     <span>LinkedIn</span>
                 </a>
                 <a href="https://github.com/ErenPaper" target="_blank" class="contact-icon-btn" aria-label="GitHub">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0 0 22 12.017C22 6.484 17.522 2 12 2z"/>
                     </svg>
                     <span>GitHub</span>
@@ -508,7 +534,7 @@
         <!-- FOOTER -->
         <footer>
             <p class="footer-name">Raphael Ramos</p>
-            <p class="footer-sub">Edmonton, AB · 2026</p>
+            <p class="footer-sub">© 2026 Raphael Ramos</p>
         </footer>
 
         <script>
@@ -588,6 +614,22 @@
 
         const featured = document.querySelector('.project-card.featured');
         if (featured) sectionObserver.observe(featured);
+        // ── HAMBURGER MENU ────────────────────────────────────────
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            hamburger.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                hamburger.classList.remove('active');
+            });
+        });
         </script>
     </body>
 </html>
