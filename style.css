@@ -1175,8 +1175,8 @@ section:not(#hero).visible {
 /* ─── ABOUT GRID WITH PHOTO ─────────────────────────────────── */
 .about-grid {
     display: grid;
-    grid-template-columns: 1fr 500px;
-    gap: 60px;
+    grid-template-columns: 1fr 420px;
+    gap: 48px;
     align-items: center;
 }
 
@@ -1188,32 +1188,25 @@ section:not(#hero).visible {
 }
 
 .about-photo {
-    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .about-photo img {
     width: 100%;
-    aspect-ratio: 4/3;
+    max-height: 320px;
     object-fit: cover;
     object-position: center center;
     border-radius: 12px;
     border: 0.5px solid #222222;
-    filter: grayscale(20%);
-    transition: filter 0.3s ease;
+    filter: grayscale(15%);
+    transition: filter 0.3s ease, transform 0.3s ease;
 }
 
 .about-photo img:hover {
     filter: grayscale(0%);
-}
-
-.about-photo::before {
-    content: '';
-    position: absolute;
-    inset: -8px;
-    border-radius: 16px;
-    border: 0.5px solid #e63946;
-    opacity: 0.2;
-    pointer-events: none;
+    transform: scale(1.01);
 }
 
 @media (max-width: 900px) {
@@ -1222,7 +1215,16 @@ section:not(#hero).visible {
         gap: 32px;
     }
 
-    .about-photo {
-        max-width: 280px;
+    .about-photo img {
+        max-height: 240px;
     }
+}
+
+/* ─── ABOUT SECTION PADDING FIX ────────────────────────────── */
+#about {
+    padding-bottom: 60px;
+}
+
+#about h2 {
+    margin-bottom: 24px;
 }
