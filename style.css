@@ -1228,3 +1228,226 @@ section:not(#hero).visible {
 #about h2 {
     margin-bottom: 24px;
 }
+
+/* ─── SMALL VIDEO EMBED FOR PROJECT CARDS ───────────────────── */
+.project-video-small {
+    padding-bottom: 56% !important;
+}
+
+/* ─── PROJECT SCREENSHOT IMAGE ──────────────────────────────── */
+.project-img {
+    object-fit: contain;
+    object-position: center top;
+    border-radius: 8px 8px 0 0;
+    margin: -1.5rem -1.5rem 1rem -1.5rem;
+    width: calc(100% + 3rem);
+    max-height: 300px;
+    display: block;
+    background: #0a0a0a;
+}
+
+/* ─── CSS VARIABLES — DARK (default) ───────────────────────── */
+:root {
+    --bg: #0a0a0a;
+    --bg-card: #111111;
+    --bg-nav: rgba(10, 10, 10, 0.85);
+    --text: #ffffff;
+    --text-muted: #aaaaaa;
+    --text-dim: #555555;
+    --border: #222222;
+    --border-subtle: #1a1a1a;
+    --accent: #e63946;
+    --tag-text: #555555;
+    --sidebar-icon: #444444;
+}
+
+/* ─── CSS VARIABLES — LIGHT ─────────────────────────────────── */
+[data-theme="light"] {
+    --bg: #faf8f5;
+    --bg-card: #ffffff;
+    --bg-nav: rgba(250, 248, 245, 0.92);
+    --text: #111111;
+    --text-muted: #444444;
+    --text-dim: #888888;
+    --border: #e0e0e0;
+    --border-subtle: #dddddd;
+    --accent: #e63946;
+    --tag-text: #888888;
+    --sidebar-icon: #999999;
+}
+
+/* ─── APPLY VARIABLES THROUGHOUT ───────────────────────────── */
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav {
+    background: var(--bg-nav);
+    border-bottom-color: var(--border-subtle);
+}
+
+.project-card,
+.experience-item,
+.skill-category {
+    background: var(--bg-card);
+    border-color: var(--border);
+}
+
+.project-card p,
+.experience-bullets li {
+    color: var(--text-muted);
+}
+
+.experience-date,
+.experience-location {
+    color: var(--text-dim);
+}
+
+.project-tech span,
+.experience-tags span {
+    color: var(--tag-text);
+    border-color: var(--border);
+}
+
+.skill-tags span {
+    color: var(--text-muted);
+    border-color: var(--border);
+}
+
+#about p,
+.about-text p {
+    color: var(--text-muted);
+}
+
+.hero-tagline {
+    color: var(--text-dim);
+}
+
+.hero-tagline em {
+    color: var(--text-muted);
+}
+
+.hero-location {
+    color: var(--text-dim);
+}
+
+.btn-secondary {
+    border-color: var(--border);
+    color: var(--text-muted);
+}
+
+.nav-links a {
+    color: var(--text-muted);
+}
+
+footer {
+    border-top-color: var(--border-subtle);
+}
+
+.footer-sub {
+    color: var(--text-dim);
+}
+
+.sidebar-icon {
+    color: var(--sidebar-icon);
+}
+
+.sidebar-line {
+    background: linear-gradient(to bottom, var(--border), transparent);
+}
+
+.contact-icon-btn {
+    border-color: var(--border);
+    color: var(--text-muted);
+}
+
+.beyond-zone::before,
+.beyond-zone::after {
+    background: linear-gradient(to right, transparent, var(--border));
+}
+
+.section-placeholder {
+    color: var(--text-dim);
+}
+
+/* ─── THEME TOGGLE BUTTON ───────────────────────────────────── */
+.theme-toggle {
+    background: none;
+    border: 0.5px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 9px;
+    cursor: pointer;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Show sun in dark mode, moon in light mode */
+.icon-moon { display: block; }
+.icon-sun  { display: none;  }
+
+[data-theme="light"] .icon-moon { display: none;  }
+[data-theme="light"] .icon-sun  { display: block; }
+
+/* ─── FIX HARDCODED COLORS FOR LIGHT MODE ───────────────────── */
+h1, h2, h3, h4 {
+    color: var(--text);
+}
+
+#hero h1 {
+    color: var(--text);
+}
+
+.experience-company {
+    color: var(--text);
+}
+
+.project-card h3 {
+    color: var(--text);
+}
+
+.cursor-blink {
+    color: var(--accent);
+}
+
+.hero-tagline em {
+    color: var(--text-muted);
+}
+
+.nav-logo {
+    color: var(--accent);
+}
+
+.photo-circle {
+    background: var(--bg-card);
+    border-color: var(--border-subtle);
+}
+
+.beyond-zone::after {
+    background: linear-gradient(to left, transparent, var(--border));
+}
+
+[data-theme="light"] .project-video-wrap {
+    background: #e8e8e8;
+}
+
+[data-theme="light"] .about-photo img {
+    border-color: var(--border);
+}
+
+[data-theme="light"] .hamburger span {
+    background: #555555;
+}
+
+[data-theme="light"] .nav-links {
+    background: rgba(250, 248, 245, 0.97);
+}
