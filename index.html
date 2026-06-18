@@ -3,12 +3,31 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Raphael Ramos</title>
+        <title>Raphael Ramos · Computer Engineer</title>
+        <meta name="description" content="Raphael Ramos — Computer Engineering graduate (2026) focused on firmware, embedded systems, and hardware. Portfolio of projects from edge ML to FPGA CPUs.">
+
+        <!-- Social share preview (LinkedIn, etc.) -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Raphael Ramos · Computer Engineer">
+        <meta property="og:description" content="Firmware, embedded systems, and hardware — projects from edge ML to FPGA CPUs.">
+        <meta property="og:image" content="https://erenpaper.github.io/assets/raphael.jpg">
+        <meta property="og:url" content="https://erenpaper.github.io/">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Raphael Ramos · Computer Engineer">
+        <meta name="twitter:description" content="Firmware, embedded systems, and hardware — projects from edge ML to FPGA CPUs.">
+        <meta name="twitter:image" content="https://erenpaper.github.io/assets/raphael.jpg">
+
         <link rel="stylesheet" href="style.css" />
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230a0a0a'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='700' fill='%23e63946' text-anchor='middle'>rr</text></svg>">
     </head>
     <body>
+        <!-- ABSTRACT ANIMATED BACKGROUND (Three.js) -->
+        <canvas id="bg-canvas"></canvas>
+
+        <!-- SCROLL PROGRESS BAR -->
+        <div class="scroll-progress" id="scroll-progress"></div>
+
         <!-- FIXED SIDEBAR ICONS -->
         <div class="sidebar-icons">
             <a href="mailto:raphaelramos19@gmail.com" aria-label="Email" class="sidebar-icon">
@@ -64,7 +83,7 @@
                 <div class="hero-divider"></div>
                 <p class="hero-tagline">
                     <em>I like to build things!...and figure out why it broke...</em>
-                    Computer Engineering grad, June 2026.
+                    Computer Engineering graduate, Class of 2026.
                 </p>
                 <div class="hero-ctas">
                     <a href="#projects" class="btn btn-primary">See my work</a>
@@ -81,14 +100,14 @@
 
         <!-- ABOUT ME SECTION -->
         <section id="about">
-            <h2>About</h2>
+            <h2 data-index="01">About</h2>
             <div class="about-grid">
                 <div class="about-text">
                     <p>
-                        I'm a Computer Engineer from the University of Alberta, graduating June 2026.
+                        I'm a Computer Engineer from the University of Alberta, graduated June 2026.
                         I gravitate toward work that's hands-on and grounded — firmware, embedded systems,
                         hardware that actually does something in the world.
-                        Currently VP Academics at the Computer Engineering Club.
+                        Most recently VP Academics at the Computer Engineering Club.
                     </p>
                     <br>
                     <p>
@@ -105,7 +124,7 @@
 
         <!-- WORK EXPERIENCE SECTION -->
         <section id="experience">
-            <h2>Experience</h2>
+            <h2 data-index="02">Experience</h2>
             <div class="experience-list">
                 <div class="experience-item">
                     <div class="experience-header">
@@ -183,149 +202,104 @@
             </div>
         </section>
         <section id="projects">
-            <h2>Projects</h2>
+            <h2 data-index="03">Projects</h2>
+            <div class="project-filters" id="project-filters">
+                <button class="filter-chip active" data-filter="all">All</button>
+                <button class="filter-chip" data-filter="embedded">Embedded</button>
+                <button class="filter-chip" data-filter="hardware">Hardware</button>
+                <button class="filter-chip" data-filter="software">Software</button>
+                <button class="filter-chip" data-filter="ml">ML</button>
+            </div>
             <div class="projects-grid">
 
                 <!-- CAPSTONE — full width -->
                 <div class="project-card featured">
-                    <div class="project-video-wrap">
-                        <iframe
-                            src="https://www.youtube.com/embed/SDkYA16DcgQ"
-                            title="CCHAM-II Capstone Demo"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                    <span class="project-tag">Capstone · Embedded · ML · Cloud · IoT</span>
+                    <h3>Continuing Care Home Activity Monitor</h3>
+                    <div class="project-stats">
+                        <span>97.73% ML accuracy</span>
+                        <span>29hr standalone</span>
+                        <span>Under $200 CAD</span>
+                        <span>3 subsystems</span>
                     </div>
-                    <div class="project-card-body">
-                        <span class="project-tag">Capstone · Embedded · ML · Cloud · IoT</span>
-                        <h3>Continuing Care Home Activity Monitor</h3>
-                        <p>Non-invasive elder care monitoring system for aging-in-place safety.
-                            Three subsystems — stove detection, water usage, and appliance monitoring —
-                            all running edge ML on Raspberry Pi Pico 2W microcontrollers with a full
-                            AWS IoT cloud pipeline and caregiver mobile app.</p>
-                        <div class="project-stats">
-                            <span>97.73% ML accuracy</span>
-                            <span>29hr standalone</span>
-                            <span>Under $200 CAD</span>
-                            <span>3 subsystems</span>
-                        </div>
-                        <div class="project-tech">
-                            <span>C++</span>
-                            <span>MicroPython</span>
-                            <span>Edge Impulse</span>
-                            <span>AWS IoT</span>
-                            <span>MQTT/TLS</span>
-                            <span>DynamoDB</span>
-                            <span>Lambda</span>
-                            <span>React Native</span>
-                        </div>
+                    <div class="project-tech">
+                        <span>C++</span>
+                        <span>MicroPython</span>
+                        <span>Edge Impulse</span>
+                        <span>AWS IoT</span>
+                        <span>MQTT/TLS</span>
+                        <span>DynamoDB</span>
+                        <span>Lambda</span>
+                        <span>React Native</span>
                     </div>
                 </div>
 
                 <!-- RP2040 Project 1: Encoder HMI -->
                 <div class="project-card">
-                    <div class="project-video-wrap project-video-small">
-                        <iframe src="https://www.youtube.com/embed/q_OnzubR1rI" title="Rotary Encoder HMI Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="project-card-body">
-                        <span class="project-tag">Embedded · Firmware · Hardware</span>
-                        <h3>Rotary Encoder HMI</h3>
-                        <p>Embedded human-machine interface using a mechanical quadrature encoder and
-                            WS2812B RGB LED ring on the RP2040. Implemented a Russian roulette-inspired
-                            game with real-time LED animations driven by encoder rotation and button input.</p>
-                        <div class="project-tech">
-                            <span>C</span>
-                            <span>RP2040 PIO</span>
-                            <span>WS2812B</span>
-                            <span>Quadrature Decode</span>
-                            <span>GDB</span>
-                        </div>
+                    <span class="project-tag">Embedded · Firmware · Hardware</span>
+                    <h3>Rotary Encoder HMI</h3>
+                    <div class="project-tech">
+                        <span>C</span>
+                        <span>RP2040 PIO</span>
+                        <span>WS2812B</span>
+                        <span>Quadrature Decode</span>
+                        <span>GDB</span>
                     </div>
                 </div>
 
                 <!-- RP2040 Project 2: Motor Control -->
                 <div class="project-card">
-                    <div class="project-video-wrap project-video-small">
-                        <iframe src="https://www.youtube.com/embed/njNi2PRX1Rw" title="DC Motor Speed Controller Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="project-card-body">
-                        <span class="project-tag">Embedded · Control Systems</span>
-                        <h3>DC Motor Speed Controller</h3>
-                        <p>Open-loop DC motor controller using PWM and ADC on the RP2040. Potentiometer
-                            sets speed and direction via H-bridge driver, with a tachometer-style
-                            RGB LED ring animation responding in real time. Prototyped in Wokwi first.</p>
-                        <div class="project-tech">
-                            <span>C</span>
-                            <span>PWM</span>
-                            <span>ADC</span>
-                            <span>H-bridge</span>
-                            <span>Wokwi</span>
-                        </div>
+                    <span class="project-tag">Embedded · Control Systems</span>
+                    <h3>DC Motor Speed Controller</h3>
+                    <div class="project-tech">
+                        <span>C</span>
+                        <span>PWM</span>
+                        <span>ADC</span>
+                        <span>H-bridge</span>
+                        <span>Wokwi</span>
                     </div>
                 </div>
 
                 <!-- RP2040 Project 3: Voice Fan -->
                 <div class="project-card">
-                    <div class="project-video-wrap project-video-small">
-                        <iframe src="https://www.youtube.com/embed/0YUXNzxJXc8" title="Voice-Controlled Fan Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                    <div class="project-card-body">
-                        <span class="project-tag">Embedded · TinyML · Audio</span>
-                        <h3>Voice-Controlled Fan</h3>
-                        <p>Wake-word controlled DC fan using on-device ML on the RP2040. INMP441
-                            microphone captured audio via I2S, processed by a TensorFlow Lite model
-                            to detect "yes" and "no" commands — fan on, fan off, no internet needed.</p>
-                        <div class="project-tech">
-                            <span>C / C++</span>
-                            <span>TinyML</span>
-                            <span>I2S</span>
-                            <span>INMP441</span>
-                            <span>TensorFlow Lite</span>
-                        </div>
+                    <span class="project-tag">Embedded · TinyML · Audio</span>
+                    <h3>Voice-Controlled Fan</h3>
+                    <div class="project-tech">
+                        <span>C / C++</span>
+                        <span>TinyML</span>
+                        <span>I2S</span>
+                        <span>INMP441</span>
+                        <span>TensorFlow Lite</span>
                     </div>
                 </div>
 
-                <!-- Event Lottery — with screenshot -->
+                <!-- Event Lottery -->
                 <div class="project-card">
-                    <!-- SWAP: replace src with assets/event_lottery.jpg or similar when ready -->
-                    <img src="assets/eventlottery.jpg" alt="Event Lottery App" class="project-img" onerror="this.style.display='none'">
                     <span class="project-tag">Mobile · Backend</span>
                     <h3>Event Lottery App</h3>
-                    <p>Android app implementing a fair lottery-based signup system for high-demand events.
-                        Real-time Firebase backend with local notifications, deep linking,
-                        and full OOP design with UML and JUnit testing.</p>
                     <div class="project-tech">
                         <span>Java</span>
                         <span>Android</span>
                         <span>Firebase</span>
                     </div>
-                    <a href="https://github.com/ErenPaper/EventLotteryApp" target="_blank" class="project-link">GitHub →</a>
                 </div>
 
                 <!-- Anomaly Detection -->
                 <div class="project-card">
                     <span class="project-tag">ML · Data Science</span>
                     <h3>Anomaly Detection System</h3>
-                    <p>Full anomaly detection pipeline using statistical, distance-based (k-NN, DBSCAN),
-                        and ML (One-Class SVM) techniques. Evaluated via precision, recall, F1-score,
-                        and ROC/PR curves. Documented end-to-end in a reproducible Jupyter notebook.</p>
                     <div class="project-tech">
                         <span>Python</span>
                         <span>Scikit-learn</span>
                         <span>Pandas</span>
                         <span>Matplotlib</span>
                     </div>
-                    <a href="https://github.com/ErenPaper/Anomaly-Detection-System" target="_blank" class="project-link">GitHub →</a>
                 </div>
 
                 <!-- 16-bit CPU -->
                 <div class="project-card">
                     <span class="project-tag">Hardware · Digital Logic</span>
                     <h3>16-bit CPU Design</h3>
-                    <p>Designed and implemented a 16-bit CPU from scratch on a Xilinx Zybo Z7 FPGA.
-                        Full controller-datapath architecture with ALU, register file, and an FSM
-                        executing 13 custom instructions including a bitwise multiplier.</p>
                     <div class="project-tech">
                         <span>VHDL</span>
                         <span>Vivado</span>
@@ -337,9 +311,6 @@
                 <div class="project-card">
                     <span class="project-tag">Systems · Networking</span>
                     <h3>File Sharing System</h3>
-                    <p>Client-server file sharing app in C using custom TCP/UDP socket protocols
-                        and nonblocking I/O to handle multiple concurrent connections with
-                        enforced packet formats and proper error handling.</p>
                     <div class="project-tech">
                         <span>C</span>
                         <span>Sockets</span>
@@ -351,9 +322,6 @@
                 <div class="project-card placeholder-card">
                     <span class="project-tag">Coming Soon · Mobile · Social</span>
                     <h3>Group Dining Decision App</h3>
-                    <p>Tinder-style restaurant picker for groups — join via QR or link, filter by cuisine
-                        and radius, swipe on spots, and a ranked voting algorithm surfaces the
-                        highest-consensus pick in real time.</p>
                     <div class="project-tech">
                         <span>Java</span>
                         <span>Android Studio</span>
@@ -366,8 +334,6 @@
                 <div class="project-card placeholder-card">
                     <span class="project-tag">Coming Soon · Hardware · Embedded</span>
                     <h3>BMO Build</h3>
-                    <p>A custom-built BMO from Adventure Time — 3D printed enclosure, embedded hardware inside,
-                        and firmware to bring it to life. Schematics, print files, and build log coming as it progresses.</p>
                     <div class="project-tech">
                         <span>3D Printing</span>
                         <span>Embedded C</span>
@@ -379,8 +345,6 @@
                 <div class="project-card placeholder-card">
                     <span class="project-tag">In Progress · Embedded · RTOS</span>
                     <h3>Morse Code Decoder</h3>
-                    <p>FreeRTOS project on the Raspberry Pi Pico — button input triggers interrupt-driven
-                        timing tasks to decode Morse code in real time, displayed on an OLED screen.</p>
                     <div class="project-tech">
                         <span>C</span><span>FreeRTOS</span><span>RP2040</span>
                         <span>Interrupts</span><span>Timers</span><span>OLED</span>
@@ -392,7 +356,7 @@
 
         <!-- SKILLS SECTION -->
         <section id="skills">
-            <h2>Skills</h2>
+            <h2 data-index="04">Skills</h2>
             <div class="skills-grid">
                 <div class="skill-category">
                     <h4>Languages</h4>
@@ -454,14 +418,14 @@
                             <span class="experience-role">Vice President, Academics</span>
                         </div>
                         <div class="experience-right">
-                            <span class="experience-date">Apr 2025 – Present</span>
+                            <span class="experience-date">Apr 2025 – Jun 2026</span>
                             <span class="experience-location">University of Alberta</span>
                         </div>
                     </div>
                     <ul class="experience-bullets">
-                        <li>Lead academic programming for 100+ members including workshops, study sessions, and exam preparation events.</li>
-                        <li>Coordinate with faculty and student groups to connect members with academic resources and opportunities.</li>
-                        <li>Manage communications between club executive, faculty advisors, and the broader student membership.</li>
+                        <li>Led academic programming for 100+ members including workshops, study sessions, and exam preparation events.</li>
+                        <li>Coordinated with faculty and student groups to connect members with academic resources and opportunities.</li>
+                        <li>Managed communications between club executive, faculty advisors, and the broader student membership.</li>
                     </ul>
                     <div class="experience-tags">
                         <span>Leadership</span><span>Event Planning</span><span>Faculty Relations</span>
@@ -564,7 +528,147 @@
             <p class="footer-sub">© 2026 Raphael Ramos</p>
         </footer>
 
+        <!-- BACK TO TOP -->
+        <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+
+        <!-- PROJECT DETAIL MODAL -->
+        <div class="modal-overlay" id="project-modal" aria-hidden="true">
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+                <div class="modal-content" id="modal-content"></div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
         <script>
+        // ── GALAXY STARFIELD BACKGROUND (Three.js) ────────────────
+        // A flattened 3D disc of soft round stars in three depth layers
+        // (faint dust, bright stars, red accents). Slowly rotates, gently
+        // ripples (the "math"), twinkles, and parallax-tilts toward the
+        // mouse on desktop. Built from scratch — tune the marked numbers.
+        (function initBackground() {
+            const canvas = document.getElementById('bg-canvas');
+            if (!canvas || typeof THREE === 'undefined') return;
+
+            const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            let renderer;
+            try {
+                renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            } catch (e) {
+                return; // WebGL unsupported — page still works, just no background
+            }
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.z = 18;
+
+            const isLight = () => document.documentElement.getAttribute('data-theme') === 'light';
+
+            // Soft round star sprite — turns square points into glowing dots
+            const starTex = (function () {
+                const c = document.createElement('canvas');
+                c.width = c.height = 64;
+                const ctx = c.getContext('2d');
+                const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+                g.addColorStop(0.0, 'rgba(255,255,255,1)');
+                g.addColorStop(0.25, 'rgba(255,255,255,0.7)');
+                g.addColorStop(0.55, 'rgba(255,255,255,0.18)');
+                g.addColorStop(1.0, 'rgba(255,255,255,0)');
+                ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 64);
+                return new THREE.CanvasTexture(c);
+            })();
+
+            const SPREAD = 46;   // overall size of the star cloud
+            const DISC = 0.42;   // vertical flatten — lower = more galaxy-disc
+
+            // Build one layer of stars. Returns handles for animation/theming.
+            function makeLayer(count, size, color, opacity) {
+                const pos = new Float32Array(count * 3);
+                const baseY = new Float32Array(count);
+                const phase = new Float32Array(count);
+                for (let i = 0; i < count; i++) {
+                    const x = (Math.random() - 0.5) * SPREAD;
+                    const y = (Math.random() - 0.5) * SPREAD * DISC;
+                    const z = (Math.random() - 0.5) * SPREAD;
+                    pos[i * 3] = x; pos[i * 3 + 1] = y; pos[i * 3 + 2] = z;
+                    baseY[i] = y; phase[i] = Math.random() * Math.PI * 2;
+                }
+                const geo = new THREE.BufferGeometry();
+                geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                const mat = new THREE.PointsMaterial({
+                    size, color, map: starTex, transparent: true, opacity,
+                    sizeAttenuation: true, depthWrite: false,
+                    blending: isLight() ? THREE.NormalBlending : THREE.AdditiveBlending,
+                });
+                return { pts: new THREE.Points(geo, mat), mat, geo, baseY, phase, count };
+            }
+
+            const group = new THREE.Group();
+            scene.add(group);
+
+            // faint blue dust · bright white stars · red accent stars
+            const dust   = makeLayer(isTouch ? 900 : 2600, 0.18, isLight() ? 0x666666 : 0x8a96bf, isLight() ? 0.5 : 0.55);
+            const stars  = makeLayer(isTouch ? 220 : 650,  0.5,  isLight() ? 0x333333 : 0xffffff, isLight() ? 0.65 : 0.9);
+            const accent = makeLayer(isTouch ? 30  : 120,  0.55, 0xe63946,                          0.9);
+            [dust, stars, accent].forEach(l => group.add(l.pts));
+
+            let targetX = 0, targetY = 0, curX = 0, curY = 0;
+            if (!isTouch) {
+                window.addEventListener('mousemove', (e) => {
+                    targetX = e.clientX / window.innerWidth - 0.5;
+                    targetY = e.clientY / window.innerHeight - 0.5;
+                });
+            }
+
+            const clock = new THREE.Clock();
+            function frame() {
+                const t = clock.getElapsedTime();
+                if (!isTouch) { // ripple the dust layer
+                    const arr = dust.geo.attributes.position.array;
+                    for (let i = 0; i < dust.count; i++) {
+                        arr[i * 3 + 1] = dust.baseY[i] + Math.sin(t * 0.45 + dust.phase[i]) * 0.4;
+                    }
+                    dust.geo.attributes.position.needsUpdate = true;
+                }
+                group.rotation.y = t * 0.016;
+                // twinkle the bright stars
+                stars.mat.opacity = (isLight() ? 0.65 : 0.9) * (0.78 + Math.sin(t * 1.3) * 0.22);
+                curX += (targetX - curX) * 0.04;
+                curY += (targetY - curY) * 0.04;
+                camera.position.x = curX * 6;
+                camera.position.y = -curY * 4;
+                camera.lookAt(0, 0, 0);
+                renderer.render(scene, camera);
+                if (!reduceMotion) requestAnimationFrame(frame);
+            }
+            frame();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Re-theme the stars when light/dark is toggled
+            new MutationObserver(() => {
+                const light = isLight();
+                dust.mat.color.set(light ? 0x666666 : 0x8a96bf);
+                dust.mat.opacity = light ? 0.5 : 0.55;
+                stars.mat.color.set(light ? 0x333333 : 0xffffff);
+                [dust, stars, accent].forEach(l => {
+                    l.mat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
+                    l.mat.needsUpdate = true;
+                });
+                if (reduceMotion) renderer.render(scene, camera);
+            }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+        })();
+
         // ── TYPING EFFECT ─────────────────────────────────────────
         const typingEl = document.getElementById('typing-name');
         const lines = ['Raphael', 'Ramos'];
@@ -591,31 +695,32 @@
         }
         setTimeout(type, 300);
 
-        // ── CURSOR TRAIL ──────────────────────────────────────────
-        const TRAIL_COUNT = 12;
-        const trail = [];
-        for (let i = 0; i < TRAIL_COUNT; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'cursor-dot';
-            dot.style.opacity = (1 - i / TRAIL_COUNT) * 0.6;
-            dot.style.width = dot.style.height = `${8 - i * 0.4}px`;
-            document.body.appendChild(dot);
-            trail.push({ el: dot, x: -100, y: -100 });
-        }
-        let mouseX = -100, mouseY = -100;
-        document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
-        function animateTrail() {
-            let x = mouseX, y = mouseY;
-            trail.forEach((dot, i) => {
-                dot.el.style.left = `${x - 4}px`;
-                dot.el.style.top = `${y - 4}px`;
-                dot.x += (x - dot.x) * 0.25;
-                dot.y += (y - dot.y) * 0.25;
-                x = dot.x; y = dot.y;
+
+        // ── SCROLL PROGRESS BAR + ACTIVE NAV ──────────────────────
+        const progressBar = document.getElementById('scroll-progress');
+        const navLinkEls = Array.from(document.querySelectorAll('.nav-links a'));
+        const spySections = navLinkEls
+            .map(a => document.querySelector(a.getAttribute('href')))
+            .filter(Boolean);
+
+        function onScroll() {
+            // progress bar
+            const docH = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docH > 0 ? (window.scrollY / docH) * 100 : 0;
+            progressBar.style.width = pct + '%';
+
+            // active nav link — last section whose top has passed the midpoint
+            const marker = window.scrollY + window.innerHeight * 0.35;
+            let activeId = spySections[0] ? spySections[0].id : null;
+            spySections.forEach(sec => {
+                if (sec.offsetTop <= marker) activeId = sec.id;
             });
-            requestAnimationFrame(animateTrail);
+            navLinkEls.forEach(a => {
+                a.classList.toggle('active', a.getAttribute('href') === '#' + activeId);
+            });
         }
-        animateTrail();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
 
         // ── SCROLL ANIMATIONS ─────────────────────────────────────
         const sectionObserver = new IntersectionObserver((entries) => {
@@ -670,6 +775,264 @@
                 navLinks.classList.remove('open');
                 hamburger.classList.remove('active');
             });
+        });
+
+        // ── PROJECT DEEP-DIVE MODALS ──────────────────────────────
+        // Keyed by the project card's <h3> title. Edit the "insight"
+        // lines in your own voice — that sentence is the highest-signal
+        // part of each write-up.
+        const projectDetails = {
+            "Continuing Care Home Activity Monitor": {
+                context: "Capstone · Computer Engineering",
+                video: "SDkYA16DcgQ",
+                stack: ["C++", "MicroPython", "Edge Impulse", "AWS IoT", "MQTT/TLS", "DynamoDB", "Lambda", "React Native"],
+                brief: "A non-invasive monitoring system that helps elderly residents age safely in place — three independent subsystems watch for stove, water, and appliance activity, run ML on-device, and stream alerts to a caregiver app.",
+                built: [
+                    "Trained and deployed edge-ML models on Raspberry Pi Pico 2W microcontrollers, reaching 97.73% accuracy while running entirely on-device — no cloud round-trip needed to detect an event.",
+                    "Built three independent subsystems (stove detection, water usage, appliance monitoring), each running standalone for up to 29 hours.",
+                    "Wired a full AWS IoT pipeline — MQTT over TLS into IoT Core, Lambda processing, DynamoDB storage — feeding a React Native caregiver app.",
+                    "Kept the entire bill of materials under $200 CAD, proving the concept is deployable at real-world cost."
+                ],
+                insight: "Elder-care tech only earns its place if residents forget it's there — every trade-off favoured non-invasiveness over raw capability.",
+                links: []
+            },
+            "Rotary Encoder HMI": {
+                context: "ECE 407 · Project 1 · Embedded Systems",
+                video: "q_OnzubR1rI",
+                stack: ["C", "RP2040 PIO", "WS2812B", "Quadrature Decode", "GDB"],
+                brief: "An embedded human-machine interface built around a mechanical quadrature encoder and a WS2812B RGB LED ring on the RP2040, wrapped in a Russian-roulette-style game.",
+                built: [
+                    "Decoded a mechanical quadrature encoder in real time and drove a WS2812B RGB LED ring using the RP2040's PIO for precise, timing-critical signalling.",
+                    "Implemented a Russian-roulette-inspired game with LED animations responding live to encoder rotation and button input.",
+                    "Debugged timing and signal issues down at the register level with GDB."
+                ],
+                insight: "PIO turns the RP2040 into a tiny deterministic co-processor — offloading the WS2812B timing onto it freed the main core entirely.",
+                links: []
+            },
+            "DC Motor Speed Controller": {
+                context: "ECE 407 · Project 2 · Control Systems",
+                video: "njNi2PRX1Rw",
+                stack: ["C", "PWM", "ADC", "H-bridge", "Wokwi"],
+                brief: "An open-loop DC motor speed controller on the RP2040 — a potentiometer sets speed and direction through an H-bridge, with a tachometer-style LED ring responding in real time.",
+                built: [
+                    "Read a potentiometer over ADC and drove motor speed with PWM, mapping the input to both speed and direction through an H-bridge driver.",
+                    "Animated a WS2812B RGB LED ring as a live tachometer reflecting motor state.",
+                    "Prototyped the full circuit in Wokwi before touching hardware, catching wiring issues early."
+                ],
+                insight: "Simulating in Wokwi first turned hardware bring-up from guesswork into confirmation — most bugs were gone before the board ever powered on.",
+                links: []
+            },
+            "Voice-Controlled Fan": {
+                context: "ECE 407 · Project 3 · TinyML",
+                video: "0YUXNzxJXc8",
+                stack: ["C / C++", "TinyML", "I2S", "INMP441", "TensorFlow Lite"],
+                brief: "A wake-word-controlled DC fan running on-device ML on the RP2040 — say \"yes\" to turn it on, \"no\" to turn it off, with no internet connection.",
+                built: [
+                    "Captured audio from an INMP441 MEMS microphone over I2S and fed it into a TensorFlow Lite model running entirely on the RP2040.",
+                    "Mapped \"yes\"/\"no\" inference results to fan on/off control in real time.",
+                    "Kept everything offline — inference runs on the microcontroller, no cloud or network required."
+                ],
+                insight: "Getting the model onto the chip was the easy half — making one spoken word trigger exactly one action took more tuning than the ML itself.",
+                links: []
+            },
+            "Event Lottery App": {
+                context: "Course Project · Mobile & Backend",
+                image: "assets/eventlottery.jpg",
+                stack: ["Java", "Android", "Firebase"],
+                brief: "An Android app implementing a fair, lottery-based signup system for high-demand events.",
+                built: [
+                    "Built a lottery-based signup flow that fairly allocates spots for oversubscribed events.",
+                    "Integrated a real-time Firebase backend with local notifications and deep linking.",
+                    "Designed the system with full OOP architecture, UML, and JUnit test coverage."
+                ],
+                insight: "Fairness is a feature you design for — a lottery only feels fair if the rules are transparent and the implementation is provably unbiased.",
+                links: [{ label: "GitHub →", href: "https://github.com/ErenPaper/EventLotteryApp" }]
+            },
+            "Anomaly Detection System": {
+                context: "Machine Learning · Data Science",
+                stack: ["Python", "Scikit-learn", "Pandas", "Matplotlib"],
+                brief: "An end-to-end anomaly detection pipeline comparing statistical, distance-based, and ML approaches on the same data.",
+                built: [
+                    "Implemented and compared statistical, distance-based (k-NN, DBSCAN), and ML (One-Class SVM) detection techniques.",
+                    "Evaluated each approach with precision, recall, F1-score, and ROC/PR curves.",
+                    "Documented the full pipeline in a reproducible Jupyter notebook."
+                ],
+                insight: "No single anomaly detector wins everywhere — the value was in showing where each method breaks, not just where it works.",
+                links: [{ label: "GitHub →", href: "https://github.com/ErenPaper/Anomaly-Detection-System" }]
+            },
+            "16-bit CPU Design": {
+                context: "Digital Logic · Hardware",
+                stack: ["VHDL", "Vivado", "FPGA"],
+                brief: "A 16-bit CPU designed from scratch on a Xilinx Zybo Z7 FPGA, with a full controller-datapath architecture.",
+                built: [
+                    "Designed a complete controller-datapath architecture with an ALU, register file, and control FSM.",
+                    "Implemented 13 custom instructions — including a bitwise multiplier — running on real FPGA hardware.",
+                    "Built and verified the design in Vivado on a Xilinx Zybo Z7."
+                ],
+                insight: "Building a CPU from the gate level up makes every abstraction above it — assembly, C, the OS — feel earned rather than magic.",
+                links: []
+            },
+            "File Sharing System": {
+                context: "Systems · Networking",
+                stack: ["C", "Sockets", "TCP/UDP"],
+                brief: "A client-server file sharing application in C built on custom socket protocols and nonblocking I/O.",
+                built: [
+                    "Implemented custom TCP/UDP socket protocols with enforced packet formats and error handling.",
+                    "Used nonblocking I/O to handle multiple concurrent connections on a single server."
+                ],
+                insight: "Writing the protocol by hand showed how much work TCP normally hides — every dropped packet and partial read had to be planned for.",
+                links: []
+            }
+        };
+
+        const modal = document.getElementById('project-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalClose = document.getElementById('modal-close');
+
+        function openModal(data) {
+            const stack = data.stack.map(s => `<span>${s}</span>`).join('');
+            const built = data.built.map(b => `<li>${b}</li>`).join('');
+            const links = (data.links || []).map(l =>
+                `<a href="${l.href}" target="_blank" class="modal-link">${l.label}</a>`).join('');
+            // Media is built here, so the YouTube player only loads on open (lazy)
+            let media = '';
+            if (data.video) {
+                media = `<div class="modal-media"><div class="project-video-wrap"><iframe src="https://www.youtube.com/embed/${data.video}" title="${data.title} demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div></div>`;
+            } else if (data.image) {
+                media = `<div class="modal-media"><img src="${data.image}" alt="${data.title}"></div>`;
+            }
+            modalContent.innerHTML = `
+                ${media}
+                <span class="modal-context">${data.context}</span>
+                <h3 id="modal-title">${data.title}</h3>
+                <div class="modal-stack">${stack}</div>
+                <p class="modal-brief">${data.brief}</p>
+                <h4 class="modal-heading">What I built</h4>
+                <ul class="modal-built">${built}</ul>
+                <div class="modal-insight"><span class="modal-insight-label">Key insight</span>${data.insight}</div>
+                ${links ? `<div class="modal-links">${links}</div>` : ''}`;
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            modalClose.focus();
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+            // Clear after the fade so the video stops and audio cuts out
+            setTimeout(() => {
+                if (!modal.classList.contains('open')) modalContent.innerHTML = '';
+            }, 320);
+        }
+
+        // Wire a "View details" button onto every card that has a write-up
+        document.querySelectorAll('.project-card').forEach(card => {
+            const h3 = card.querySelector('h3');
+            if (!h3) return;
+            const data = projectDetails[h3.textContent.trim()];
+            if (!data) return;
+            data.title = h3.textContent.trim();
+            const btn = document.createElement('button');
+            btn.className = 'project-details-btn';
+            btn.innerHTML = 'View details <span aria-hidden="true">→</span>';
+            btn.addEventListener('click', () => openModal(data));
+            (card.querySelector('.project-card-body') || card).appendChild(btn);
+        });
+
+        // ── ANIMATED STAT COUNTERS ────────────────────────────────
+        // Counts the number inside each .project-stats span up from 0
+        // when it scrolls into view, preserving any prefix/suffix text.
+        (function () {
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const stats = document.querySelectorAll('.project-stats span');
+            if (!stats.length || reduceMotion) return;
+
+            const parsed = [];
+            stats.forEach(el => {
+                const m = el.textContent.match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/s);
+                if (!m) return;
+                const decimals = m[2].includes('.') ? m[2].split('.')[1].length : 0;
+                parsed.push({ el, prefix: m[1], target: parseFloat(m[2]), suffix: m[3], decimals });
+                el.textContent = m[1] + (0).toFixed(decimals) + m[3];
+            });
+
+            function run(item) {
+                const dur = 1200, start = performance.now();
+                function step(now) {
+                    const p = Math.min((now - start) / dur, 1);
+                    const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+                    const val = (item.target * eased).toFixed(item.decimals);
+                    item.el.textContent = item.prefix + val + item.suffix;
+                    if (p < 1) requestAnimationFrame(step);
+                }
+                requestAnimationFrame(step);
+            }
+
+            const obs = new IntersectionObserver((entries, o) => {
+                entries.forEach(e => {
+                    if (!e.isIntersecting) return;
+                    const item = parsed.find(p => p.el === e.target);
+                    if (item) run(item);
+                    o.unobserve(e.target);
+                });
+            }, { threshold: 0.6 });
+            parsed.forEach(p => obs.observe(p.el));
+        })();
+
+        // ── PROJECT FILTERS ───────────────────────────────────────
+        const projectCategories = {
+            "Continuing Care Home Activity Monitor": "embedded ml",
+            "Rotary Encoder HMI": "embedded hardware",
+            "DC Motor Speed Controller": "embedded hardware",
+            "Voice-Controlled Fan": "embedded ml",
+            "Event Lottery App": "software",
+            "Anomaly Detection System": "ml software",
+            "16-bit CPU Design": "hardware",
+            "File Sharing System": "software",
+            "Group Dining Decision App": "software",
+            "BMO Build": "embedded hardware",
+            "Morse Code Decoder": "embedded"
+        };
+
+        const filterBar = document.getElementById('project-filters');
+        const allCards = Array.from(document.querySelectorAll('.project-card'));
+        allCards.forEach(card => {
+            const h3 = card.querySelector('h3');
+            card.dataset.category = (h3 && projectCategories[h3.textContent.trim()]) || '';
+        });
+
+        filterBar.addEventListener('click', (e) => {
+            const chip = e.target.closest('.filter-chip');
+            if (!chip) return;
+            filterBar.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            const f = chip.dataset.filter;
+            allCards.forEach(card => {
+                const show = f === 'all' || card.dataset.category.split(' ').includes(f);
+                card.classList.toggle('filtered-out', !show);
+                if (show) {
+                    card.classList.remove('filter-in');
+                    void card.offsetWidth; // restart the entrance animation
+                    card.classList.add('filter-in');
+                }
+            });
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('open')) closeModal();
+        });
+
+        // ── BACK TO TOP ───────────────────────────────────────────
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 600);
+        }, { passive: true });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
         </script>
     </body>
