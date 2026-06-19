@@ -318,6 +318,18 @@
                     </div>
                 </div>
 
+                <!-- Twitter/X Database CLI -->
+                <div class="project-card">
+                    <span class="project-tag">Databases · Backend</span>
+                    <h3>Twitter/X Database CLI</h3>
+                    <div class="project-tech">
+                        <span>Python</span>
+                        <span>SQLite3</span>
+                        <span>MongoDB</span>
+                        <span>JSON</span>
+                    </div>
+                </div>
+
                 <!-- Dining App -->
                 <div class="project-card placeholder-card">
                     <span class="project-tag">Coming Soon · Mobile · Social</span>
@@ -655,18 +667,14 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
             });
 
-            // Re-theme the stars when light/dark is toggled
-            new MutationObserver(() => {
-                const light = isLight();
-                dust.mat.color.set(light ? 0x666666 : 0x8a96bf);
-                dust.mat.opacity = light ? 0.5 : 0.55;
-                stars.mat.color.set(light ? 0x333333 : 0xffffff);
-                [dust, stars, accent].forEach(l => {
-                    l.mat.blending = light ? THREE.NormalBlending : THREE.AdditiveBlending;
-                    l.mat.needsUpdate = true;
-                });
-                if (reduceMotion) renderer.render(scene, camera);
-            }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+            // The starfield is a dark-mode feature — on the light cream
+            // background the dots read like cells, so fade it out in light.
+            function applyTheme() {
+                canvas.style.opacity = isLight() ? '0' : '1';
+            }
+            applyTheme();
+            new MutationObserver(applyTheme).observe(
+                document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
         })();
 
         // ── TYPING EFFECT ─────────────────────────────────────────
@@ -882,8 +890,25 @@
                 ],
                 insight: "Writing the protocol by hand showed how much work TCP normally hides — every dropped packet and partial read had to be planned for.",
                 links: []
+            },
+            "Twitter/X Database CLI": {
+                context: "CMPUT 291 · Fall 2023",
+                stack: ["Python", "SQLite3", "MongoDB", "JSON"],
+                brief: "A command-line social-media database application that bulk-loads a large Twitter/X dataset and supports tweet composition, user and tweet search, and follower-list management — built across both SQLite and MongoDB backends.",
+                built: [
+                    "Led the SQLite + Python integration, building the core features: tweet composition, user and tweet search, and follower-list management.",
+                    "Wrote SQL queries in Python to drive a working social-media platform over a large JSON dataset.",
+                    "Collaborated on GitHub in a four-person team, integrating everyone's features and refining functionality together.",
+                    "Handled database creation, debugging, and error-checking to keep the command-line interface robust."
+                ],
+                insight: "Most of the real work was making search fast and correct over a big dataset — and getting four people's features to compose cleanly mattered more than any single query.",
+                links: []
             }
         };
+
+        // Tag every entry with its own title, and fix an order for prev/next
+        Object.keys(projectDetails).forEach(k => { projectDetails[k].title = k; });
+        const projectOrder = Object.keys(projectDetails);
 
         const modal = document.getElementById('project-modal');
         const modalContent = document.getElementById('modal-content');
@@ -901,6 +926,15 @@
             } else if (data.image) {
                 media = `<div class="modal-media"><img src="${data.image}" alt="${data.title}"></div>`;
             }
+            // Prev / next navigation between projects
+            const idx = projectOrder.indexOf(data.title);
+            const prevKey = projectOrder[idx - 1];
+            const nextKey = projectOrder[idx + 1];
+            const nav = `<div class="modal-nav">
+                ${prevKey ? `<button class="modal-nav-btn prev" data-key="${prevKey}"><span class="modal-nav-dir">← prev</span><span class="modal-nav-name">${prevKey}</span></button>` : '<span></span>'}
+                ${nextKey ? `<button class="modal-nav-btn next" data-key="${nextKey}"><span class="modal-nav-dir">next →</span><span class="modal-nav-name">${nextKey}</span></button>` : '<span></span>'}
+            </div>`;
+
             modalContent.innerHTML = `
                 ${media}
                 <span class="modal-context">${data.context}</span>
@@ -910,7 +944,12 @@
                 <h4 class="modal-heading">What I built</h4>
                 <ul class="modal-built">${built}</ul>
                 <div class="modal-insight"><span class="modal-insight-label">Key insight</span>${data.insight}</div>
-                ${links ? `<div class="modal-links">${links}</div>` : ''}`;
+                ${links ? `<div class="modal-links">${links}</div>` : ''}
+                ${nav}`;
+            modalContent.querySelectorAll('.modal-nav-btn').forEach(b =>
+                b.addEventListener('click', () => openModal(projectDetails[b.dataset.key])));
+            modal.scrollTop = 0;
+            modal.querySelector('.modal').scrollTop = 0;
             modal.classList.add('open');
             modal.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
@@ -928,17 +967,59 @@
         }
 
         // Wire a "View details" button onto every card that has a write-up
+        const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+        const TILT_MAX = 6; // degrees
+
         document.querySelectorAll('.project-card').forEach(card => {
             const h3 = card.querySelector('h3');
             if (!h3) return;
             const data = projectDetails[h3.textContent.trim()];
             if (!data) return;
-            data.title = h3.textContent.trim();
-            const btn = document.createElement('button');
-            btn.className = 'project-details-btn';
-            btn.innerHTML = 'View details <span aria-hidden="true">→</span>';
-            btn.addEventListener('click', () => openModal(data));
-            (card.querySelector('.project-card-body') || card).appendChild(btn);
+
+            // Thumbnail (poster image) — a lightweight visual hook (not a
+            // live player) so cards stay fast. The whole card opens the modal.
+            const src = data.video
+                ? `https://img.youtube.com/vi/${data.video}/hqdefault.jpg`
+                : data.image;
+            if (src) {
+                const thumb = document.createElement('div');
+                thumb.className = 'project-thumb';
+                thumb.innerHTML = `<img src="${src}" alt="${data.title} preview" loading="lazy">` +
+                    (data.video ? '<span class="thumb-play" aria-hidden="true"></span>' : '');
+                card.insertBefore(thumb, card.firstChild);
+            }
+
+            const cue = document.createElement('span');
+            cue.className = 'project-details-btn';
+            cue.innerHTML = 'View details <span aria-hidden="true">→</span>';
+            card.appendChild(cue);
+
+            // Whole card is the click target
+            card.classList.add('clickable');
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', `View details: ${data.title}`);
+            card.addEventListener('click', () => openModal(data));
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(data); }
+            });
+
+            // 3D tilt toward the cursor (desktop only; skip the big featured card)
+            if (finePointer && !card.classList.contains('featured')) {
+                card.addEventListener('mousemove', (e) => {
+                    const r = card.getBoundingClientRect();
+                    const px = (e.clientX - r.left) / r.width;
+                    const py = (e.clientY - r.top) / r.height;
+                    const rx = (0.5 - py) * TILT_MAX * 2;
+                    const ry = (px - 0.5) * TILT_MAX * 2;
+                    card.style.transition = 'transform 0s';
+                    card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transition = 'transform 0.5s cubic-bezier(.03,.98,.52,.99)';
+                    card.style.transform = '';
+                });
+            }
         });
 
         // ── ANIMATED STAT COUNTERS ────────────────────────────────
@@ -991,6 +1072,7 @@
             "Anomaly Detection System": "ml software",
             "16-bit CPU Design": "hardware",
             "File Sharing System": "software",
+            "Twitter/X Database CLI": "software",
             "Group Dining Decision App": "software",
             "BMO Build": "embedded hardware",
             "Morse Code Decoder": "embedded"
