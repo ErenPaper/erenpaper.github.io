@@ -147,7 +147,7 @@ nav {
 
 #hero h1 {
     font-size: 72px;
-    font-weight: 700;
+    font-weight: 500;
     line-height: 1.0;
     color: #ffffff;
     opacity: 0;
@@ -348,7 +348,7 @@ section {
 
 h2 {
     font-size: 42px;
-    font-weight: 700;
+    font-weight: 500;
     margin-bottom: 40px;
     color: #ffffff;
 }
@@ -1721,18 +1721,6 @@ h1, h2, h3, h4 {
     }
 }
 
-/* ─── SECTION INDEX NUMBERS ─────────────────────────────────── */
-h2[data-index]::before {
-    content: attr(data-index);
-    display: block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    color: var(--accent);
-    opacity: 0.7;
-    margin-bottom: 10px;
-}
 
 /* ─── PROJECT FILTER CHIPS ──────────────────────────────────── */
 .project-filters {
@@ -2030,3 +2018,544 @@ h2[data-index]::before {
 .project-card.clickable .project-details-btn {
     pointer-events: none;
 }
+
+/* ─── WARM GRADIENT BACKGROUND (light theme) ────────────────── */
+#light-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background:
+        radial-gradient(42% 50% at 18% 28%, rgba(230, 57, 70, 0.07), transparent 70%),
+        radial-gradient(46% 55% at 82% 22%, rgba(255, 168, 110, 0.10), transparent 70%),
+        radial-gradient(50% 60% at 62% 82%, rgba(230, 57, 70, 0.05), transparent 72%),
+        radial-gradient(40% 45% at 30% 75%, rgba(255, 190, 130, 0.07), transparent 70%);
+    background-size: 200% 200%;
+    animation: auroraDrift 30s ease-in-out infinite alternate;
+}
+
+[data-theme="light"] #light-bg {
+    opacity: 1;
+}
+
+@keyframes auroraDrift {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #light-bg { animation: none; }
+}
+
+/* ════════════════════════════════════════════════════════════ */
+/* ─── RETRO-FUTURIST PASS ───────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════ */
+
+#hero h1 {
+    text-shadow: 0 0 28px rgba(230, 57, 70, 0.55), 0 0 64px rgba(230, 57, 70, 0.28);
+}
+
+[data-theme="light"] #hero h1 {
+    text-shadow: none;
+}
+
+/* ─── CRT SCANLINES (dark theme only) ───────────────────────── */
+#scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0,
+        rgba(0, 0, 0, 0) 2px,
+        rgba(0, 0, 0, 0.11) 3px
+    );
+    opacity: 0.55;
+    transition: opacity 0.4s ease;
+}
+
+[data-theme="light"] #scanlines {
+    opacity: 0;
+}
+
+/* ─── MUSIC EQUALIZER (beyond-engineering nod) ──────────────── */
+.eq {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 13px;
+    margin-left: 12px;
+    vertical-align: middle;
+}
+
+.eq i {
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    border-radius: 1px;
+    transform-origin: bottom;
+    transform: scaleY(0.3);
+    animation: eqBar 0.9s ease-in-out infinite;
+}
+
+.eq i:nth-child(1) { animation-delay: 0.0s; }
+.eq i:nth-child(2) { animation-delay: 0.25s; }
+.eq i:nth-child(3) { animation-delay: 0.5s; }
+.eq i:nth-child(4) { animation-delay: 0.15s; }
+.eq i:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes eqBar {
+    0%, 100% { transform: scaleY(0.28); }
+    50%      { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .eq i { animation: none; transform: scaleY(0.6); }
+}
+
+/* ─── SUB-SECTION GROUP LABELS (Work / Info buckets) ────────── */
+.group-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin: 52px 0 22px;
+}
+
+.group-label::before {
+    content: '';
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.6;
+}
+
+/* First group-label right under the section h2 sits closer */
+h2 + .group-label {
+    margin-top: 6px;
+}
+
+/* ─── SECTION INTRO LINE (Prototypes) ───────────────────────── */
+.section-intro {
+    font-size: 16px;
+    color: var(--text-muted);
+    max-width: 660px;
+    line-height: 1.7;
+    margin-bottom: 34px;
+}
+
+/* Contact buttons inside Info read left-aligned */
+#info .contact-links {
+    margin-top: 4px;
+}
+
+/* ─── BACKGROUND MUSIC PLAYER (retro vinyl) ─────────────────── */
+.music-player {
+    position: fixed;
+    right: 24px;
+    bottom: 88px;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 16px 7px 7px;
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.music-player:hover {
+    border-color: var(--accent);
+}
+
+.music-toggle {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    background: #0d0d0d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* the record grooves */
+.vinyl {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        repeating-radial-gradient(circle at center, #1d1d1d 0 1px, #242424 1px 3px);
+}
+.vinyl::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 11px;
+    height: 11px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: var(--accent);
+}
+.music-player.playing .vinyl {
+    animation: spin 3.2s linear infinite;
+}
+
+/* play / pause glyphs */
+.m-ico { position: relative; z-index: 1; }
+.m-play {
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 6px 0 6px 11px;
+    border-color: transparent transparent transparent #fff;
+    margin-left: 3px;
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.6));
+}
+.m-pause {
+    display: none;
+    width: 9px; height: 12px;
+    border-left: 3px solid #fff;
+    border-right: 3px solid #fff;
+}
+.music-player.playing .m-play { display: none; }
+.music-player.playing .m-pause { display: block; }
+
+.music-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+.music-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+.music-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.music-vol {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 64px;
+    height: 3px;
+    border-radius: 3px;
+    background: var(--border);
+    cursor: pointer;
+}
+.music-vol::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+}
+.music-vol::-moz-range-thumb {
+    width: 12px; height: 12px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+}
+
+/* Compact on small screens — just the disc */
+@media (max-width: 640px) {
+    .music-player {
+        right: 16px;
+        bottom: 70px;
+        padding: 6px;
+        gap: 0;
+    }
+    .music-info,
+    .music-vol { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .music-player.playing .vinyl { animation: none; }
+}
+
+/* ════════════════════════════════════════════════════════════ */
+/* ─── SIDE B (personal) + CONTACT BLOCKS ────────────────────── */
+/* ════════════════════════════════════════════════════════════ */
+
+/* Warm, grainy treatment — the "analog" half */
+#sideb { position: relative; }
+#sideb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px;
+}
+#sideb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(65% 55% at 50% 0%, rgba(255, 150, 90, 0.05), transparent 70%);
+}
+#sideb > * { position: relative; z-index: 1; }
+
+/* Interest tags */
+.interest-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+.interest {
+    position: relative;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 20px;
+    cursor: default;
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+                box-shadow 0.28s ease, color 0.2s ease;
+}
+
+/* Contact blocks */
+.contact-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 70px 10% 90px;
+}
+.contact-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 28px 26px;
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    border-radius: 14px;
+    text-decoration: none;
+    transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.28s ease;
+}
+.cb-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+.cb-value {
+    font-size: 16px;
+    color: var(--text-muted);
+    word-break: break-word;
+    transition: color 0.2s ease;
+}
+.contact-block:hover .cb-value { color: var(--text); }
+
+/* ─── SHARED HOVER: border fills in, card pushes forward ─────── */
+.interest::after,
+.contact-block::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1.5px solid var(--accent);
+    border-radius: inherit;
+    opacity: 0;
+    transform: scale(0.9);
+    pointer-events: none;
+    transition: opacity 0.28s ease, transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.interest:hover,
+.contact-block:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+    color: var(--text);
+}
+.interest:hover::after,
+.contact-block:hover::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@media (max-width: 640px) {
+    .contact-strip { grid-template-columns: 1fr; padding: 50px 6% 70px; }
+}
+
+/* Old centered #contact rules no longer apply to the new strip */
+#contact.contact-strip {
+    display: grid;
+    justify-content: initial;
+    align-items: initial;
+}
+
+/* ════════════════════════════════════════════════════════════ */
+/* ─── DUAL MODE: Professional ⇄ Personal ────────────────────── */
+/* ════════════════════════════════════════════════════════════ */
+
+/* ── Mode visibility ───────────────────────────────────────── */
+[data-mode="pro"] .mode-personal-only { display: none !important; }
+[data-mode="personal"] .mode-pro-only { display: none !important; }
+
+/* ── Personal palette: warm, dark, analog ──────────────────── */
+[data-mode="personal"] {
+    --bg: #161210;
+    --bg-card: #1d1714;
+    --bg-nav: rgba(22, 18, 16, 0.85);
+    --text: #f3ece6;
+    --text-muted: #b8a99e;
+    --text-dim: #82736a;
+    --border: #2e251f;
+    --border-subtle: #241c17;
+    --accent: #e63946;
+    --tag-text: #82736a;
+    --sidebar-icon: #6a5c52;
+}
+
+/* ── 0.4s crossfade on the big surfaces when switching modes ── */
+html { transition: background-color 0.4s ease; }
+body { transition: background-color 0.4s ease, color 0.4s ease; }
+nav  { transition: background-color 0.4s ease, border-color 0.3s ease; }
+.project-card,
+.experience-item,
+.skill-category,
+.interest,
+.contact-block,
+.contact-icon-btn,
+.music-player,
+.mode-toggle {
+    transition: background-color 0.4s ease, border-color 0.2s ease,
+                transform 0.25s ease, box-shadow 0.25s ease, color 0.3s ease;
+}
+
+/* ── Hero neon glow: subtle in Pro, full retro in Personal ──── */
+#hero h1 {
+    text-shadow: 0 0 18px rgba(230, 57, 70, 0.22);
+    transition: text-shadow 0.4s ease;
+}
+[data-mode="personal"] #hero h1 {
+    text-shadow: 0 0 28px rgba(230, 57, 70, 0.55), 0 0 64px rgba(230, 57, 70, 0.28);
+}
+[data-theme="light"] #hero h1 { text-shadow: none; }
+
+/* ── CRT scanlines: Personal mode only ─────────────────────── */
+[data-mode="pro"] #scanlines { opacity: 0; }
+[data-mode="personal"] #scanlines { opacity: 0.5; }
+
+/* Personal mode keeps its warm palette even if light theme was saved
+   in Pro — hide the cream light-mode gradient here. */
+[data-mode="personal"] #light-bg { opacity: 0; }
+
+/* ── FILM GRAIN OVERLAY (Personal mode only) ───────────────── */
+#grain {
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px;
+    mix-blend-mode: overlay;
+}
+[data-mode="personal"] #grain {
+    opacity: 0.07;
+    animation: grainShift 0.6s steps(2) infinite;
+}
+@keyframes grainShift {
+    0%   { transform: translate(0, 0); }
+    50%  { transform: translate(-3px, 2px); }
+    100% { transform: translate(2px, -2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+    [data-mode="personal"] #grain { animation: none; }
+}
+
+/* ── MODE TOGGLE BUTTON (fixed, bottom-left) ───────────────── */
+.mode-toggle {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    z-index: 400;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    padding: 5px;
+    border-radius: 40px;
+    background: var(--bg-card);
+    border: 0.5px solid var(--border);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+}
+.mode-toggle:hover { border-color: var(--accent); }
+
+.mode-opt {
+    padding: 7px 15px;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    border-radius: 30px;
+    color: var(--text-dim);
+    transition: background-color 0.4s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+}
+[data-mode="pro"] .opt-pro,
+[data-mode="personal"] .opt-personal {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+@media (max-width: 640px) {
+    .mode-toggle { left: 16px; bottom: 16px; }
+    .mode-opt { padding: 6px 12px; font-size: 11px; }
+}
+
+/* ── RED CURSOR TRAIL (12 dots, Pro mode, desktop only) ────── */
+#cursor-trail {
+    position: fixed;
+    inset: 0;
+    z-index: 350;
+    pointer-events: none;
+}
+.trail-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px rgba(230, 57, 70, 0.7);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+}
+/* No cursor trail in Personal mode — the vinyl + grain carry it there */
+[data-mode="personal"] #cursor-trail { display: none; }
+
+/* ── EXTRACURRICULARS heading spacing (sits after the divider) ─ */
+#extracurriculars { padding-top: 40px; }
+#sideb { padding-top: 40px; }
+
+/* The // beyond engineering divider leads into the mode section */
+.beyond-zone { padding: 50px 10% 0; }
+@media (max-width: 900px) { .beyond-zone { padding: 40px 6% 0; } }

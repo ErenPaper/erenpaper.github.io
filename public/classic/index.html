@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="pro" data-theme="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Raphael Ramos · Computer Engineer</title>
+        <meta name="description" content="Raphael Ramos — Computer Engineering graduate (2026) focused on firmware, embedded systems, and hardware. Portfolio of projects from edge ML to FPGA CPUs.">
+
+        <!-- Social share preview (LinkedIn, etc.) -->
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Raphael Ramos · Computer Engineer">
+        <meta property="og:description" content="Firmware, embedded systems, and hardware — projects from edge ML to FPGA CPUs.">
+        <meta property="og:image" content="https://erenpaper.github.io/assets/raphael.jpg">
+        <meta property="og:url" content="https://erenpaper.github.io/">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Raphael Ramos · Computer Engineer">
+        <meta name="twitter:description" content="Firmware, embedded systems, and hardware — projects from edge ML to FPGA CPUs.">
+        <meta name="twitter:image" content="https://erenpaper.github.io/assets/raphael.jpg">
+
+        <!-- Set mode/theme before paint to avoid a flash of the wrong skin -->
+        <script>
+        (function () {
+            try {
+                var params = new URLSearchParams(location.search);
+                var mode = params.get('mode');
+                if (mode !== 'personal' && mode !== 'pro') mode = localStorage.getItem('mode') || 'pro';
+                document.documentElement.setAttribute('data-mode', mode);
+                // Theme only applies in Pro mode; Personal has its own fixed warm palette.
+                var theme = localStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {}
+        })();
+        </script>
+
+        <link rel="stylesheet" href="/classic/style.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%230a0a0a'/><text x='50' y='68' font-family='Georgia,serif' font-size='52' font-weight='700' fill='%23e63946' text-anchor='middle'>rr</text></svg>">
+    </head>
+    <body>
+        <!-- ABSTRACT ANIMATED BACKGROUND (Three.js) -->
+        <canvas id="bg-canvas"></canvas>
+
+        <!-- WARM GRADIENT BACKGROUND (light theme only) -->
+        <div id="light-bg" aria-hidden="true"></div>
+
+        <!-- CRT SCANLINES (Personal mode texture) -->
+        <div id="scanlines" aria-hidden="true"></div>
+
+        <!-- FILM GRAIN OVERLAY (Personal mode only) -->
+        <div id="grain" aria-hidden="true"></div>
+
+        <!-- RED CURSOR TRAIL (Pro mode, desktop only) -->
+        <div id="cursor-trail" aria-hidden="true"></div>
+
+        <!-- SCROLL PROGRESS BAR -->
+        <div class="scroll-progress" id="scroll-progress"></div>
+
+        <!-- NAVIGATION -->
+        <nav id="navbar">
+            <a href="#hero" class="nav-logo">rr</a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li class="mode-pro-only"><a href="#skills">Skills</a></li>
+                <li class="mode-pro-only"><a href="#extracurriculars">Beyond</a></li>
+                <li class="mode-personal-only"><a href="#sideb">Side B</a></li>
+            </ul>
+            <div class="nav-right">
+                <button class="theme-toggle mode-pro-only" id="theme-toggle" aria-label="Toggle light/dark theme">
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                    </svg>
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>
+                    </svg>
+                </button>
+                <a href="/" class="nav-resume" title="Back to the main menu">⌂ Main Menu</a>
+                <a href="/assets/Raphael_Ramos_Resume.pdf" target="_blank" class="nav-resume">Resume</a>
+                <button class="hamburger" id="hamburger" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- HERO SECTION -->
+        <section id="hero">
+            <div class="hero-text">
+                <p class="hero-eyebrow">Computer Engineering Graduate · Edmonton, AB</p>
+                <h1><span id="typing-name"></span><span class="cursor-blink">|</span></h1>
+                <div class="hero-divider"></div>
+                <p class="hero-tagline">
+                    <em>I like to build things!...and figure out why it broke...</em>
+                    Computer Engineering graduate, Class of 2026.
+                </p>
+                <div class="hero-ctas mode-pro-only">
+                    <a href="#projects" class="btn btn-primary">See my work</a>
+                </div>
+            </div>
+            <div class="hero-photo-wrap">
+                <div class="photo-glow"></div>
+                <div class="photo-ring"></div>
+                <div class="photo-circle">
+                    <img src="/assets/raphael.jpg" alt="Raphael Ramos">
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about">
+            <h2>About</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>
+                        I'm a Computer Engineering graduate from the University of Alberta (June 2026).
+                        I gravitate toward work that's hands-on and grounded — firmware, embedded systems,
+                        hardware that actually does something in the world.
+                        Currently VP Academics at the Computer Engineering Club.
+                    </p>
+                    <br>
+                    <p>
+                        Outside of engineering, I play piano with my family, volunteer at events, and have watched probably too much anime
+                        — the GitHub handle is proof. I'm outgoing and love to talk (maybe too much), take my faith seriously, and genuinely believe a
+                        well-timed dad joke is a life skill.
+                    </p>
+                </div>
+                <div class="about-photo">
+                    <img src="/assets/about_me.jpg" alt="Raphael Ramos">
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE SECTION -->
+        <section id="experience">
+            <h2>Experience</h2>
+            <div class="experience-list">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Turbine-X Energy Inc.</span>
+                            <span class="experience-role">Product Development Intern</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">May 2024 – Aug 2024</span>
+                            <span class="experience-location">Nisku, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Performed system-level testing and validation for fully integrated prototypes to ensure specification compliance.</li>
+                        <li>Calibrated advanced electrical, optical, and sensor equipment ensuring precise measurements.</li>
+                        <li>Built and brought up servers for internal data sharing, including physical construction and digital configuration.</li>
+                        <li>Created technical documentation for testing equipment covering training, specifications, and conditions.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Hardware Testing</span>
+                        <span>Sensor Calibration</span>
+                        <span>System Validation</span>
+                        <span>Power Apps</span>
+                        <span>Technical Documentation</span>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Vertical City</span>
+                            <span class="experience-role">Software Deployment Intern</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Jul 2023 – Sep 2023</span>
+                            <span class="experience-location">Edmonton, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Updated Linux-based software from Ubuntu 18 to Ubuntu 20 on elevator and lobby screens across 250+ units.</li>
+                        <li>Troubleshot LTE signal processing with antennas, optimizing network connectivity for uninterrupted communication.</li>
+                        <li>Executed hardware re-wiring on elevator TVs to ensure seamless functionality of critical systems.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Linux</span>
+                        <span>Ubuntu</span>
+                        <span>LTE / Networking</span>
+                        <span>Hardware Wiring</span>
+                        <span>Software Deployment</span>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Private Tutoring</span>
+                            <span class="experience-role">Academic Tutor</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Sept 2025 – Present</span>
+                            <span class="experience-location">Edmonton, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Provide one-on-one tutoring across Math, English, and Social Studies for students from Grade 9 to 12.</li>
+                        <li>Adapt teaching approach to individual learning needs across multiple clients and learning environments.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Mathematics</span>
+                        <span>English</span>
+                        <span>Social Studies</span>
+                        <span>One-on-one Instruction</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects">
+            <h2>Projects</h2>
+            <p class="section-intro">Capstone, firmware &amp; hardware builds first — mostly RP2040 work — then systems and ML projects below.</p>
+            <div class="projects-grid">
+
+                <!-- CAPSTONE — full width featured (YouTube on open) -->
+                <div class="project-card featured">
+                    <span class="project-tag">Capstone · Embedded · ML · Cloud · IoT</span>
+                    <h3>Continuing Care Home Activity Monitor</h3>
+                    <div class="project-stats">
+                        <span>97.73% ML accuracy</span>
+                        <span>29hr standalone</span>
+                        <span>Under $200 CAD</span>
+                        <span>3 subsystems</span>
+                    </div>
+                    <div class="project-tech">
+                        <span>C++</span>
+                        <span>MicroPython</span>
+                        <span>Edge Impulse</span>
+                        <span>AWS IoT</span>
+                        <span>MQTT/TLS</span>
+                        <span>DynamoDB</span>
+                        <span>Lambda</span>
+                        <span>React Native</span>
+                    </div>
+                </div>
+
+                <!-- Rotary Encoder HMI — YouTube -->
+                <div class="project-card">
+                    <span class="project-tag">Embedded · Firmware · Hardware</span>
+                    <h3>Rotary Encoder HMI</h3>
+                    <div class="project-tech">
+                        <span>C</span>
+                        <span>RP2040 PIO</span>
+                        <span>WS2812B</span>
+                        <span>Quadrature Decode</span>
+                        <span>GDB</span>
+                    </div>
+                </div>
+
+                <!-- DC Motor Speed Controller — YouTube -->
+                <div class="project-card">
+                    <span class="project-tag">Embedded · Control Systems</span>
+                    <h3>DC Motor Speed Controller</h3>
+                    <div class="project-tech">
+                        <span>C</span>
+                        <span>PWM</span>
+                        <span>ADC</span>
+                        <span>H-bridge</span>
+                        <span>Wokwi</span>
+                    </div>
+                </div>
+
+                <!-- Voice-Controlled Fan — YouTube -->
+                <div class="project-card">
+                    <span class="project-tag">Embedded · TinyML · Audio</span>
+                    <h3>Voice-Controlled Fan</h3>
+                    <div class="project-tech">
+                        <span>C / C++</span>
+                        <span>TinyML</span>
+                        <span>I2S</span>
+                        <span>INMP441</span>
+                        <span>TensorFlow Lite</span>
+                    </div>
+                </div>
+
+                <!-- Event Lottery App — screenshot -->
+                <div class="project-card">
+                    <span class="project-tag">Mobile · Backend</span>
+                    <h3>Event Lottery App</h3>
+                    <div class="project-tech">
+                        <span>Java</span>
+                        <span>Android</span>
+                        <span>Firebase</span>
+                    </div>
+                </div>
+
+                <!-- Anomaly Detection — text only, GitHub link -->
+                <div class="project-card">
+                    <span class="project-tag">ML · Data Science</span>
+                    <h3>Anomaly Detection System</h3>
+                    <div class="project-tech">
+                        <span>Python</span>
+                        <span>Scikit-learn</span>
+                        <span>Pandas</span>
+                        <span>Matplotlib</span>
+                    </div>
+                </div>
+
+                <!-- 16-bit CPU — text only -->
+                <div class="project-card">
+                    <span class="project-tag">Hardware · Digital Logic</span>
+                    <h3>16-bit CPU Design</h3>
+                    <div class="project-tech">
+                        <span>VHDL</span>
+                        <span>Vivado</span>
+                        <span>FPGA</span>
+                    </div>
+                </div>
+
+                <!-- File Sharing — text only -->
+                <div class="project-card">
+                    <span class="project-tag">Systems · Networking</span>
+                    <h3>File Sharing System</h3>
+                    <div class="project-tech">
+                        <span>C</span>
+                        <span>Sockets</span>
+                        <span>TCP/UDP</span>
+                    </div>
+                </div>
+
+                <!-- Nosh — coming soon -->
+                <div class="project-card placeholder-card">
+                    <span class="project-tag">Coming Soon · Mobile · Social</span>
+                    <h3>Group Dining Decision App (Nosh)</h3>
+                    <div class="project-tech">
+                        <span>Java</span>
+                        <span>Android Studio</span>
+                        <span>Firebase</span>
+                        <span>Google Places API</span>
+                    </div>
+                </div>
+
+                <!-- BMO — coming soon -->
+                <div class="project-card placeholder-card">
+                    <span class="project-tag">Coming Soon · Hardware · Embedded</span>
+                    <h3>BMO Build</h3>
+                    <div class="project-tech">
+                        <span>3D Printing</span>
+                        <span>Embedded C</span>
+                        <span>CAD</span>
+                    </div>
+                </div>
+
+                <!-- Morse Code Decoder — in progress -->
+                <div class="project-card placeholder-card">
+                    <span class="project-tag">In Progress · Embedded · RTOS</span>
+                    <h3>Morse Code Decoder</h3>
+                    <div class="project-tech">
+                        <span>C</span><span>FreeRTOS</span><span>RP2040</span>
+                        <span>Interrupts</span><span>Timers</span><span>OLED</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Languages</h4>
+                    <div class="skill-tags">
+                        <span>Python</span><span>C</span><span>C++</span>
+                        <span>Java</span><span>SQL</span><span>VHDL</span>
+                        <span>MATLAB</span><span>JavaScript</span><span>HTML/CSS</span>
+                        <span>ARM</span><span>MIPS</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Embedded & Hardware</h4>
+                    <div class="skill-tags">
+                        <span>Raspberry Pi Pico 2W</span><span>RP2040 PIO</span><span>MicroPython</span>
+                        <span>Edge Impulse</span><span>TensorFlow Lite</span><span>FreeRTOS</span>
+                        <span>Vivado</span><span>LTSpice</span><span>Cadence</span>
+                        <span>WaveForms</span><span>Wokwi</span><span>GDB</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Protocols & Interfaces</h4>
+                    <div class="skill-tags">
+                        <span>GPIO</span><span>I2C</span><span>SPI</span>
+                        <span>UART</span><span>I2S</span><span>PWM</span>
+                        <span>ADC</span><span>DMA</span><span>MQTT/TLS</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Cloud & Backend</h4>
+                    <div class="skill-tags">
+                        <span>AWS IoT Core</span><span>Lambda</span><span>DynamoDB</span>
+                        <span>Firebase</span><span>Supabase</span><span>MongoDB</span><span>SQLite</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Dev Tools</h4>
+                    <div class="skill-tags">
+                        <span>Git</span><span>GitHub</span><span>Android Studio</span>
+                        <span>VS Code</span><span>Jupyter</span><span>Linux</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h4>Libraries & Frameworks</h4>
+                    <div class="skill-tags">
+                        <span>React Native</span><span>NumPy</span><span>Pandas</span>
+                        <span>Matplotlib</span><span>Seaborn</span><span>Scikit-learn</span><span>OpenMP</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- // BEYOND ENGINEERING DIVIDER -->
+        <div class="beyond-zone">
+            <span class="beyond-label"><span>// beyond engineering</span></span>
+        </div>
+
+        <!-- EXTRACURRICULARS (Professional mode) -->
+        <section id="extracurriculars" class="mode-pro-only">
+            <h2>Extracurriculars</h2>
+            <div class="experience-list">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Computer Engineering Club</span>
+                            <span class="experience-role">VP Academics</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Apr 2025 – Present</span>
+                            <span class="experience-location">University of Alberta</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Led academic programming for 100+ members including workshops, study sessions, and exam preparation events.</li>
+                        <li>Coordinated with faculty and student groups to connect members with academic resources and opportunities.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Leadership</span><span>Event Planning</span><span>Faculty Relations</span>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">AlbertaSat</span>
+                            <span class="experience-role">Ground Station Software Team</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Sept 2023 – Sept 2024</span>
+                            <span class="experience-location">University of Alberta</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Contributed to ground station software development for CubeSat operations and reliable data transmission.</li>
+                        <li>Collaborated with technical teams on implementation tasks and participated in regular development work sessions.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>CubeSat</span><span>Ground Station Software</span><span>Team Collaboration</span>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">North Pointe Community Church</span>
+                            <span class="experience-role">Worship Leader & Pianist</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Oct 2017 – Present</span>
+                            <span class="experience-location">Edmonton, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Lead piano for Sunday services, youth services, and special events including Christmas and Easter.</li>
+                        <li>Coordinate the team during rehearsals and keep everything prepared for performance.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Piano</span><span>Team Leadership</span><span>Performance</span>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Lupus Society of Alberta</span>
+                            <span class="experience-role">Music & Event Volunteer</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Sept 2012 – Sept 2020</span>
+                            <span class="experience-location">Edmonton, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Performed live music at the annual Edmonton Lupus Charity Run to raise awareness and funds for research.</li>
+                        <li>Assisted with event organization and gave out food to runners and fundraisers participating in the run.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Music Performance</span><span>Event Volunteering</span><span>Community</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIDE B (Personal mode — the analog half) -->
+        <section id="sideb" class="mode-personal-only">
+            <h2>Side B</h2>
+            <p class="section-intro">The analog half. When I'm not chasing down a firmware bug, I'm somewhere near a piano.</p>
+
+            <h3 class="group-label">What I'm into</h3>
+            <div class="interest-grid">
+                <span class="interest">Film Photography</span>
+                <span class="interest">Super 8</span>
+                <span class="interest">Game Boy</span>
+                <span class="interest">PS1 / PS2</span>
+                <span class="interest">Vinyl</span>
+                <span class="interest">Piano</span>
+                <span class="interest">Fashion</span>
+                <span class="interest">Anime</span>
+            </div>
+
+            <h3 class="group-label">Music &amp; Community <span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></h3>
+            <div class="experience-list">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">North Pointe Community Church</span>
+                            <span class="experience-role">Worship Leader & Pianist</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Oct 2017 – Present</span>
+                            <span class="experience-location">Edmonton, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Lead piano for Sunday services, youth services, and special events including Christmas and Easter.</li>
+                        <li>Take on a leadership role during team rehearsals — coordinating the team and keeping everything prepared for performance.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Piano</span><span>Team Leadership</span><span>Performance</span>
+                    </div>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-left">
+                            <span class="experience-company">Lupus Society of Alberta</span>
+                            <span class="experience-role">Music & Event Volunteer</span>
+                        </div>
+                        <div class="experience-right">
+                            <span class="experience-date">Sept 2012 – Sept 2020</span>
+                            <span class="experience-location">Edmonton, AB</span>
+                        </div>
+                    </div>
+                    <ul class="experience-bullets">
+                        <li>Performed live music at the annual Edmonton Lupus Charity Run to raise awareness and funds for research.</li>
+                        <li>Assisted with event organization and gave out food to runners and fundraisers participating in the run.</li>
+                    </ul>
+                    <div class="experience-tags">
+                        <span>Music Performance</span><span>Event Volunteering</span><span>Community</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT — Professional mode: icon buttons -->
+        <section id="contact" class="contact-pro mode-pro-only">
+            <div class="contact-links">
+                <a class="contact-icon-btn" href="mailto:rcurtisramos@gmail.com">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    Email
+                </a>
+                <a class="contact-icon-btn" href="https://www.linkedin.com/in/raphael-ramos1/" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                    LinkedIn
+                </a>
+                <a class="contact-icon-btn" href="https://github.com/ErenPaper" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                    GitHub
+                </a>
+            </div>
+        </section>
+
+        <!-- CONTACT — Personal mode: clean blocks (cheryllao style) -->
+        <section id="contact-personal" class="contact-strip mode-personal-only">
+            <a class="contact-block" href="mailto:rcurtisramos@gmail.com">
+                <span class="cb-label">Email</span>
+                <span class="cb-value">rcurtisramos@gmail.com</span>
+            </a>
+            <a class="contact-block" href="https://www.linkedin.com/in/raphael-ramos1/" target="_blank">
+                <span class="cb-label">LinkedIn</span>
+                <span class="cb-value">/raphael-ramos1</span>
+            </a>
+            <a class="contact-block" href="https://github.com/ErenPaper" target="_blank">
+                <span class="cb-label">GitHub</span>
+                <span class="cb-value">/ErenPaper</span>
+            </a>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p class="footer-name">Raphael Ramos</p>
+            <p class="footer-sub">© 2026 Raphael Ramos</p>
+        </footer>
+
+        <!-- BACKGROUND MUSIC PLAYER (Personal mode — retro vinyl) -->
+        <div class="music-player mode-personal-only" id="music-player">
+            <button class="music-toggle" id="music-toggle" aria-label="Play music">
+                <span class="vinyl" aria-hidden="true"></span>
+                <span class="m-ico m-play" aria-hidden="true"></span>
+                <span class="m-ico m-pause" aria-hidden="true"></span>
+            </button>
+            <div class="music-info">
+                <span class="music-kicker">// now playing</span>
+                <span class="music-title" id="music-title">Raphael — piano</span>
+            </div>
+            <input type="range" class="music-vol" id="music-vol" min="0" max="100" value="45" aria-label="Music volume">
+            <audio id="music-audio" loop preload="none"></audio>
+        </div>
+
+        <!-- BACK TO TOP -->
+        <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+        </button>
+
+        <!-- PROJECT DETAIL MODAL -->
+        <div class="modal-overlay" id="project-modal" aria-hidden="true">
+            <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+                <div class="modal-content" id="modal-content"></div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+        <script src="/classic/script.js"></script>
+    </body>
+</html>

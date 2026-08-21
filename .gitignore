@@ -1,0 +1,9 @@
+/node_modules
+/.next
+/out
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+
+# Generated at build time from the Letterboxd RSS feed
+/public/letterboxd.json
