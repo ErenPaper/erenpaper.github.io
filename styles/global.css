@@ -1100,6 +1100,17 @@ a.sb-vinyl:hover { border-color: color-mix(in srgb, var(--sb-accent) 55%, transp
 .sb-watch-rating { font-size: 13px; color: var(--sb-accent); }
 .sb-watch-date { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 1px; color: rgba(232,220,203,.5); }
 
+/* up next — live Letterboxd watchlist (chips) */
+.sb-watchlist { display: flex; flex-wrap: wrap; gap: 8px; }
+.sb-wl {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px;
+  border-radius: 999px; background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.1); transition: transform .15s, border-color .15s;
+}
+.sb-wl:hover { transform: translateY(-2px); border-color: var(--sb-accent-2); }
+.sb-wl-title { font-family: var(--sb-serif); font-size: 15px; color: #fbf3e6; }
+.sb-wl-arrow { color: var(--sb-accent-2); font-size: 12px; }
+
 /* music I make — track cards (SoundCloud / YouTube / mp3) */
 .sb-tracks { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 .sb-track { padding: 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); }

@@ -136,6 +136,42 @@ function RecentlyWatched() {
   );
 }
 
+/* ── up next — my live Letterboxd watchlist (scraped at build time) ── */
+type WatchlistFilm = { title: string; href: string };
+
+function Watchlist() {
+  const [films, setFilms] = useState<WatchlistFilm[]>([]);
+
+  useEffect(() => {
+    let ok = true;
+    // /letterboxd-watchlist.json is generated at build time from my public
+    // watchlist page (may be empty locally) — ignore if it's missing/empty.
+    fetch("/letterboxd-watchlist.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (ok && Array.isArray(d)) setFilms(d.slice(0, 10)); })
+      .catch(() => {});
+    return () => { ok = false; };
+  }, []);
+
+  if (!films.length) return null;
+
+  return (
+    <section className="sb-section" id="sb-watchlist">
+      <h2 className="sb-h2">
+        up next <span className="sb-h2-note">what&apos;s on my watchlist</span>
+      </h2>
+      <div className="sb-watchlist">
+        {films.map((f, i) => (
+          <a className="sb-wl" key={f.href + i} href={f.href} target="_blank" rel="noreferrer">
+            <span className="sb-wl-title">{f.title}</span>
+            <span className="sb-wl-arrow" aria-hidden>↗</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 /* ── music I make — piano / Cubase, via SoundCloud / YouTube / mp3 ── */
 function TrackCard({ t }: { t: Track }) {
   const sc = t.soundcloud
@@ -189,6 +225,7 @@ export default function PersonalSite() {
         <span className="sb-nav-label">{sideB.kicker}</span>
         <ul className="sb-nav-links">
           <li><a href="#sb-watched" onClick={go("sb-watched")}>Watching</a></li>
+          <li><a href="#sb-watchlist" onClick={go("sb-watchlist")}>Up Next</a></li>
           <li><a href="#sb-work" onClick={go("sb-work")}>The Work</a></li>
         </ul>
         <button className="sb-btn" onClick={toMenu}>⌂ Menu</button>
@@ -236,6 +273,8 @@ export default function PersonalSite() {
         </section>
 
         <RecentlyWatched />
+
+        <Watchlist />
 
         {/* the family band — real, featured */}
         <section className="sb-section" id="sb-band">

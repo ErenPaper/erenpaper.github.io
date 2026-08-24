@@ -46,15 +46,16 @@ export type Track = {
 };
 
 export const tracks: Track[] = [
-  // ↓ replace with real music — e.g. a Cubase track on SoundCloud, or a piano mp3
-  { title: "Your first track", kind: "piano", date: "2026", note: "drop a SoundCloud/YouTube link or an mp3 here and it plays" },
+  // Add a real track by giving ONE source (youtube / soundcloud / audio). Until
+  // then this placeholder reads as a note to visitors, not a note to myself.
+  { title: "Recordings on the way", kind: "piano", date: "2026", note: "Piano takes and a few Cubase sketches will land here as I finish them." },
 ];
 
-// A short "recently FINISHED" log — latest things you've completed, newest first,
-// kept short (trim old ones). Anime auto-fills from AniList (completed) and
-// Letterboxd films auto-append at build time; this is for the rest — TV shows
-// (SIMKL/Trakt), K-dramas, docs, and any movie not yet logged on Letterboxd.
-// `href` links the card to that title / your review.
+// A short "recently FINISHED" log. This is now fully automated: anime auto-fills
+// from AniList (completed) and films auto-append from the Letterboxd diary at
+// build time. Leave this empty — it's here only as a manual override for things
+// no tracker covers (a doc, a K-drama not on MyDramaList, etc.). `href` links
+// the card to that title / your review.
 export type Watch = {
   title: string;
   kind: "tv" | "film" | "anime" | "drama";
@@ -64,11 +65,7 @@ export type Watch = {
   href?: string;     // optional link
 };
 
-export const recentlyWatched: Watch[] = [
-  { title: "Suits", kind: "tv", date: "AUG 2026" },
-  { title: "Odyssey", kind: "film", date: "AUG 2026" },
-  { title: "Brand New Day", kind: "film", date: "AUG 2026" },
-];
+export const recentlyWatched: Watch[] = [];
 
 export type FeedKind = "note" | "photo" | "music" | "video" | "link";
 
