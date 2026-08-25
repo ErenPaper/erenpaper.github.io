@@ -251,20 +251,21 @@ export const projects: Project[] = [
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/Anomaly-Detection-System" }],
   },
   {
-    title: "File Sharing System",
-    tag: "Systems · Networking",
-    tech: ["C", "Sockets", "TCP/UDP"],
+    title: "pulse — UDP Heartbeat Failure Detector",
+    tag: "Systems · Networking · C",
+    tech: ["C", "UDP Sockets", "poll()", "Monotonic Timing", "State Machines"],
     status: "shipped",
-    context: "Operating Systems · Sockets",
+    context: "Personal project",
     brief:
-      "A client-server file sharing application in C built on custom socket protocols and nonblocking I/O.",
+      "A tiny liveness monitor in C — the health-check layer behind systems like Consul or Serf, distilled to the sockets and the timing. Agents send periodic UDP heartbeats; the monitor tracks last-seen per node and ages quiet ones ALIVE → SUSPECT → DOWN, recovering them on the next beat.",
     built: [
-      "Implemented custom TCP/UDP socket protocols with enforced packet formats and error handling.",
-      "Used nonblocking I/O to handle multiple concurrent connections on a single server.",
+      "Fire-and-forget UDP heartbeats — no acks or retransmits, because silence over time is the signal, not any single packet.",
+      "A poll() loop on a fixed tick so the monitor wakes to notice absence, not just arrivals, and sweeps the roster each tick.",
+      "CLOCK_MONOTONIC last-seen timing so NTP/DST wall-clock jumps can't trigger false failures, with SUSPECT/DOWN thresholds.",
     ],
     insight:
-      "Writing the protocol by hand made me realize how much TCP hands you for free. Every dropped packet and half-read message was suddenly mine to catch and plan around.",
-    linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/file-sharing-system" }],
+      "Detecting that something is gone is harder than detecting that it's there — you're reacting to the absence of a message, so the timer, not the packet, has to be the source of truth.",
+    linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/pulse" }],
   },
   {
     title: "Social-Media Database Apps",
@@ -301,20 +302,21 @@ export const projects: Project[] = [
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/EventLotteryApp" }],
   },
   {
-    title: "FIFO Client-Server (IPC)",
-    tag: "Systems · OS · IPC",
-    tech: ["C", "Named Pipes (FIFO)", "Nonblocking I/O", "Signals"],
+    title: "pipebus — Pub/Sub over Named Pipes",
+    tag: "Systems · IPC · C",
+    tech: ["C", "Named Pipes (FIFO)", "poll()", "Nonblocking I/O", "Signals"],
     status: "shipped",
-    context: "Operating Systems · IPC",
+    context: "Personal project",
     brief:
-      "A client-server system in C that talks over named pipes (FIFOs) with nonblocking I/O — an operating-systems exercise in inter-process communication and juggling multiple clients without sockets.",
+      "A small publish/subscribe message broker in C — the plumbing behind something like MQTT, minus the network stack. Clients subscribe to topics over named pipes; the broker fans each message out to every subscriber, multiplexing them all with a single poll() loop.",
     built: [
-      "Set up bidirectional FIFOs between the server and multiple clients.",
-      "Used nonblocking reads so the server could service several clients without stalling on any one.",
+      "One shared 'registry' FIFO for requests, with each line kept under PIPE_BUF so concurrent clients' writes stay atomic and never interleave.",
+      "A dynamic per-client inbox FIFO so the broker can address individual subscribers when fanning a message out.",
+      "poll()-based multiplexing and fail-soft delivery — a dead subscriber raises EPIPE and gets dropped without stalling the broker.",
     ],
     insight:
-      "FIFOs are really just files with rules — most of the work was in the handshake and the cleanup, not moving the data itself.",
-    linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/fifo-client-server" }],
+      "The hard part of a broker isn't moving bytes — it's the addressing and lifecycle: who's subscribed, how you reach exactly them, and how you notice when one quietly disappears.",
+    linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/pipebus" }],
   },
   {
     title: "digicam-datestamp",
