@@ -233,35 +233,6 @@ function GameBoy() {
   );
 }
 
-// Compact 35mm film camera, lens toward the viewer.
-function FilmCamera() {
-  return (
-    <group position={[-3.15, -1.02, 0.35]} rotation={[0, 0.45, 0]}>
-      <RoundedBox args={[0.85, 0.5, 0.34]} radius={0.05} smoothness={3} castShadow>
-        <meshStandardMaterial color="#1d1d20" roughness={0.45} metalness={0.2} />
-      </RoundedBox>
-      {/* silver top plate + shutter button */}
-      <mesh position={[0, 0.28, 0]}>
-        <boxGeometry args={[0.85, 0.09, 0.34]} />
-        <meshStandardMaterial color="#9a9890" roughness={0.3} metalness={0.6} />
-      </mesh>
-      <mesh position={[0.28, 0.35, 0]}>
-        <cylinderGeometry args={[0.035, 0.035, 0.04, 12]} />
-        <meshStandardMaterial color="#c8c6c0" roughness={0.25} metalness={0.7} />
-      </mesh>
-      {/* lens barrel + glass */}
-      <mesh position={[0, 0, 0.26]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.17, 0.19, 0.22, 24]} />
-        <meshStandardMaterial color="#111114" roughness={0.35} metalness={0.4} />
-      </mesh>
-      <mesh position={[0, 0, 0.375]} rotation={[Math.PI / 2, 0, 0]}>
-        <cylinderGeometry args={[0.12, 0.12, 0.02, 24]} />
-        <meshStandardMaterial color="#1b2b4a" roughness={0.1} metalness={0.8} />
-      </mesh>
-    </group>
-  );
-}
-
 // Loose stack of floppies near the back-right, slightly fanned.
 function FloppyStack() {
   const disks: Array<[string, number, number]> = [
@@ -469,7 +440,6 @@ export default function DeskScene() {
       <StarGlow />
       <Console />
       <GameBoy />
-      <FilmCamera />
       <FloppyStack />
       <Mug />
       <CameraRig />
