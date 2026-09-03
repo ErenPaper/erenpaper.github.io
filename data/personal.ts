@@ -66,7 +66,9 @@ export type Watch = {
 
 // Completed things the trackers miss (newest first). Anime + Letterboxd films
 // auto-append, so keep this for TV / docuseries / K-dramas / unlogged movies.
-export const recentlyWatched: Watch[] = [];
+export const recentlyWatched: Watch[] = [
+  { title: "Suits", kind: "tv", date: "SEP 2026" },
+];
 
 // In-progress things — shown in the "currently watching" strip alongside live
 // AniList (currently-watching anime). Add a row as you start something new.
