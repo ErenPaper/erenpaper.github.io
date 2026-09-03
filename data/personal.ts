@@ -51,21 +51,28 @@ export const tracks: Track[] = [
   { title: "Recordings on the way", kind: "piano", date: "2026", note: "Piano takes and a few Cubase sketches will land here as I finish them." },
 ];
 
-// A short "recently FINISHED" log. This is now fully automated: anime auto-fills
-// from AniList (completed) and films auto-append from the Letterboxd diary at
-// build time. Leave this empty — it's here only as a manual override for things
-// no tracker covers (a doc, a K-drama not on MyDramaList, etc.). `href` links
-// the card to that title / your review.
+// The watch logs. Anime auto-fills from AniList (completed + in-progress) and
+// films auto-append from the Letterboxd diary at build time. These typed lists
+// are manual overrides for what the trackers miss — TV, docuseries, K-dramas,
+// or a movie not yet logged. `href` links the card to that title / your review.
 export type Watch = {
   title: string;
-  kind: "tv" | "film" | "anime" | "drama";
+  kind: "tv" | "film" | "anime" | "drama" | "doc";
   rating?: string;   // however you rate — "★★★★☆", "8/10", "loved it"
-  date: string;      // "AUG 2026"
+  date: string;      // "AUG 2026", a source ("NETFLIX"), or progress ("EP 2 / 4")
   note?: string;     // optional one-liner
   href?: string;     // optional link
 };
 
+// Completed things the trackers miss (newest first). Anime + Letterboxd films
+// auto-append, so keep this for TV / docuseries / K-dramas / unlogged movies.
 export const recentlyWatched: Watch[] = [];
+
+// In-progress things — shown in the "currently watching" strip alongside live
+// AniList (currently-watching anime). Add a row as you start something new.
+export const currentlyWatching: Watch[] = [
+  { title: "Crime Scene: The Vanishing at the Cecil Hotel", kind: "doc", date: "NETFLIX", note: "crime docuseries" },
+];
 
 export type FeedKind = "note" | "photo" | "music" | "video" | "link";
 

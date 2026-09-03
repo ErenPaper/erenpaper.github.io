@@ -1091,6 +1091,7 @@ a.sb-vinyl:hover { border-color: color-mix(in srgb, var(--sb-accent) 55%, transp
 .sb-watch.k-film .sb-watch-kind { background: var(--sb-accent-2); }
 .sb-watch.k-anime .sb-watch-kind { background: #a78bfa; }
 .sb-watch.k-drama .sb-watch-kind { background: #e8809a; }
+.sb-watch.k-doc .sb-watch-kind { background: #6fb8a0; }
 .sb-watch-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
 .sb-watch-title { font-family: var(--sb-serif); font-size: 16px; color: #fbf3e6; }
 .sb-watch-title a { color: inherit; border-bottom: 1px solid transparent; transition: border-color .15s; }

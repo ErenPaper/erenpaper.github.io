@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { sideB, shelves, band, recentlyWatched, tracks, type Watch, type Track } from "../../data/personal";
+import { sideB, shelves, band, recentlyWatched, currentlyWatching, tracks, type Watch, type Track } from "../../data/personal";
 import { links, profile, experience, projects } from "../../data/portfolio";
 import ProjectMedia from "../ProjectMedia";
 
@@ -61,6 +61,12 @@ const ANILIST_QUERY = `query ($n: String) {
   MediaListCollection(userName: $n, type: ANIME, status: COMPLETED, sort: FINISHED_ON_DESC) {
     lists { entries { score(format: POINT_10) completedAt { year month }
       media { title { english romaji } siteUrl } } }
+  }
+}`;
+
+const ANILIST_CURRENT = `query ($n: String) {
+  MediaListCollection(userName: $n, type: ANIME, status: CURRENT, sort: UPDATED_TIME_DESC) {
+    lists { entries { progress media { title { english romaji } episodes siteUrl } } }
   }
 }`;
 
@@ -127,6 +133,59 @@ function RecentlyWatched() {
             </div>
             <div className="sb-watch-meta">
               {w.rating && <span className="sb-watch-rating">{w.rating}</span>}
+              <span className="sb-watch-date">{w.date}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── currently watching — live AniList (in-progress) + typed TV/docuseries ── */
+function CurrentlyWatching() {
+  const [anime, setAnime] = useState<Watch[]>([]);
+
+  useEffect(() => {
+    let ok = true;
+    fetch("https://graphql.anilist.co", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ query: ANILIST_CURRENT, variables: { n: "erenpaper" } }),
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        type AniEntry = { progress: number; media: { title: { english?: string; romaji?: string }; episodes: number | null; siteUrl: string } };
+        const entries: AniEntry[] = (d?.data?.MediaListCollection?.lists ?? []).flatMap((l: { entries: AniEntry[] }) => l.entries);
+        if (!ok || !entries.length) return;
+        setAnime(entries.slice(0, 3).map((e) => ({
+          title: e.media.title.english || e.media.title.romaji || "Untitled",
+          kind: "anime" as const,
+          date: e.media.episodes ? `EP ${e.progress} / ${e.media.episodes}` : `EP ${e.progress}`,
+          href: e.media.siteUrl,
+        })));
+      })
+      .catch(() => {});
+    return () => { ok = false; };
+  }, []);
+
+  const items = [...currentlyWatching, ...anime].slice(0, 6);
+  if (items.length === 0) return null;
+
+  return (
+    <section className="sb-section" id="sb-watching">
+      <h2 className="sb-h2">currently watching <span className="sb-h2-note">mid-way through</span></h2>
+      <div className="sb-watched">
+        {items.map((w, i) => (
+          <div className={`sb-watch k-${w.kind}`} key={w.title + i}>
+            <span className="sb-watch-kind">{w.kind}</span>
+            <div className="sb-watch-body">
+              <span className="sb-watch-title">
+                {w.href ? <a href={w.href} target="_blank" rel="noreferrer">{w.title}</a> : w.title}
+              </span>
+              {w.note && <span className="sb-watch-note">{w.note}</span>}
+            </div>
+            <div className="sb-watch-meta">
               <span className="sb-watch-date">{w.date}</span>
             </div>
           </div>
@@ -224,7 +283,8 @@ export default function PersonalSite() {
         <button className="sb-brand" onClick={toMenu} title="Back to main menu">rr</button>
         <span className="sb-nav-label">{sideB.kicker}</span>
         <ul className="sb-nav-links">
-          <li><a href="#sb-watched" onClick={go("sb-watched")}>Watching</a></li>
+          <li><a href="#sb-watching" onClick={go("sb-watching")}>Watching</a></li>
+          <li><a href="#sb-watched" onClick={go("sb-watched")}>Finished</a></li>
           <li><a href="#sb-watchlist" onClick={go("sb-watchlist")}>Up Next</a></li>
           <li><a href="#sb-work" onClick={go("sb-work")}>The Work</a></li>
         </ul>
@@ -271,6 +331,8 @@ export default function PersonalSite() {
             ))}
           </div>
         </section>
+
+        <CurrentlyWatching />
 
         <RecentlyWatched />
 
