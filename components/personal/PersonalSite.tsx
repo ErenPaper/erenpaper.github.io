@@ -115,7 +115,9 @@ function RecentlyWatched() {
     return () => { ok = false; };
   }, []);
 
-  const items = [...anime, ...films, ...recentlyWatched].slice(0, 6);
+  // Manual entries first — they're curated for things the trackers miss, so
+  // they should never get sliced off behind auto-filled anime/films.
+  const items = [...recentlyWatched, ...anime, ...films].slice(0, 6);
   if (items.length === 0) return null;
 
   return (
