@@ -25,6 +25,7 @@ export const shelves: Shelf[] = [
 export const band = {
   name: "Sonic RMD",
   since: "2010",
+  photo: "/assets/sonic-rmd.jpg",   // live shot; film-framed in the band section
   blurb:
     "The family band — we've been playing together since I was a kid, and it's the reason I ended up at a piano in the first place. Everything from covers to originals.",
   href: "https://www.youtube.com/@15robrap",

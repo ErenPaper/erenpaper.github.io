@@ -343,7 +343,18 @@ export default function PersonalSite() {
         {/* the family band — real, featured */}
         <section className="sb-section" id="sb-band">
           <div className="sb-band">
-            <span className="sb-band-disc" aria-hidden><i /></span>
+            {band.photo ? (
+              <div className="sb-band-photo">
+                <span className="sb-sprockets" aria-hidden>{Array.from({ length: 10 }).map((_, i) => <i key={i} />)}</span>
+                <img src={band.photo} alt={`${band.name} performing live`} />
+                <span className="sb-sprockets" aria-hidden>{Array.from({ length: 10 }).map((_, i) => <i key={i} />)}</span>
+                <span className="sb-tape sb-tape-tl" aria-hidden />
+                <span className="sb-tape sb-tape-br" aria-hidden />
+                <span className="sb-band-cap">the band · &rsquo;{band.since.slice(2)}</span>
+              </div>
+            ) : (
+              <span className="sb-band-disc" aria-hidden><i /></span>
+            )}
             <div className="sb-band-text">
               <span className="sb-band-kicker">FAMILY BAND · SINCE {band.since}</span>
               <h3 className="sb-band-name">{band.name}</h3>
