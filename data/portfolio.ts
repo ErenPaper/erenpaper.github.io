@@ -337,7 +337,7 @@ export const projects: Project[] = [
   },
   { title: "Group Dining Decision App (Dinnr)", tag: "In Progress · Mobile · Social", tech: ["Java", "Android Studio", "Firebase", "Google Places API"], status: "progress" },
   { title: "BMO Build", tag: "Coming Soon · Hardware · Embedded", tech: ["3D Printing", "Embedded C", "CAD"], status: "soon" },
-  { title: "Morse Code Decoder", tag: "Planned · Embedded · RTOS", tech: ["C", "FreeRTOS", "RP2040", "Interrupts", "Timers", "OLED"], status: "soon" },
+  { title: "Morse Code Decoder", tag: "Planned · Embedded · RTOS", tech: ["C", "FreeRTOS", "RP2040", "Interrupts", "Timers", "Serial"], status: "soon" },
 ];
 
 export type SkillCategory = { name: string; skills: string[] };
