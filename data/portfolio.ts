@@ -335,9 +335,9 @@ export const projects: Project[] = [
       "The date was sitting in the EXIF the whole time — the project was really about putting it back on the picture the way the old cameras used to.",
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/digicam-datestamp" }],
   },
-  { title: "Group Dining Decision App (Dinnr)", tag: "Coming Soon · Mobile · Social", tech: ["Java", "Android Studio", "Firebase", "Google Places API"], status: "soon" },
+  { title: "Group Dining Decision App (Dinnr)", tag: "In Progress · Mobile · Social", tech: ["Java", "Android Studio", "Firebase", "Google Places API"], status: "progress" },
   { title: "BMO Build", tag: "Coming Soon · Hardware · Embedded", tech: ["3D Printing", "Embedded C", "CAD"], status: "soon" },
-  { title: "Morse Code Decoder", tag: "In Progress · Embedded · RTOS", tech: ["C", "FreeRTOS", "RP2040", "Interrupts", "Timers", "OLED"], status: "progress" },
+  { title: "Morse Code Decoder", tag: "Planned · Embedded · RTOS", tech: ["C", "FreeRTOS", "RP2040", "Interrupts", "Timers", "OLED"], status: "soon" },
 ];
 
 export type SkillCategory = { name: string; skills: string[] };
