@@ -639,6 +639,18 @@ html[data-theme="light"] .pro-wallpaper .pcb-traces { filter: invert(1) hue-rota
 .menu-options[data-sel] .menu-option:not(.selected) .mo-num,
 .menu-options[data-sel] .menu-option:not(.selected) .mo-label { opacity: .15; }
 .menu-option.selected .mo-num { color: var(--accent); }
+
+/* two-worlds preview: Professional glows Tron cyan, Personal glows warm/red */
+.menu-option.mo-pro { text-shadow: 0 0 12px rgba(51,225,255,.22); }
+.menu-option.mo-pro:hover .mo-num,
+.menu-option.mo-pro.selected .mo-num { color: #33e1ff; }
+.menu-option.mo-pro .mo-label::after { background: #33e1ff; }
+.menu-option.mo-pro:hover .mo-label { color: #d5f6ff; text-shadow: 0 0 14px rgba(51,225,255,.5); }
+.menu-option.mo-personal { text-shadow: 0 0 12px rgba(255,110,80,.22); }
+.menu-option.mo-personal:hover .mo-num,
+.menu-option.mo-personal.selected .mo-num { color: #ff7a59; }
+.menu-option.mo-personal .mo-label::after { background: #ff7a59; }
+.menu-option.mo-personal:hover .mo-label { color: #ffe2d6; text-shadow: 0 0 14px rgba(255,110,80,.5); }
 .menu-option.selected .mo-label { color: #fff; animation: sel-flicker .3s steps(2) 1; }
 .menu-option.selected .mo-label::after { transform: scaleX(1); }
 @keyframes sel-flicker {

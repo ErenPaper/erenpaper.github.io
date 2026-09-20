@@ -139,7 +139,7 @@ export default function Landing({
 
         <div className="menu-options" data-sel={sel ?? undefined}>
           <motion.button
-            className={`menu-option${sel === "pro" ? " selected" : ""}`}
+            className={`menu-option mo-pro${sel === "pro" ? " selected" : ""}`}
             {...rise(0.5)}
             onMouseEnter={playHoverTick}
             onClick={() => choose("pro")}
@@ -149,7 +149,7 @@ export default function Landing({
           </motion.button>
 
           <motion.button
-            className={`menu-option${sel === "personal" ? " selected" : ""}`}
+            className={`menu-option mo-personal${sel === "personal" ? " selected" : ""}`}
             {...rise(0.65)}
             onMouseEnter={playHoverTick}
             onClick={() => choose("personal")}
