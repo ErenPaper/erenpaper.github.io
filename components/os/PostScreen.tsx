@@ -54,6 +54,7 @@ export default function PostScreen({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="post-screen" aria-hidden>
+      <div className="post-disc" />
       {LINES.map((l, i) => {
         if (now < l.at) return null;
         const isMem = i === 2;

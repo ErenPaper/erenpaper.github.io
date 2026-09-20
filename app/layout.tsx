@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono, Unbounded, DM_Serif_Display, Caveat } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono, Unbounded, DM_Serif_Display, Caveat, Orbitron } from "next/font/google";
 import "../styles/global.css";
 
 const space = Space_Grotesk({
@@ -30,6 +30,12 @@ const caveat = Caveat({
   weight: ["400", "600", "700"],
   variable: "--font-hand",
 });
+// Geometric display face — the TRON "Grid" headers on the Professional side.
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  weight: ["500", "700", "900"],
+  variable: "--font-tron",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://erenpaper.github.io"),
@@ -59,7 +65,7 @@ export default function RootLayout({
       suppressHydrationWarning
       /* Font variables must live on <html>: :root's --font-sans/--font-mono
          reference them, and var() resolves where the property is defined. */
-      className={`${space.variable} ${jetbrains.variable} ${unbounded.variable} ${dmSerif.variable} ${caveat.variable}`}
+      className={`${space.variable} ${jetbrains.variable} ${unbounded.variable} ${dmSerif.variable} ${caveat.variable} ${orbitron.variable}`}
     >
       <head>
         {/* Apply persisted persona/theme before paint to avoid a flash. */}

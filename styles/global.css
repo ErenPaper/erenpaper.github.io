@@ -727,6 +727,19 @@ html[data-theme="light"] .pro-wallpaper .pcb-traces { filter: invert(1) hue-rota
   display: inline-block; width: .6em; height: 1.05em; margin-top: 2px;
   background: #7fe9ff; animation: cursor-blink .9s steps(1) infinite;
 }
+/* spinning identity disc — the Tron "loading" ring on the boot screen */
+.post-disc {
+  position: absolute; top: 3.4vh; right: 5vw; width: 60px; height: 60px; border-radius: 50%;
+  border: 2px solid rgba(127,233,255,.22);
+  border-top-color: #7fe9ff; border-right-color: #7fe9ff;
+  box-shadow: 0 0 18px rgba(51,225,255,.4), inset 0 0 12px rgba(51,225,255,.22);
+  animation: disc-spin 1.1s linear infinite;
+}
+.post-disc::after {
+  content: ""; position: absolute; inset: 9px; border-radius: 50%;
+  border: 1px solid rgba(127,233,255,.4);
+}
+@keyframes disc-spin { to { transform: rotate(360deg); } }
 
 /* Film-projector startup over the personal OS: warm gate flicker + a light-leak
    sweeping in from the corner, like a Super-8 reel catching the lamp. */
@@ -1365,6 +1378,25 @@ html[data-persona="pro"][data-theme="dark"] .pro-site-wrap {
 }
 html[data-persona="pro"][data-theme="dark"] .pro-site-wrap a,
 html[data-persona="pro"][data-theme="dark"] .pro-site-wrap button { cursor: pointer; }
+/* geometric "Grid" display font on the pro headers (dark only) */
+html[data-persona="pro"][data-theme="dark"] .ps-title,
+html[data-persona="pro"][data-theme="dark"] .ps-name,
+html[data-persona="pro"][data-theme="dark"] .ps-divider-label,
+html[data-persona="pro"][data-theme="dark"] .ps-skill-head,
+html[data-persona="pro"][data-theme="dark"] .ps-xp-head,
+html[data-persona="pro"][data-theme="dark"] .ps-built-head,
+html[data-persona="pro"][data-theme="dark"] .ps-bench-name {
+  font-family: var(--font-tron), var(--font-mono), monospace;
+  letter-spacing: 1.5px;
+}
+/* identity disc around the rr brand mark */
+html[data-persona="pro"][data-theme="dark"] .ps-brand-mark {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%; font-size: 13px;
+  border: 1.5px solid var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 50%, transparent),
+              inset 0 0 8px color-mix(in srgb, var(--accent) 28%, transparent);
+}
 
 @media (max-width: 780px) {
   .ps-links { display: none; }
