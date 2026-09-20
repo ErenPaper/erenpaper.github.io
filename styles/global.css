@@ -698,6 +698,9 @@ html[data-theme="light"] .pro-wallpaper .pcb-traces { filter: invert(1) hue-rota
 }
 @keyframes tron-streak { from { left: -10%; } to { left: 112%; } }
 
+/* POV light-cycle run canvas — the Professional entry, under the derez flash */
+.grid-run { position: fixed; inset: 0; z-index: 9990; pointer-events: none; background: #04060e; }
+
 /* Letterbox bars framing the star dive — snap in fast, ease out. */
 .letterbox {
   position: fixed; left: 0; right: 0; height: 0; z-index: 9997;
@@ -733,17 +736,13 @@ html[data-theme="light"] .pro-wallpaper .pcb-traces { filter: invert(1) hue-rota
     radial-gradient(65% 85% at 84% 10%, rgba(255,150,66,.55), transparent 60%),
     radial-gradient(50% 60% at 10% 96%, rgba(255,96,66,.35), transparent 60%),
     #fff1dc;
-  animation: film-gate .8s steps(1, end) forwards;
+  animation: film-warm .75s ease-out forwards;
 }
-@keyframes film-gate {
+@keyframes film-warm {
   0%   { opacity: 0; }
-  5%   { opacity: .95; }
-  11%  { opacity: .16; }
-  19%  { opacity: .9; }
-  29%  { opacity: .28; }
-  41%  { opacity: .78; }
-  56%  { opacity: .14; }
-  72%  { opacity: .5; }
+  22%  { opacity: .85; }   /* lamp strikes warm */
+  40%  { opacity: .5; }    /* one gentle settle, not a strobe */
+  55%  { opacity: .66; }
   100% { opacity: 0; }
 }
 

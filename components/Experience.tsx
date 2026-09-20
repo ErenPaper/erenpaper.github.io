@@ -8,6 +8,7 @@ import BootScreen from "./os/BootScreen";
 import PostScreen from "./os/PostScreen";
 import Landing from "./intro/Landing";
 import ProSite from "./pro/ProSite";
+import GridRun from "./pro/GridRun";
 import PersonalSite from "./personal/PersonalSite";
 import { initAudioUnlock, playLockClick, playPowerDown, playWarpRise } from "./intro/sound";
 
@@ -231,7 +232,8 @@ export default function Experience() {
     leave();
   };
 
-  const showScene = ready && webgl && !reduce && phase !== "os";
+  // Professional "leaving" swaps the 3D star-dive for the GridRun light-cycle run.
+  const showScene = ready && webgl && !reduce && phase !== "os" && phase !== "leaving";
   const barsOn = phase === "leaving" || starBloom === "open";
   const barsMounted = phase === "leaving" || starBloom !== "idle";
 
@@ -260,6 +262,11 @@ export default function Experience() {
                 : `clip-path ${bloom === "open" ? 500 : 400}ms cubic-bezier(0.4, 0, 0.2, 1)`,
           }}
         />
+      )}
+
+      {/* Professional entry: POV light-cycle run down the Grid, then the derez flash */}
+      {phase === "leaving" && webgl && !reduce && (
+        <GridRun onDone={() => window.dispatchEvent(new Event("star-zoom"))} />
       )}
 
       {starBloom !== "idle" && (
