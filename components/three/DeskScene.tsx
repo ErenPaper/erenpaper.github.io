@@ -434,6 +434,10 @@ export default function DeskScene() {
       <pointLight position={[-3, 3.2, 2.2]} intensity={1.2} distance={12} color="#ffb35c" />
       {/* dim phosphor-green wash behind the desk */}
       <pointLight position={[0, 0.4, -3.2]} intensity={0.8} color={PHOSPHOR} />
+      {/* the two worlds bleeding into the room — cool blue (the Grid) from the
+          right, warm red (the film side) from the left; foreshadows the split */}
+      <pointLight position={[5, 1.6, -1.5]} intensity={1.15} distance={16} color="#39a2ff" />
+      <pointLight position={[-5, 1.3, -1.5]} intensity={1.0} distance={16} color="#ff5540" />
       <MatrixRain />
       <Desk />
       <Monitor />
