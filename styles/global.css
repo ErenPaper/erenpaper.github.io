@@ -16,17 +16,18 @@
 
 /* ---- Pro (engineering console) · dark = phosphor green on black ---- */
 html[data-persona="pro"][data-theme="dark"] {
-  --bg: #040705;
-  --bg-card: #08120b;
-  --bg-elevated: #0c1a10;
-  --bg-nav: rgba(4, 10, 6, 0.78);
-  --text: #d9ffe6;
-  --text-muted: #8fbf9f;
-  --text-dim: #4a7a58;
-  --border: #16371f;
-  --border-subtle: #0f2415;
-  --accent: #57ff8a;
-  --accent-2: #ffb000; /* instrument amber */
+  /* TRON grid — cold cyan on blue-black (the "blue program" to Personal's warm/red) */
+  --bg: #04060e;
+  --bg-card: #081120;
+  --bg-elevated: #0c1a30;
+  --bg-nav: rgba(6, 12, 24, 0.80);
+  --text: #dcecff;
+  --text-muted: #8ea6cf;
+  --text-dim: #4c6690;
+  --border: #163a5f;
+  --border-subtle: #0f2138;
+  --accent: #33e1ff;          /* Tron cyan */
+  --accent-2: #5b8cff;        /* electric blue */
 }
 
 /* ---- Pro · light = paper datasheet ---- */
@@ -1299,6 +1300,27 @@ a.sb-vinyl:hover { border-color: color-mix(in srgb, var(--sb-accent) 55%, transp
   mix-blend-mode: screen; opacity: .5;
 }
 @keyframes pcb-pulse { from { background-position: 130% 0; } to { background-position: -130% 0; } }
+
+/* ── TRON glow — dark pro only; light theme stays the paper datasheet ── */
+html[data-persona="pro"][data-theme="dark"] .ps-pcb { opacity: .72; }
+html[data-persona="pro"][data-theme="dark"] .ps-title,
+html[data-persona="pro"][data-theme="dark"] .ps-name {
+  text-shadow: 0 0 20px color-mix(in srgb, var(--accent) 42%, transparent);
+}
+html[data-persona="pro"][data-theme="dark"] .ps-brand-mark,
+html[data-persona="pro"][data-theme="dark"] .ps-divider-label {
+  text-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+html[data-persona="pro"][data-theme="dark"] .ps-divider-line {
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+html[data-persona="pro"][data-theme="dark"] .ps-btn.solid {
+  box-shadow: 0 0 18px -2px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+html[data-persona="pro"][data-theme="dark"] .ps-btn:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 22px -2px color-mix(in srgb, var(--accent) 70%, transparent);
+}
 
 @media (max-width: 780px) {
   .ps-links { display: none; }
