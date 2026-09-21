@@ -577,21 +577,10 @@ html[data-theme="light"] .pro-wallpaper .pcb-traces { filter: invert(1) hue-rota
   transform: translate(-50%, -50%);
   width: min(58vh, 92vw);
   display: flex; flex-direction: column; align-items: center;
-  animation: crt-flicker 7s steps(30) infinite;   /* faint CRT brightness wobble */
-}
-/* scanlines over the menu content so the text reads as phosphor *in* the tube,
-   not flat HTML laid on top of the glass */
-.menu-center::after {
-  content: ""; position: absolute; inset: -1.5vh -3vh; pointer-events: none; z-index: 6;
-  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.24) 0 1px, transparent 1px 3px);
-  mix-blend-mode: multiply; border-radius: 8px;
-}
-@keyframes crt-flicker {
-  0%, 46%, 100% { filter: brightness(1); }
-  48% { filter: brightness(.86); }
-  50% { filter: brightness(1.03); }
-  77% { filter: brightness(.93); }
-  79% { filter: brightness(1); }
+  /* soft dark backing so the text reads cleanly over the starfield —
+     heavily feathered so it never becomes a hard oval */
+  background: radial-gradient(115% 95% at 50% 46%, rgba(2,6,10,.62), rgba(2,6,10,.28) 52%, transparent 76%);
+  border-radius: 14px;
 }
 .menu-logo {
   font-family: var(--font-unbounded), sans-serif; font-weight: 700;
@@ -603,13 +592,13 @@ html[data-theme="light"] .pro-wallpaper .pcb-traces { filter: invert(1) hue-rota
   font-family: var(--font-sans); font-weight: 700; text-transform: uppercase;
   font-size: clamp(15px, 3.6vh, 34px); letter-spacing: .2em; text-indent: .2em;
   color: #eafff0;
-  text-shadow: 0 0 6px rgba(190,255,210,.55), 0 0 22px rgba(120,255,170,.35), 0 2px 14px rgba(2,6,14,.85);
+  text-shadow: 0 0 2px rgba(0,0,0,.95), 0 1px 5px rgba(0,0,0,.9), 0 0 16px rgba(120,255,170,.28);
 }
 .menu-role {
   height: 20px; margin: 1.4vh 0 5.5vh;
   font-family: var(--font-mono); font-size: clamp(10px, 1.35vh, 13px); letter-spacing: 2px;
-  color: rgba(255,255,255,.55); text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(140,255,180,.18);
+  color: rgba(255,255,255,.72); text-transform: uppercase;
+  text-shadow: 0 1px 4px rgba(0,0,0,.92), 0 0 10px rgba(140,255,180,.18);
 }
 .menu-role .rp { color: var(--accent); }
 .type-cursor {
@@ -625,7 +614,7 @@ html[data-theme="light"] .pro-wallpaper .pcb-traces { filter: invert(1) hue-rota
   display: flex; align-items: baseline; gap: 12px;
   font-family: var(--font-mono); font-size: clamp(11px, 1.5vh, 14px); letter-spacing: 3px;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(140,255,180,.15);
+  text-shadow: 0 1px 4px rgba(0,0,0,.9), 0 0 10px rgba(140,255,180,.15);
 }
 .menu-option .mo-num {
   font-size: 11px; color: rgba(255,255,255,.3);
