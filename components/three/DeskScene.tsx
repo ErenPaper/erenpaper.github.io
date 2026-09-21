@@ -59,6 +59,18 @@ function useScreenTexture() {
       ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
     }
     ctx.globalAlpha = 1;
+    // glass glare — a soft reflection catching the upper-left of the tube
+    const glare = ctx.createLinearGradient(0, 0, c.width * 0.6, c.height * 0.62);
+    glare.addColorStop(0, "rgba(205,238,255,0.12)");
+    glare.addColorStop(0.26, "rgba(205,238,255,0.025)");
+    glare.addColorStop(0.55, "rgba(0,0,0,0)");
+    ctx.fillStyle = glare; ctx.fillRect(0, 0, c.width, c.height);
+    // tube vignette — darken toward the curved corners (bound to the screen)
+    const vg = ctx.createRadialGradient(c.width / 2, c.height * 0.46, c.height * 0.22,
+                                        c.width / 2, c.height * 0.5, c.height * 0.92);
+    vg.addColorStop(0, "rgba(0,0,0,0)");
+    vg.addColorStop(1, "rgba(0,0,0,0.62)");
+    ctx.fillStyle = vg; ctx.fillRect(0, 0, c.width, c.height);
     // the target star: hot white core inside a phosphor-green halo
     const sx = TARGET_STAR_UV.u * c.width, sy = TARGET_STAR_UV.v * c.height;
     const halo = ctx.createRadialGradient(sx, sy, 0, sx, sy, 26);
