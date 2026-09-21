@@ -31,15 +31,34 @@ function useScreenTexture() {
     const c = document.createElement("canvas");
     c.width = 1024; c.height = 640;
     const ctx = c.getContext("2d")!;
-    ctx.fillStyle = "#060d08"; ctx.fillRect(0, 0, c.width, c.height);
-    for (let i = 0; i < 240; i++) {
+    // deep space
+    ctx.fillStyle = "#03060a"; ctx.fillRect(0, 0, c.width, c.height);
+    // faint nebula wisps for depth
+    for (let i = 0; i < 4; i++) {
+      const nx = Math.random() * c.width, ny = Math.random() * c.height;
+      const nr = 180 + Math.random() * 260;
+      const g = ctx.createRadialGradient(nx, ny, 0, nx, ny, nr);
+      const hue = Math.random() > 0.5 ? "70,110,90" : "70,90,130";
+      g.addColorStop(0, `rgba(${hue},0.05)`); g.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, c.width, c.height);
+    }
+    // starfield — mostly tiny/faint, a few bright with a soft halo
+    for (let i = 0; i < 540; i++) {
       const x = Math.random() * c.width, y = Math.random() * c.height;
-      const r = Math.random() * 1.6;
-      ctx.globalAlpha = 0.3 + Math.random() * 0.6;
+      const r = Math.pow(Math.random(), 2.6) * 2.1 + 0.25;   // bias to small
+      const b = 0.28 + Math.random() * 0.7;
       const roll = Math.random();
-      ctx.fillStyle = roll > 0.92 ? ACCENT : roll > 0.55 ? "#c9f7d4" : "#cdd6f4";
+      const col = roll > 0.95 ? ACCENT : roll > 0.86 ? "#b9f7cf" : roll > 0.5 ? "#eaf2ff" : "#c7d4f0";
+      if (r > 1.5) {
+        const halo = ctx.createRadialGradient(x, y, 0, x, y, r * 5);
+        halo.addColorStop(0, "rgba(220,235,255,0.5)"); halo.addColorStop(1, "rgba(220,235,255,0)");
+        ctx.globalAlpha = 1; ctx.fillStyle = halo;
+        ctx.beginPath(); ctx.arc(x, y, r * 5, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = b; ctx.fillStyle = col;
       ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
     }
+    ctx.globalAlpha = 1;
     // the target star: hot white core inside a phosphor-green halo
     const sx = TARGET_STAR_UV.u * c.width, sy = TARGET_STAR_UV.v * c.height;
     const halo = ctx.createRadialGradient(sx, sy, 0, sx, sy, 26);
@@ -135,7 +154,7 @@ function Monitor() {
       {/* slightly convex CRT glass over the screen */}
       <mesh position={[0, 0.1, 0.42]} scale={[1.68, 1.2, 0.14]}>
         <sphereGeometry args={[1, 32, 24]} />
-        <meshStandardMaterial transparent opacity={0.07} color="#aaffcc" roughness={0} metalness={0.1} />
+        <meshStandardMaterial transparent opacity={0.035} color="#aaffcc" roughness={0.55} metalness={0.1} />
       </mesh>
       {/* power LED on the bezel */}
       <mesh position={[1.55, -1.28, 0.46]}>

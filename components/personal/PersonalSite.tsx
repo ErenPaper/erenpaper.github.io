@@ -86,7 +86,7 @@ function RecentlyWatched() {
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (ok && Array.isArray(d)) {
-          setFilms(d.slice(0, 3).map((f: { title: string; rating?: string; date: string; href?: string }) => ({ ...f, kind: "film" as const })));
+          setFilms(d.slice(0, 5).map((f: { title: string; rating?: string; date: string; href?: string }) => ({ ...f, kind: "film" as const })));
         }
       })
       .catch(() => {});
@@ -102,7 +102,7 @@ function RecentlyWatched() {
         type AniEntry = { score: number; completedAt: { year: number | null; month: number | null }; media: { title: { english?: string; romaji?: string }; siteUrl: string } };
         const entries: AniEntry[] = (d?.data?.MediaListCollection?.lists ?? []).flatMap((l: { entries: AniEntry[] }) => l.entries);
         if (!ok || !entries.length) return;
-        setAnime(entries.slice(0, 3).map((e) => ({
+        setAnime(entries.slice(0, 2).map((e) => ({
           title: e.media.title.english || e.media.title.romaji || "Untitled",
           kind: "anime" as const,
           rating: e.score ? `${e.score}/10` : undefined,
@@ -115,9 +115,9 @@ function RecentlyWatched() {
     return () => { ok = false; };
   }, []);
 
-  // Manual entries first — they're curated for things the trackers miss, so
-  // they should never get sliced off behind auto-filled anime/films.
-  const items = [...recentlyWatched, ...anime, ...films].slice(0, 6);
+  // Manual TV/docuseries first (Suits, Loki, …), then films — I finish those
+  // more often — then anime fills the remainder. Weighted toward film/TV.
+  const items = [...recentlyWatched, ...films, ...anime].slice(0, 6);
   if (items.length === 0) return null;
 
   return (
