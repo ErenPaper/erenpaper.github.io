@@ -103,9 +103,11 @@ export default function Experience() {
 
   // Safety net: if the dolly stalls (tab throttled, WebGL hiccup), force the
   // bloom rather than stranding the user mid-"entering" / mid-"leaving".
+  // Personal doesn't dive into the screen — after a brief warm drift, cross-
+  // dissolve into Side B. (Also the safety net if the camera stalls.)
   useEffect(() => {
     if (phase !== "entering") return;
-    const t = window.setTimeout(() => window.dispatchEvent(new Event("crt-bloom")), 6000);
+    const t = window.setTimeout(() => window.dispatchEvent(new Event("crt-bloom")), 1150);
     return () => window.clearTimeout(t);
   }, [phase]);
 
@@ -252,12 +254,9 @@ export default function Experience() {
         <div
           className="phosphor-bloom"
           style={{
-            clipPath: `circle(${bloom === "open" ? "130vw" : "0vw"} at 50% 50%)`,
-            WebkitClipPath: `circle(${bloom === "open" ? "130vw" : "0vw"} at 50% 50%)`,
+            opacity: bloom === "open" ? 1 : 0,
             transition:
-              bloom === "mounted"
-                ? "none"
-                : `clip-path ${bloom === "open" ? 500 : 400}ms cubic-bezier(0.4, 0, 0.2, 1)`,
+              bloom === "mounted" ? "none" : `opacity ${bloom === "open" ? 520 : 620}ms ease-in-out`,
           }}
         />
       )}

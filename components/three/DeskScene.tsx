@@ -424,14 +424,11 @@ function CameraRig() {
     idle.current += dt;
     if (phase === "entering") {
       diveFrom.current = null;
-      // dolly straight into the screen; the phosphor bloom takes over near it
-      const tp = new THREE.Vector3(0, 0.35, 1.1);
-      camera.position.lerp(tp, 0.06);
-      camera.lookAt(0, 0.33, 0);
-      if (!bloomFired.current && camera.position.z < 2.5) {
-        bloomFired.current = true;
-        window.dispatchEvent(new Event("crt-bloom"));
-      }
+      // Personal: no dive into the screen — a slow warm drift (lean back from the
+      // desk) while the warm cross-dissolve takes over. Reveal fires on a timer.
+      const tp = new THREE.Vector3(0.25, 0.78, 5.7);
+      camera.position.lerp(tp, 0.025);
+      camera.lookAt(0, 0.4, 0);
     } else if (phase === "leaving") {
       // Time-based eased dive at the bright star on the CRT. On the first frame
       // capture the current (menu) position; then glide along a fixed path so
