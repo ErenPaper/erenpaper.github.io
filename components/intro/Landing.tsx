@@ -163,6 +163,11 @@ export default function Landing({
           {hintText || "\u00A0"}
         </motion.div>
       </div>
+
+      {/* CRT glass over the whole picture \u2014 glare, curved-corner vignette,
+          faint scanlines and a slow refresh-roll, so it reads as a tube you're
+          looking *into*, not text laid on top. */}
+      <div className="crt-glass" aria-hidden />
     </motion.div>
   );
 }
