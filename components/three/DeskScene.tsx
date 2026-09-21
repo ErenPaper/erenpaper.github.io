@@ -60,10 +60,10 @@ function useScreenTexture() {
     }
     ctx.globalAlpha = 1;
     // glass glare — a soft reflection catching the upper-left of the tube
-    const glare = ctx.createLinearGradient(0, 0, c.width * 0.6, c.height * 0.62);
-    glare.addColorStop(0, "rgba(205,238,255,0.12)");
-    glare.addColorStop(0.26, "rgba(205,238,255,0.025)");
-    glare.addColorStop(0.55, "rgba(0,0,0,0)");
+    const glare = ctx.createLinearGradient(0, 0, c.width * 0.66, c.height * 0.66);
+    glare.addColorStop(0, "rgba(210,240,255,0.20)");
+    glare.addColorStop(0.22, "rgba(210,240,255,0.06)");
+    glare.addColorStop(0.5, "rgba(0,0,0,0)");
     ctx.fillStyle = glare; ctx.fillRect(0, 0, c.width, c.height);
     // tube vignette — darken toward the curved corners (bound to the screen)
     const vg = ctx.createRadialGradient(c.width / 2, c.height * 0.46, c.height * 0.22,
@@ -163,6 +163,7 @@ function Monitor() {
           toneMapped={false}
         />
       </mesh>
+      <ScanLines />
       {/* slightly convex CRT glass over the screen */}
       <mesh position={[0, 0.1, 0.42]} scale={[1.68, 1.2, 0.14]}>
         <sphereGeometry args={[1, 32, 24]} />
@@ -176,6 +177,33 @@ function Monitor() {
       {/* phosphor glow spilling off the screen onto the desk (flickers) */}
       <ScreenGlow />
     </group>
+  );
+}
+
+// Crisp scanlines bound to the screen: a tiny 1×4 texture (one dark row of four)
+// tiled ~150× down the screen with nearest filtering so the lines stay sharp
+// instead of smearing when the screen is scaled on-screen.
+function ScanLines() {
+  const tex = useMemo(() => {
+    const c = document.createElement("canvas");
+    c.width = 1; c.height = 4;
+    const ctx = c.getContext("2d")!;
+    ctx.clearRect(0, 0, 1, 4);
+    ctx.fillStyle = "rgba(0,0,0,0.34)";
+    ctx.fillRect(0, 0, 1, 1);
+    const t = new THREE.CanvasTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(1, 150);
+    t.magFilter = THREE.NearestFilter;
+    t.minFilter = THREE.NearestFilter;
+    t.generateMipmaps = false;
+    return t;
+  }, []);
+  return (
+    <mesh position={[0, 0.1, 0.465]}>
+      <planeGeometry args={[SCREEN_W, SCREEN_H]} />
+      <meshBasicMaterial map={tex} transparent opacity={0.55} depthWrite={false} toneMapped={false} />
+    </mesh>
   );
 }
 
