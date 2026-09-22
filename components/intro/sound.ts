@@ -79,6 +79,43 @@ export function playHoverTick() {
   src.start(t);
 }
 
+/** Vinyl needle-drop: a contact pop + low thump, then ~1.4s of soft surface crackle. */
+export function playNeedleDrop() {
+  const ac = live();
+  if (!ac) return;
+  const t = ac.currentTime;
+  // contact pop
+  const popBuf = ac.createBuffer(1, Math.ceil(ac.sampleRate * 0.03), ac.sampleRate);
+  const pd = popBuf.getChannelData(0);
+  for (let i = 0; i < pd.length; i++) pd[i] = (Math.random() * 2 - 1) * (1 - i / pd.length);
+  const pop = ac.createBufferSource();
+  const popGain = ac.createGain();
+  pop.buffer = popBuf;
+  popGain.gain.setValueAtTime(0.13, t);
+  popGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+  pop.connect(popGain).connect(ac.destination);
+  pop.start(t);
+  // low thump
+  const osc = ac.createOscillator();
+  const og = ac.createGain();
+  osc.type = "sine"; osc.frequency.setValueAtTime(68, t);
+  og.gain.setValueAtTime(0.11, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
+  osc.connect(og).connect(ac.destination); osc.start(t); osc.stop(t + 0.16);
+  // sparse surface crackle through a bandpass
+  const dur = 1.4;
+  const nb = ac.createBuffer(1, Math.ceil(ac.sampleRate * dur), ac.sampleRate);
+  const nd = nb.getChannelData(0);
+  for (let i = 0; i < nd.length; i++) nd[i] = Math.random() > 0.985 ? (Math.random() * 2 - 1) : 0;
+  const noise = ac.createBufferSource();
+  const bp = ac.createBiquadFilter();
+  const ng = ac.createGain();
+  noise.buffer = nb; bp.type = "bandpass"; bp.frequency.value = 3000; bp.Q.value = 0.7;
+  ng.gain.setValueAtTime(0.1, t);
+  ng.gain.linearRampToValueAtTime(0.0001, t + dur);
+  noise.connect(bp).connect(ng).connect(ac.destination);
+  noise.start(t);
+}
+
 /** Descending 260→30 Hz sweep, 550ms — the CRT power-off thunk. */
 export function playPowerDown() {
   const ac = live();

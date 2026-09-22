@@ -9,7 +9,7 @@ import PostScreen from "./os/PostScreen";
 import Landing from "./intro/Landing";
 import ProSite from "./pro/ProSite";
 import PersonalSite from "./personal/PersonalSite";
-import FilmLeader from "./personal/FilmLeader";
+import VinylDrop from "./personal/VinylDrop";
 import { initAudioUnlock, playLockClick, playPowerDown, playWarpRise } from "./intro/sound";
 
 // The 3D scene is client-only and lazy so it never blocks first paint / SSR.
@@ -251,9 +251,9 @@ export default function Experience() {
         )}
       </AnimatePresence>
 
-      {/* Personal entry: Super-8 film-leader countdown, then the warm dissolve */}
+      {/* Personal entry: vinyl drop + needle set, then the warm dissolve */}
       {phase === "entering" && webgl && !reduce && (
-        <FilmLeader onDone={() => window.dispatchEvent(new Event("crt-bloom"))} />
+        <VinylDrop onDone={() => window.dispatchEvent(new Event("crt-bloom"))} />
       )}
 
       {bloom !== "idle" && (
