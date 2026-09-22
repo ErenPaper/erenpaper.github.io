@@ -9,6 +9,7 @@ import PostScreen from "./os/PostScreen";
 import Landing from "./intro/Landing";
 import ProSite from "./pro/ProSite";
 import PersonalSite from "./personal/PersonalSite";
+import FilmLeader from "./personal/FilmLeader";
 import { initAudioUnlock, playLockClick, playPowerDown, playWarpRise } from "./intro/sound";
 
 // The 3D scene is client-only and lazy so it never blocks first paint / SSR.
@@ -103,11 +104,11 @@ export default function Experience() {
 
   // Safety net: if the dolly stalls (tab throttled, WebGL hiccup), force the
   // bloom rather than stranding the user mid-"entering" / mid-"leaving".
-  // Personal doesn't dive into the screen — after a brief warm drift, cross-
-  // dissolve into Side B. (Also the safety net if the camera stalls.)
+  // Personal: the film-leader countdown fires "crt-bloom" (the warm reveal) when
+  // the reel starts; this is just the safety net if it stalls.
   useEffect(() => {
     if (phase !== "entering") return;
-    const t = window.setTimeout(() => window.dispatchEvent(new Event("crt-bloom")), 1150);
+    const t = window.setTimeout(() => window.dispatchEvent(new Event("crt-bloom")), 5000);
     return () => window.clearTimeout(t);
   }, [phase]);
 
@@ -249,6 +250,11 @@ export default function Experience() {
           <Landing key="landing" onPersonal={startShutter} onProfessional={startStarZoom} />
         )}
       </AnimatePresence>
+
+      {/* Personal entry: Super-8 film-leader countdown, then the warm dissolve */}
+      {phase === "entering" && webgl && !reduce && (
+        <FilmLeader onDone={() => window.dispatchEvent(new Event("crt-bloom"))} />
+      )}
 
       {bloom !== "idle" && (
         <div

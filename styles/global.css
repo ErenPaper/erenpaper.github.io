@@ -1322,6 +1322,9 @@ a.sb-vinyl:hover { border-color: color-mix(in srgb, var(--sb-accent) 55%, transp
 /* Matrix phosphor bloom — a single green "pixel" that swells from the centre
    of the screen until it swallows the viewport, then contracts over the OS.
    The radius is driven by an inline clip-path transition in Experience.tsx. */
+/* Super-8 film-leader countdown canvas — the Personal entry, under the reveal */
+.film-leader { position: fixed; inset: 0; z-index: 9990; pointer-events: none; background: #2a2118; }
+
 /* Personal reveal = a warm film light-leak cross-dissolve (not a CRT zoom) */
 .phosphor-bloom {
   position: fixed; inset: 0; z-index: 9995; pointer-events: none;
