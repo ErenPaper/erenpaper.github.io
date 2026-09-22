@@ -1322,45 +1322,6 @@ a.sb-vinyl:hover { border-color: color-mix(in srgb, var(--sb-accent) 55%, transp
 /* Matrix phosphor bloom — a single green "pixel" that swells from the centre
    of the screen until it swallows the viewport, then contracts over the OS.
    The radius is driven by an inline clip-path transition in Experience.tsx. */
-/* Vinyl-drop — the Personal entry: a record lowers, spins, needle sets */
-.vinyl-drop {
-  position: fixed; inset: 0; z-index: 9990; pointer-events: none;
-  background: radial-gradient(circle at 50% 44%, #201811, #0a0806 72%);
-  display: grid; place-items: center;
-}
-.vinyl-stage { position: relative; width: min(58vh, 86vw); aspect-ratio: 1; }
-.vinyl-platter {
-  position: absolute; inset: 0; border-radius: 50%;
-  background: radial-gradient(circle, #2a2018 0 100%);
-  box-shadow: 0 18px 60px rgba(0,0,0,.6), inset 0 0 44px rgba(0,0,0,.55);
-}
-.vinyl-record { position: absolute; inset: 4%; animation: vinyl-drop .7s cubic-bezier(.25,.9,.3,1) forwards; }
-.vinyl-disc {
-  position: absolute; inset: 0; border-radius: 50%; display: grid; place-items: center;
-  background: repeating-radial-gradient(circle at 50% 50%, #0b0b0b 0 1.5px, #161616 1.5px 3.5px);
-  box-shadow: inset 0 0 60px rgba(255,255,255,.04), 0 10px 40px rgba(0,0,0,.6);
-  animation: vinyl-spin 1.6s linear .75s infinite;
-}
-.vinyl-disc::after {
-  content: ""; position: absolute; inset: 0; border-radius: 50%;
-  background: linear-gradient(115deg, transparent 42%, rgba(255,240,220,.10) 50%, transparent 58%);
-}
-.vinyl-label {
-  width: 30%; aspect-ratio: 1; border-radius: 50%;
-  background: radial-gradient(circle, #12100e 0 13%, #e07a4a 13% 100%);
-  box-shadow: 0 0 0 1px rgba(0,0,0,.4);
-}
-.vinyl-arm {
-  position: absolute; top: -2%; right: 2%; width: 46%; height: 7px; border-radius: 4px;
-  background: linear-gradient(#c9c6be, #7d7a72);
-  transform-origin: 92% 50%; transform: rotate(-30deg);
-  box-shadow: 0 4px 10px rgba(0,0,0,.5);
-  animation: vinyl-arm 1s cubic-bezier(.3,.7,.3,1) .5s forwards;
-}
-.vinyl-head { position: absolute; left: 2%; top: -3px; width: 14px; height: 13px; border-radius: 3px; background: #2a2a2a; }
-@keyframes vinyl-drop { from { transform: translateY(-120%) scale(.92); opacity: .2; } to { transform: translateY(0) scale(1); opacity: 1; } }
-@keyframes vinyl-spin { to { transform: rotate(360deg); } }
-@keyframes vinyl-arm { to { transform: rotate(12deg); } }
 
 /* Personal reveal = a warm film light-leak cross-dissolve (not a CRT zoom) */
 .phosphor-bloom {
