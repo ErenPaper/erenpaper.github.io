@@ -58,6 +58,7 @@ export default function Experience() {
   const [post, setPost] = useState(false);      // POST/BIOS flourish over the pro console
   const [powerOn, setPowerOn] = useState(false); // CRT power-on flourish over the personal OS
   const [cycle, setCycle] = useState<Cycle>("idle");
+  const [channelOn, setChannelOn] = useState(false); // channel-switch runs once zoomed onto the screen
   const reduce = useMemo(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     []
@@ -102,12 +103,20 @@ export default function Experience() {
     return () => window.removeEventListener("star-zoom", onStar);
   }, []);
 
+  // Personal: the rig fires "channel-switch" once the camera has zoomed onto the
+  // screen — that's when the snow/roll runs (on the now-full-frame tube).
+  useEffect(() => {
+    const onCh = () => setChannelOn(true);
+    window.addEventListener("channel-switch", onCh);
+    return () => window.removeEventListener("channel-switch", onCh);
+  }, []);
+
   // Safety net: if the dolly stalls (tab throttled, WebGL hiccup), force the
   // bloom rather than stranding the user mid-"entering" / mid-"leaving".
-  // Personal: after a brief warm drift, cross-dissolve into Side B.
+  // Safety net: if the zoom stalls, start the channel-switch anyway.
   useEffect(() => {
     if (phase !== "entering") return;
-    const t = window.setTimeout(() => window.dispatchEvent(new Event("crt-bloom")), 1150);
+    const t = window.setTimeout(() => window.dispatchEvent(new Event("channel-switch")), 2200);
     return () => window.clearTimeout(t);
   }, [phase]);
 
@@ -163,6 +172,7 @@ export default function Experience() {
         setBooted(true);
         setPhase("os");
         setBloom("shrink");
+        setChannelOn(false);
       }, 520);
       return () => window.clearTimeout(t);
     }
@@ -249,8 +259,8 @@ export default function Experience() {
         )}
       </AnimatePresence>
 
-      {/* Personal entry: CRT channel-switch (snow + roll), then fade up from black */}
-      {phase === "entering" && webgl && !reduce && (
+      {/* Personal entry: once zoomed onto the tube, the screen changes channel */}
+      {channelOn && phase === "entering" && (
         <ChannelSwitch onDone={() => window.dispatchEvent(new Event("crt-bloom"))} />
       )}
 
