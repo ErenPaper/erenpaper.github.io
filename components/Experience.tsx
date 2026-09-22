@@ -9,6 +9,7 @@ import PostScreen from "./os/PostScreen";
 import Landing from "./intro/Landing";
 import ProSite from "./pro/ProSite";
 import PersonalSite from "./personal/PersonalSite";
+import ChannelSwitch from "./personal/ChannelSwitch";
 import { initAudioUnlock, playLockClick, playPowerDown, playWarpRise } from "./intro/sound";
 
 // The 3D scene is client-only and lazy so it never blocks first paint / SSR.
@@ -162,7 +163,6 @@ export default function Experience() {
         setBooted(true);
         setPhase("os");
         setBloom("shrink");
-        setPowerOn(true);
       }, 520);
       return () => window.clearTimeout(t);
     }
@@ -248,6 +248,11 @@ export default function Experience() {
           <Landing key="landing" onPersonal={startShutter} onProfessional={startStarZoom} />
         )}
       </AnimatePresence>
+
+      {/* Personal entry: CRT channel-switch (snow + roll), then fade up from black */}
+      {phase === "entering" && webgl && !reduce && (
+        <ChannelSwitch onDone={() => window.dispatchEvent(new Event("crt-bloom"))} />
+      )}
 
       {bloom !== "idle" && (
         <div

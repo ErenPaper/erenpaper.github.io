@@ -116,6 +116,33 @@ export function playNeedleDrop() {
   noise.start(t);
 }
 
+/** Channel-change: a mechanical chunk + a short burst of TV static. */
+export function playChannelChange() {
+  const ac = live();
+  if (!ac) return;
+  const t = ac.currentTime;
+  // static burst — high-passed white noise, quick swell and fall
+  const dur = 0.42;
+  const buf = ac.createBuffer(1, Math.ceil(ac.sampleRate * dur), ac.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * 0.6;
+  const src = ac.createBufferSource();
+  const hp = ac.createBiquadFilter();
+  const g = ac.createGain();
+  src.buffer = buf; hp.type = "highpass"; hp.frequency.value = 1300;
+  g.gain.setValueAtTime(0.0, t);
+  g.gain.linearRampToValueAtTime(0.085, t + 0.04);
+  g.gain.linearRampToValueAtTime(0.0001, t + dur);
+  src.connect(hp).connect(g).connect(ac.destination);
+  src.start(t);
+  // mechanical channel chunk
+  const osc = ac.createOscillator();
+  const og = ac.createGain();
+  osc.type = "square"; osc.frequency.setValueAtTime(135, t);
+  og.gain.setValueAtTime(0.08, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+  osc.connect(og).connect(ac.destination); osc.start(t); osc.stop(t + 0.07);
+}
+
 /** Descending 260→30 Hz sweep, 550ms — the CRT power-off thunk. */
 export function playPowerDown() {
   const ac = live();
