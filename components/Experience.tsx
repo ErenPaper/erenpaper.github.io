@@ -9,7 +9,6 @@ import PostScreen from "./os/PostScreen";
 import Landing from "./intro/Landing";
 import ProSite from "./pro/ProSite";
 import PersonalSite from "./personal/PersonalSite";
-import ChannelSwitch from "./personal/ChannelSwitch";
 import { initAudioUnlock, playLockClick, playPowerDown, playWarpRise } from "./intro/sound";
 
 // The 3D scene is client-only and lazy so it never blocks first paint / SSR.
@@ -58,7 +57,6 @@ export default function Experience() {
   const [post, setPost] = useState(false);      // POST/BIOS flourish over the pro console
   const [powerOn, setPowerOn] = useState(false); // CRT power-on flourish over the personal OS
   const [cycle, setCycle] = useState<Cycle>("idle");
-  const [channelOn, setChannelOn] = useState(false); // channel-switch runs once zoomed onto the screen
   const reduce = useMemo(
     () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     []
@@ -103,20 +101,12 @@ export default function Experience() {
     return () => window.removeEventListener("star-zoom", onStar);
   }, []);
 
-  // Personal: the rig fires "channel-switch" once the camera has zoomed onto the
-  // screen — that's when the snow/roll runs (on the now-full-frame tube).
-  useEffect(() => {
-    const onCh = () => setChannelOn(true);
-    window.addEventListener("channel-switch", onCh);
-    return () => window.removeEventListener("channel-switch", onCh);
-  }, []);
-
   // Safety net: if the dolly stalls (tab throttled, WebGL hiccup), force the
   // bloom rather than stranding the user mid-"entering" / mid-"leaving".
-  // Safety net: if the zoom stalls, start the channel-switch anyway.
+  // Personal: after a brief drift, warm-fade into Side B.
   useEffect(() => {
     if (phase !== "entering") return;
-    const t = window.setTimeout(() => window.dispatchEvent(new Event("channel-switch")), 2200);
+    const t = window.setTimeout(() => window.dispatchEvent(new Event("crt-bloom")), 1150);
     return () => window.clearTimeout(t);
   }, [phase]);
 
@@ -172,7 +162,7 @@ export default function Experience() {
         setBooted(true);
         setPhase("os");
         setBloom("shrink");
-        setChannelOn(false);
+        setPowerOn(true);
       }, 520);
       return () => window.clearTimeout(t);
     }
@@ -258,11 +248,6 @@ export default function Experience() {
           <Landing key="landing" onPersonal={startShutter} onProfessional={startStarZoom} />
         )}
       </AnimatePresence>
-
-      {/* Personal entry: once zoomed onto the tube, the screen changes channel */}
-      {channelOn && phase === "entering" && (
-        <ChannelSwitch onDone={() => window.dispatchEvent(new Event("crt-bloom"))} />
-      )}
 
       {bloom !== "idle" && (
         <div

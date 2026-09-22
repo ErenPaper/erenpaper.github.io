@@ -1323,14 +1323,10 @@ a.sb-vinyl:hover { border-color: color-mix(in srgb, var(--sb-accent) 55%, transp
    of the screen until it swallows the viewport, then contracts over the OS.
    The radius is driven by an inline clip-path transition in Experience.tsx. */
 
-/* CRT channel-switch overlay — the Personal entry */
-.channel-switch { position: fixed; inset: 0; z-index: 9990; pointer-events: none; background: #050507; }
-
-/* Personal reveal cover — the TV going dark between channels; Side B then
-   fades up from black as the picture "locks" onto the new channel. */
+/* Personal reveal = a clean, soft warm glow cross-dissolve into Side B */
 .phosphor-bloom {
   position: fixed; inset: 0; z-index: 9995; pointer-events: none;
-  background: #050507;
+  background: radial-gradient(circle at 50% 45%, #fff6e8 0%, #f2ddbe 46%, #e7cea4 100%);
 }
 .shutter { position: fixed; left: 0; right: 0; z-index: 9998; background: #000; pointer-events: none; }
 .shutter-top { top: 0; }

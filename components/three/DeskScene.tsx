@@ -424,15 +424,11 @@ function CameraRig() {
     idle.current += dt;
     if (phase === "entering") {
       diveFrom.current = null;
-      // Personal: zoom straight onto the tube until the screen fills the frame,
-      // then fire "channel-switch" so the screen itself changes channel.
-      const tp = new THREE.Vector3(0, 0.33, 2.55);
-      camera.position.lerp(tp, 0.055);
-      camera.lookAt(0, 0.33, 0);
-      if (!bloomFired.current && camera.position.z < 2.9) {
-        bloomFired.current = true;
-        window.dispatchEvent(new Event("channel-switch"));
-      }
+      // Personal: a slow, gentle drift while a warm fade takes over (no dive —
+      // that's Professional's move). The reveal fires on a timer.
+      const tp = new THREE.Vector3(0.25, 0.7, 5.6);
+      camera.position.lerp(tp, 0.03);
+      camera.lookAt(0, 0.4, 0);
     } else if (phase === "leaving") {
       // Time-based eased dive at the bright star on the CRT. On the first frame
       // capture the current (menu) position; then glide along a fixed path so
