@@ -69,11 +69,13 @@ export default function Experience() {
     const t = (localStorage.getItem("theme") as "dark" | "light") || "dark";
     setTheme(t === "light" ? "light" : "dark");
     const params = new URLSearchParams(window.location.search);
-    if (params.get("v") === "os") enterDirect("personal");
-    if (params.get("v") === "pro") enterDirect("pro");
+    const deepLink = params.get("v");
+    if (deepLink === "os") enterDirect("personal");
+    if (deepLink === "pro") enterDirect("pro");
     // The boot plays once per browser session — reloads go straight to the menu.
+    // Deep-linked visitors never see it either, even if they head to the menu.
     try {
-      if (sessionStorage.getItem("booted")) setBootDone(true);
+      if (deepLink === "os" || deepLink === "pro" || sessionStorage.getItem("booted")) setBootDone(true);
     } catch {}
     setReady(true);
     return initAudioUnlock();
@@ -180,10 +182,12 @@ export default function Experience() {
   // the picture, swap scenes in the dark, and fade the landing back up.
   useEffect(() => {
     const onExit = () => {
-      if (reduce) { exitToDesk(); return; }
+      if (reduce) { window.history.replaceState(null, "", window.location.pathname); exitToDesk(); return; }
       playPowerDown();
       setCycle("out");
       window.setTimeout(() => {
+        // Drop any ?v= deep link so a reload from the menu stays on the menu.
+        window.history.replaceState(null, "", window.location.pathname);
         exitToDesk();
         setCycle("in");
         window.setTimeout(() => setCycle("idle"), 450);
