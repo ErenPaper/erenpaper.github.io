@@ -5,28 +5,29 @@ import { playPostBeep } from "../intro/sound";
 
 // POST/BIOS flourish over the Professional console: device enumeration with a
 // memory count-up. Renders inside .monitor-screen (under the CRT overlay, over
-// the desktop) for ~2.4s, then calls onDone. Never mounted under
+// the desktop) for ~1.2s, then calls onDone. Never mounted under
 // prefers-reduced-motion — Experience jumps straight to the desktop instead.
 
 const MEM_KB = 264;
-const MEM_AT = 300;   // when the count-up starts
-const MEM_DUR = 620;  // count-up length
-const DONE_AT = 2400;
+const MEM_AT = 150;   // when the count-up starts
+const MEM_DUR = 300;  // count-up length
+const READY_AT = 1000;
+const DONE_AT = 1250;
 
 type Line = { at: number; text: string; ok?: boolean };
 
 // Index 2 is the memory line; its count-up is rendered specially below.
 const LINES: Line[] = [
   { at: 0, text: "RR-BIOS v2.6 · RAMOS ENGINEERING" },
-  { at: 150, text: "CPU0  : RP2040 · 2× CORTEX-M0+ @ 133MHZ", ok: true },
+  { at: 75, text: "CPU0  : RP2040 · 2× CORTEX-M0+ @ 133MHZ", ok: true },
   { at: MEM_AT, text: "MEM   : SRAM", ok: true },
-  { at: 1010, text: "FLASH : 2048K QSPI XIP", ok: true },
-  { at: 1150, text: "UART0 : 115200-8N1", ok: true },
-  { at: 1290, text: "BUS   : I2C0 · SPI0 · PIO0-1", ok: true },
-  { at: 1430, text: "SENS  : IMU · ENV · MIC", ok: true },
-  { at: 1590, text: "NET   : MQTT/TLS UPLINK", ok: true },
-  { at: 1810, text: "BOOT  : LOADING PROFILE — RAPHAEL RAMOS" },
-  { at: 2110, text: "READY." },
+  { at: 500, text: "FLASH : 2048K QSPI XIP", ok: true },
+  { at: 570, text: "UART0 : 115200-8N1", ok: true },
+  { at: 640, text: "BUS   : I2C0 · SPI0 · PIO0-1", ok: true },
+  { at: 710, text: "SENS  : IMU · ENV · MIC", ok: true },
+  { at: 790, text: "NET   : MQTT/TLS UPLINK", ok: true },
+  { at: 880, text: "BOOT  : LOADING PROFILE — RAPHAEL RAMOS" },
+  { at: READY_AT, text: "READY." },
 ];
 
 export default function PostScreen({ onDone }: { onDone: () => void }) {
@@ -41,7 +42,7 @@ export default function PostScreen({ onDone }: { onDone: () => void }) {
       const ms = t - start;
       setNow(ms);
       if (!beeped.current.start && ms >= 60) { beeped.current.start = true; playPostBeep(990); }
-      if (!beeped.current.ready && ms >= 2110) { beeped.current.ready = true; playPostBeep(1320, 0.05); }
+      if (!beeped.current.ready && ms >= READY_AT) { beeped.current.ready = true; playPostBeep(1320, 0.05); }
       if (ms < DONE_AT) raf = requestAnimationFrame(step);
       else if (!doneRef.current) { doneRef.current = true; onDone(); }
     };

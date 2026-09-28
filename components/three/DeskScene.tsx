@@ -335,7 +335,7 @@ function Mug() {
 // as a deliberate plunge that speeds up into the whiteout rather than a
 // fast-then-crawl lerp.
 const easeIn = (t: number) => t * t;
-const DIVE_DUR = 2.6; // seconds, menu POV → just in front of the star
+const DIVE_DUR = 1.7; // seconds, menu POV → just in front of the star
 
 // Additive glow sprite sitting on the target star. It's a faint twinkle at
 // idle and blooms bright as the camera dives in (proximity-driven), so the

@@ -71,6 +71,10 @@ export default function Experience() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("v") === "os") enterDirect("personal");
     if (params.get("v") === "pro") enterDirect("pro");
+    // The boot plays once per browser session — reloads go straight to the menu.
+    try {
+      if (sessionStorage.getItem("booted")) setBootDone(true);
+    } catch {}
     setReady(true);
     return initAudioUnlock();
   }, [setTheme, enterDirect]);
@@ -112,7 +116,7 @@ export default function Experience() {
 
   useEffect(() => {
     if (phase !== "leaving") return;
-    const t = window.setTimeout(() => window.dispatchEvent(new Event("star-zoom")), 5000);
+    const t = window.setTimeout(() => window.dispatchEvent(new Event("star-zoom")), 3000);
     return () => window.clearTimeout(t);
   }, [phase]);
 
@@ -140,7 +144,7 @@ export default function Experience() {
         arrivePro();
         setPost(true);
         setStarBloom("hold");
-      }, 1050);
+      }, 650);
       return () => window.clearTimeout(t);
     }
     if (starBloom === "hold") {
@@ -149,7 +153,7 @@ export default function Experience() {
       return () => window.clearTimeout(t);
     }
     if (starBloom === "fade") {
-      const t = window.setTimeout(() => setStarBloom("idle"), 600);
+      const t = window.setTimeout(() => setStarBloom("idle"), 400);
       return () => window.clearTimeout(t);
     }
   }, [starBloom, arrivePro]);
@@ -242,7 +246,13 @@ export default function Experience() {
 
       <AnimatePresence mode="wait">
         {ready && phase === "intro" && !bootDone && (
-          <BootScreen key="boot" onDone={() => setBootDone(true)} />
+          <BootScreen
+            key="boot"
+            onDone={() => {
+              try { sessionStorage.setItem("booted", "1"); } catch {}
+              setBootDone(true);
+            }}
+          />
         )}
         {ready && phase === "intro" && bootDone && (
           <Landing key="landing" onPersonal={startShutter} onProfessional={startStarZoom} />
@@ -269,8 +279,8 @@ export default function Experience() {
               starBloom === "mounted" || starBloom === "hold"
                 ? "none"
                 : starBloom === "fade"
-                  ? "opacity 600ms ease"
-                  : "opacity 950ms cubic-bezier(0.5, 0, 0.85, 0.5)",
+                  ? "opacity 400ms ease"
+                  : "opacity 600ms cubic-bezier(0.5, 0, 0.85, 0.5)",
           }}
         />
       )}
