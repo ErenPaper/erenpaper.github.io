@@ -13,7 +13,7 @@ export const profile = {
 };
 
 export const bio = [
-  "I'm a Computer Engineering graduate from the University of Alberta (June 2026). I gravitate toward work that's hands-on and grounded — firmware, embedded systems, hardware that actually does something in the world. Currently VP Academics at the Computer Engineering Club.",
+  "I'm a Computer Engineering graduate from the University of Alberta (June 2026). I gravitate toward work that's hands-on and grounded — firmware, embedded systems, hardware that actually does something in the world. I also served as VP Academics at the Computer Engineering Club.",
   "Outside of engineering, I play piano with my family, volunteer at events, and have watched probably too much anime — the GitHub handle is proof. I'm outgoing and love to talk (maybe too much), take my faith seriously, and genuinely believe a well-timed dad joke is a life skill.",
 ];
 
@@ -75,7 +75,7 @@ export const extracurriculars: Experience[] = [
   {
     company: "Computer Engineering Club",
     role: "VP Academics",
-    date: "Apr 2025 – Present",
+    date: "Apr 2025 – June 2026",
     location: "University of Alberta",
     bullets: [
       "Led academic programming for 100+ members including workshops, study sessions, and exam preparation events.",
