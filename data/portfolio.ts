@@ -211,10 +211,25 @@ export const projects: Project[] = [
       "Used the potentiometer's midpoint as a direction switch with a dead zone — below centre reverses, above drives forward, centre stops — no extra buttons.",
       "Animated a WS2812 ring as a tachometer: green→yellow→red filling with speed (flashing at the limit), blue→purple in reverse.",
       "Prototyped it in Wokwi first — two LEDs standing in for the H-bridge, verified on a logic analyzer — before moving to real hardware.",
+      "Next: moving it off the breadboard onto a custom 2-layer PCB — see the RP2040 Motor-Controller Carrier Board.",
     ],
     insight:
       "Almost every bug turned out to be hardware, not code — a pin/pixel mismatch, the motor running off the wrong rail. Because I'd already proven the logic in Wokwi, I could trust the firmware and go straight at the wiring.",
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/dc-motor-speed-controller" }],
+  },
+  {
+    title: "RP2040 Motor-Controller Carrier Board",
+    tag: "In Progress · Hardware · PCB Design",
+    tech: ["KiCad", "PCB Design", "Schematic Capture", "RP2040", "H-bridge"],
+    status: "progress",
+    context: "PCB Design · 2026 · In progress",
+    brief:
+      "A custom 2-layer carrier board that takes the DC motor controller off the breadboard — the Pico, TC1508A H-bridge, potentiometer, WS2812 LED ring, and rotary encoder all on one PCB.",
+    built: [
+      "Captured the full schematic in KiCad, from the Pico's GPIO out to the H-bridge, LED ring, pot, and encoder.",
+      "Assigned footprints for every part, ready for board layout.",
+      "Up next: 2-layer layout with a ground pour, then fabrication through JLCPCB and bring-up on the real board.",
+    ],
   },
   {
     title: "16-bit CPU Design",
