@@ -362,7 +362,7 @@ export const skills: SkillCategory[] = [
   { name: "Embedded & Hardware", skills: ["Raspberry Pi Pico 2W", "RP2040 PIO", "MicroPython", "Edge Impulse", "TensorFlow Lite", "FreeRTOS", "Vivado", "LTSpice", "Cadence", "WaveForms", "Wokwi", "GDB"] },
   { name: "Protocols & Interfaces", skills: ["GPIO", "I2C", "SPI", "UART", "I2S", "PWM", "ADC", "DMA", "MQTT/TLS"] },
   { name: "Cloud & Backend", skills: ["AWS IoT Core", "Lambda", "DynamoDB", "Firebase", "Supabase", "MongoDB", "SQLite"] },
-  { name: "Dev Tools", skills: ["Git", "GitHub", "Android Studio", "VS Code", "Jupyter", "Linux"] },
+  { name: "Dev Tools", skills: ["Git", "GitHub", "Docker", "Android Studio", "VS Code", "Jupyter", "Linux", "Ubuntu", "Debian"] },
   { name: "Libraries & Frameworks", skills: ["React Native", "NumPy", "Pandas", "Matplotlib", "Seaborn", "Scikit-learn", "OpenMP"] },
 ];
 
