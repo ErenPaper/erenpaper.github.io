@@ -74,6 +74,16 @@ const MON = ["", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", 
 const finDate = (c?: { year: number | null; month: number | null }) =>
   c?.year ? `${c.month ? MON[c.month] + " " : ""}${c.year}` : "";
 
+// Show every rating as stars out of 5. "8/10" -> ★★★★, "9/10" -> ★★★★½ (whole
+// numbers out of 10 map exactly onto half-stars, so nothing is lost). Ratings
+// already in stars pass through unchanged.
+const asStars = (rating?: string) => {
+  const m = rating?.match(/^(\d+(?:\.\d+)?)\/10$/);
+  if (!m) return rating;
+  const half = Math.round(Number(m[1]));
+  return "★".repeat(Math.floor(half / 2)) + (half % 2 ? "½" : "");
+};
+
 function RecentlyWatched() {
   const [films, setFilms] = useState<Watch[]>([]);
   const [anime, setAnime] = useState<Watch[]>([]);
@@ -131,7 +141,7 @@ function RecentlyWatched() {
   // can crowd out another; any slot a type can't fill goes to the others.
   const seen = new Set<string>();
   const fresh = (list: Watch[]) => list.filter((w) => {
-    const k = w.title.toLowerCase();
+    const k = w.title.toLowerCase().replace(/[^a-z0-9]/g, "");   // ignore case/punctuation
     if (seen.has(k)) return false;
     seen.add(k);
     return true;
@@ -157,7 +167,7 @@ function RecentlyWatched() {
               {w.note && <span className="sb-watch-note">{w.note}</span>}
             </div>
             <div className="sb-watch-meta">
-              {w.rating && <span className="sb-watch-rating">{w.rating}</span>}
+              {w.rating && <span className="sb-watch-rating">{asStars(w.rating)}</span>}
               <span className="sb-watch-date">{w.date}</span>
             </div>
           </div>
