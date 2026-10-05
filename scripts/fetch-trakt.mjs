@@ -25,9 +25,13 @@ try {
       "Content-Type": "application/json",
       "trakt-api-version": "2",
       "trakt-api-key": KEY,
+      "User-Agent": "erenpaper-portfolio-build",
     },
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) {
+    const hint = (await res.text().catch(() => "")).replace(/\s+/g, " ").slice(0, 120);
+    throw new Error(`HTTP ${res.status} ${hint}`.trim());
+  }
   const rows = await res.json();
 
   // Newest rating first.
