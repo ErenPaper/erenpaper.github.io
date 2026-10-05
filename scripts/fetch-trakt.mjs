@@ -67,6 +67,7 @@ try {
   if (!KEY) throw new Error("TRAKT_CLIENT_ID not set");
 
   const watched = await get(`users/${USER}/watched/shows`);
+  console.log(`trakt: ${watched.length} watched show(s) on the profile`);
   watched.sort((a, b) => new Date(b.last_watched_at) - new Date(a.last_watched_at));
 
   // Ratings by show id, to attach a rating to a finished show (and to keep rated
@@ -86,7 +87,10 @@ try {
   for (const entry of watched.slice(0, CANDIDATES)) {
     const id = entry.show.ids.trakt;
     const eps = watchedEpisodes(entry);
-    if (!eps.length) continue;
+    if (!eps.length) {
+      console.log(`trakt:   "${entry.show.title}": no regular watched episodes in the data (seasons: ${entry.seasons?.length ?? "none"})`);
+      continue;
+    }
 
     let aired = 0;
     try {
@@ -100,6 +104,7 @@ try {
     const latest = eps.reduce((a, b) => (new Date(b.at) > new Date(a.at) ? b : a));
     const rating = ratingById.get(id)?.rating;
 
+    console.log(`trakt:   "${entry.show.title}": watched ${distinct}/${aired} aired, last ${latest.at}`);
     if (aired > 0 && distinct >= aired) {
       finished.push({
         title: entry.show.title,
