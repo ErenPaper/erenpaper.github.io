@@ -127,14 +127,19 @@ function RecentlyWatched() {
     return () => { ok = false; };
   }, []);
 
-  // Round-robin across sources so no single one (films, say) crowds the rest out
-  // of the six slots: typed TV/docs, Trakt shows, Letterboxd films, then anime.
-  const sources = [recentlyWatched, shows, films, anime];
-  const items: Watch[] = [];
-  for (let i = 0; items.length < 6 && sources.some((src) => i < src.length); i++) {
-    for (const src of sources) {
-      if (i < src.length && items.length < 6) items.push(src[i]);
-    }
+  // Six slots with a guaranteed share per type (2 TV, 2 film, 2 anime) so none
+  // can crowd out another; any slot a type can't fill goes to the others.
+  const seen = new Set<string>();
+  const fresh = (list: Watch[]) => list.filter((w) => {
+    const k = w.title.toLowerCase();
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+  const groups = [fresh([...recentlyWatched, ...shows]), fresh(films), fresh(anime)];
+  const items: Watch[] = groups.flatMap((g) => g.slice(0, 2));
+  for (const g of groups) {
+    for (const w of g.slice(2)) if (items.length < 6) items.push(w);
   }
   if (items.length === 0) return null;
 
@@ -165,9 +170,20 @@ function RecentlyWatched() {
 /* ── currently watching — live AniList (in-progress) + typed TV/docuseries ── */
 function CurrentlyWatching() {
   const [anime, setAnime] = useState<Watch[]>([]);
+  const [shows, setShows] = useState<Watch[]>([]);
 
   useEffect(() => {
     let ok = true;
+    // Trakt in-progress shows: /trakt-current.json is generated at build time.
+    fetch("/trakt-current.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (ok && Array.isArray(d)) {
+          setShows(d.slice(0, 4).map((f: { title: string; date: string; href?: string }) => ({ ...f, kind: "tv" as const })));
+        }
+      })
+      .catch(() => {});
+
     fetch("https://graphql.anilist.co", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -189,7 +205,7 @@ function CurrentlyWatching() {
     return () => { ok = false; };
   }, []);
 
-  const items = [...currentlyWatching, ...anime].slice(0, 6);
+  const items = [...currentlyWatching, ...shows, ...anime].slice(0, 6);
   if (items.length === 0) return null;
 
   return (

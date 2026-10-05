@@ -8,4 +8,5 @@ next-env.d.ts
 # Generated at build time by scripts/fetch-letterboxd*.mjs
 /public/letterboxd.json
 /public/trakt.json
+/public/trakt-current.json
 /public/letterboxd-watchlist.json
