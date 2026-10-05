@@ -52,30 +52,24 @@ export const tracks: Track[] = [
   { title: "Recordings on the way", kind: "piano", date: "2026", note: "Piano takes and a few Cubase sketches will land here as I finish them." },
 ];
 
-// The watch logs. Anime auto-fills from AniList (completed + in-progress) and
-// films auto-append from the Letterboxd diary at build time. These typed lists
-// are manual overrides for what the trackers miss — TV, docuseries, K-dramas,
-// or a movie not yet logged. `href` links the card to that title / your review.
+// The watch logs are fully automatic — nothing is typed by hand:
+//   · TV     → Trakt (build time): finished = rated shows, in progress = recent episodes
+//   · Films  → Letterboxd (build time)
+//   · Anime  → AniList (live in the browser)
+// See scripts/fetch-trakt.mjs and scripts/fetch-letterboxd.mjs.
 export type Watch = {
   title: string;
   kind: "tv" | "film" | "anime" | "drama" | "doc";
-  rating?: string;   // however you rate — "★★★★☆", "8/10", "loved it"
-  date: string;      // "AUG 2026", a source ("NETFLIX"), or progress ("EP 2 / 4")
-  note?: string;     // optional one-liner
-  href?: string;     // optional link
+  rating?: string;   // "★★★★☆", "8/10" — shown as stars out of 5
+  date: string;      // "AUG 2026", or progress ("EP 2 / 4", "S02E05")
+  note?: string;
+  href?: string;
 };
 
-// Completed things the trackers miss (newest first). Anime + Letterboxd films
-// auto-append, so keep this for TV / docuseries / K-dramas / unlogged movies.
-export const recentlyWatched: Watch[] = [
-  { title: "Suits", kind: "tv", rating: "★★★★½", date: "APR 2026" },
-];
-
-// In-progress things — shown in the "currently watching" strip alongside live
-// AniList (currently-watching anime). Add a row as you start something new.
-export const currentlyWatching: Watch[] = [
-  { title: "Crime Scene: The Vanishing at the Cecil Hotel", kind: "doc", date: "NETFLIX", note: "crime docuseries" },
-];
+// Kept empty on purpose; the widgets still read these so a manual override is
+// possible, but the site is meant to run on the automatic sources alone.
+export const recentlyWatched: Watch[] = [];
+export const currentlyWatching: Watch[] = [];
 
 export type FeedKind = "note" | "photo" | "music" | "video" | "link";
 
