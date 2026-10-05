@@ -50,15 +50,24 @@ async function get(path) {
 const showHref = (show) => (show.ids?.slug ? `https://trakt.tv/shows/${show.ids.slug}` : undefined);
 
 // Regular episodes only (season 0 = specials), each with its last watch time.
-function watchedEpisodes(entry) {
-  const eps = [];
-  for (const season of entry.seasons ?? []) {
-    if (season.number === 0) continue;
-    for (const ep of season.episodes ?? []) {
-      if (ep.plays > 0) eps.push({ season: season.number, number: ep.number, at: ep.last_watched_at });
-    }
+// The /watched/shows list doesn't carry season data for this profile, so each
+// show's episode history is fetched instead (one request per show).
+async function watchedEpisodes(entry) {
+  const last = new Map();   // "SxE" -> latest watch time
+  const add = (season, number, at) => {
+    if (!season) return;    // skip specials (season 0)
+    const k = `${season}x${number}`;
+    if (!last.has(k) || new Date(at) > new Date(last.get(k).at)) last.set(k, { season, number, at });
+  };
+
+  if (entry.seasons?.length) {
+    for (const s of entry.seasons)
+      for (const ep of s.episodes ?? []) if (ep.plays > 0) add(s.number, ep.number, ep.last_watched_at);
+  } else {
+    const rows = await get(`users/${USER}/history/shows/${entry.show.ids.trakt}?limit=1000`);
+    for (const h of rows) if (h.episode) add(h.episode.season, h.episode.number, h.watched_at);
   }
-  return eps;
+  return [...last.values()];
 }
 
 mkdirSync("public", { recursive: true });
@@ -86,9 +95,15 @@ try {
 
   for (const entry of watched.slice(0, CANDIDATES)) {
     const id = entry.show.ids.trakt;
-    const eps = watchedEpisodes(entry);
+    let eps = [];
+    try {
+      eps = await watchedEpisodes(entry);
+    } catch (e) {
+      console.warn(`trakt: could not read history for "${entry.show.title}" (${e.message})`);
+      continue;
+    }
     if (!eps.length) {
-      console.log(`trakt:   "${entry.show.title}": no regular watched episodes in the data (seasons: ${entry.seasons?.length ?? "none"})`);
+      console.log(`trakt:   "${entry.show.title}": no regular watched episodes`);
       continue;
     }
 
@@ -100,7 +115,7 @@ try {
       continue;
     }
 
-    const distinct = new Set(eps.map((e) => `${e.season}x${e.number}`)).size;
+    const distinct = eps.length;   // already one entry per distinct episode
     const latest = eps.reduce((a, b) => (new Date(b.at) > new Date(a.at) ? b : a));
     const rating = ratingById.get(id)?.rating;
 
