@@ -53,8 +53,8 @@ export const experience: Experience[] = [
     location: "Edmonton, AB",
     bullets: [
       "Updated Linux-based software from Ubuntu 18 to Ubuntu 20 on elevator and lobby screens across 250+ units.",
-      "Troubleshot LTE signal processing with antennas, optimizing network connectivity for uninterrupted communication.",
-      "Executed hardware re-wiring on elevator TVs to ensure seamless functionality of critical systems.",
+      "Troubleshot LTE connectivity and antenna placement to keep 250+ screens online.",
+      "Re-wired elevator TVs and coordinated deployment with supervisors and building technicians.",
     ],
     tags: ["Linux", "Ubuntu", "LTE / Networking", "Hardware Wiring", "Software Deployment"],
   },
@@ -136,6 +136,7 @@ export type Project = {
   built?: string[];       // "what I built" bullets
   insight?: string;       // the one takeaway
   linksOut?: ProjectLink[]; // GitHub / external links
+  art?: string;           // key of a hand-made animated graphic (components/ProjectGraphic.tsx)
 };
 
 export const projects: Project[] = [
@@ -149,11 +150,11 @@ export const projects: Project[] = [
     context: "Capstone · Jan – Apr 2026",
     video: "SDkYA16DcgQ",
     brief:
-      "A non-invasive system that helps elderly residents age safely in place — three subsystems watch for stove, water, and appliance activity, run ML on-device, and stream alerts to a caregiver app. I led the stove-safety subsystem.",
+      "A non-invasive system that helps elderly residents age safely in place — three subsystems watch for stove, water, and appliance activity, run ML on-device, and stream alerts to a caregiver app. I led the stove-safety subsystem and helped on the other two.",
     built: [
       "Built the stove-safety subsystem on a Raspberry Pi Pico 2W — an MLX90614 infrared sensor for non-contact burner heat, a DS18B20 contact sensor for the oven, and a PIR sensor to detect whether anyone is nearby.",
       "Deployed an Edge Impulse model on-device to classify burner state and fused it with the motion sensor, so an alert only fires when the stove is hot and no one is around — 97.73% accuracy with an under-10-second response.",
-      "Wired a full AWS IoT pipeline — MQTT over TLS into IoT Core, Lambda anomaly detection, DynamoDB storage — feeding a React Native caregiver app with real-time alerts and activity history.",
+      "Helped wire the full AWS IoT pipeline — MQTT over TLS into IoT Core, Lambda anomaly detection, DynamoDB storage — feeding a React Native caregiver app with real-time alerts and activity history.",
       "Kept the prototype under $200 CAD, proving the concept is deployable at real-world cost.",
     ],
     insight:
@@ -181,9 +182,9 @@ export const projects: Project[] = [
   {
     title: "Russian Roulette HMI",
     tag: "Embedded · Firmware · Hardware",
-    tech: ["C", "RP2040 PIO", "WS2812B", "Quadrature Decode", "GDB"],
+    tech: ["C", "RP2040 PIO", "WS2812B", "Quadrature Decode", "GDB", "OpenOCD"],
     status: "shipped",
-    context: "Embedded · Rotary-Encoder HMI",
+    context: "ECE 407 · Rotary-Encoder HMI · with Francis Garcia",
     video: "q_OnzubR1rI",
     brief:
       "An embedded human-machine interface built around a PEL12T mechanical rotary encoder and a WS2812 RGB LED ring on the RP2040 — wrapped in a Russian-roulette game where six chambers map to twelve LEDs.",
@@ -202,7 +203,7 @@ export const projects: Project[] = [
     tag: "Embedded · Control Systems",
     tech: ["C", "PWM", "ADC", "H-bridge", "Wokwi"],
     status: "shipped",
-    context: "Embedded · Control Systems",
+    context: "ECE 407 · Control Systems · with Francis Garcia",
     video: "njNi2PRX1Rw",
     brief:
       "An open-loop DC motor controller on the RP2040 — a potentiometer sets speed and direction through a TC1508A H-bridge, with a tachometer-style LED ring reacting in real time.",
@@ -219,20 +220,22 @@ export const projects: Project[] = [
   },
   {
     title: "RP2040 Motor-Controller Carrier Board",
+    art: "pcb",
     tag: "In Progress · Hardware · PCB Design",
     tech: ["KiCad", "PCB Design", "Schematic Capture", "RP2040", "H-bridge"],
     status: "progress",
-    context: "PCB Design · 2026 · In progress",
+    context: "PCB Design · 2026 · Layout in progress",
     brief:
       "A custom 2-layer carrier board that takes the DC motor controller off the breadboard — the Pico, TC1508A H-bridge, potentiometer, WS2812 LED ring, and rotary encoder all on one PCB.",
     built: [
       "Captured the full schematic in KiCad, from the Pico's GPIO out to the H-bridge, LED ring, pot, and encoder.",
-      "Assigned footprints for every part, ready for board layout.",
-      "Up next: 2-layer layout with a ground pour, then fabrication through JLCPCB and bring-up on the real board.",
+      "Assigned footprints for every part and started the 2-layer board layout.",
+      "Up next: finish routing and the ground pour, pass DRC, then fabrication through JLCPCB and bring-up on the real board.",
     ],
   },
   {
     title: "16-bit CPU Design",
+    art: "cpu",
     tag: "Hardware · Digital Logic",
     tech: ["VHDL", "Vivado", "FPGA"],
     status: "shipped",
@@ -249,6 +252,7 @@ export const projects: Project[] = [
   },
   {
     title: "Anomaly Detection System",
+    art: "anomaly",
     tag: "ML · Data Science",
     tech: ["Python", "Scikit-learn", "Pandas", "Matplotlib"],
     status: "shipped",
@@ -266,17 +270,73 @@ export const projects: Project[] = [
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/Anomaly-Detection-System" }],
   },
   {
+    title: "Multithreaded Resource Scheduler",
+    art: "scheduler",
+    tag: "Systems · Concurrency · C",
+    tech: ["C", "pthreads", "Mutexes", "Deadlock Avoidance"],
+    status: "shipped",
+    context: "CMPUT 379 · Operating Systems · 2024",
+    brief:
+      "A multithreaded task scheduler in C: tasks declared in an input file compete for shared resources, each task running in its own pthread while a monitor thread reports who is waiting, running, or idle.",
+    built: [
+      "One pthread per task (up to 25), with one mutex per shared resource and a separate mutex guarding the monitor's output.",
+      "All-or-nothing resource acquisition: a task that can't get everything it needs releases what it holds and retries, so tasks can't deadlock — tested on a five-philosopher dining setup.",
+      "A monitor thread that periodically prints each task's state (WAIT, RUN, IDLE) plus run and wait totals.",
+    ],
+    insight:
+      "A deadlock never shows up as an error — the program just stops. Once a task stopped holding one resource while waiting for the next, the problem went away instead of being patched.",
+  },
+  {
+    title: "Multi-Client Object Server",
+    art: "objserver",
+    tag: "Systems · Networking · C",
+    tech: ["C", "TCP Sockets", "poll()", "Nonblocking I/O"],
+    status: "shipped",
+    context: "CMPUT 379 · Operating Systems · 2024",
+    brief:
+      "A TCP client-server object store in C: a single server process handles several clients at once with poll(), over a small custom packet protocol.",
+    built: [
+      "A single poll() loop that accepts and serves up to three concurrent TCP clients without threads.",
+      "Typed packets — HELLO, PUT, GET, DELETE, GTIME, TIME, OK, ERROR, DELAY, QUIT — tagged with a client id, with error replies such as 'object already exists'.",
+      "Built after a FIFO-based version of the same idea (select() with nonblocking I/O and SIGALRM-driven delays) on a single machine.",
+    ],
+    insight:
+      "Keeping several clients straight in one process comes down to bookkeeping — which socket is whose, and what state each one is in — more than to any single system call.",
+    linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/file-sharing-system" }],
+  },
+  {
+    title: "Spectrum Analysis & Filtering (MATLAB)",
+    art: "spectrum",
+    tag: "Signal Processing · MATLAB",
+    tech: ["MATLAB", "FFT / DFT", "Welch PSD", "FIR Filters", "2-D Spectra"],
+    status: "shipped",
+    context: "ECE 340 · Discrete-Time Signals & Systems · Labs",
+    brief:
+      "Lab work in discrete-time signal processing: analyzing a music recording and a photo in the frequency domain, then designing a filter to clean up audio.",
+    built: [
+      "Took the DFT of an audio clip, scaled the frequency axis correctly, and plotted its magnitude spectrum in dB.",
+      "Used Welch power spectral density estimation to find where the signal's energy sits and to pick out a 3.01 kHz tonal noise.",
+      "Averaged a Bartlett-windowed 2-D spectrum of an image to locate its periodic noise peaks.",
+      "Designed a Hamming-windowed sinc FIR low-pass filter and applied it to audio by convolution; compared image resizing with and without antialiasing.",
+    ],
+    insight:
+      "Noise that's invisible in the waveform jumps out as a single spike in the spectrum — looking in the right domain does most of the work.",
+    linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/spectrum-analysis-matlab" }],
+  },
+  {
     title: "pulse — UDP Heartbeat Failure Detector",
+    art: "pulse",
     tag: "Systems · Networking · C",
     tech: ["C", "UDP Sockets", "poll()", "Monotonic Timing", "State Machines"],
     status: "shipped",
-    context: "Personal project",
+    context: "Personal project · Aug – Sept 2026",
     brief:
       "A tiny liveness monitor in C — the health-check layer behind systems like Consul or Serf, distilled to the sockets and the timing. Agents send periodic UDP heartbeats; the monitor tracks last-seen per node and ages quiet ones ALIVE → SUSPECT → DOWN, recovering them on the next beat.",
     built: [
       "Fire-and-forget UDP heartbeats — no acks or retransmits, because silence over time is the signal, not any single packet.",
       "A poll() loop on a fixed tick so the monitor wakes to notice absence, not just arrivals, and sweeps the roster each tick.",
       "CLOCK_MONOTONIC last-seen timing so NTP/DST wall-clock jumps can't trigger false failures, with SUSPECT/DOWN thresholds.",
+      "Set up like a real tool: man pages, a make install target, Debian packaging files, and a make demo smoke test.",
     ],
     insight:
       "Detecting that something is gone is harder than detecting that it's there — you're reacting to the absence of a message, so the timer, not the packet, has to be the source of truth.",
@@ -284,40 +344,42 @@ export const projects: Project[] = [
   },
   {
     title: "Social-Media Database Apps",
+    art: "dbapps",
     tag: "Databases · Data · Python",
     tech: ["Python", "SQLite", "MongoDB", "SQL"],
     status: "shipped",
-    context: "Databases · Fall 2023 · Team of 4",
+    context: "CMPUT 291 · Fall 2023 · Team of 4",
     brief:
-      "Two term projects building a Twitter-style app over different data stores — first a relational version on SQLite, then a document-store version on MongoDB — with login, posting, following, and search. Built with Eric Cheng, Ohm Panchal, and Esa Abuzar.",
+      "Two term projects building a Twitter-style command-line app over different data stores — first a relational version on SQLite, then a document-store version on MongoDB — with login, posting, following, and search. Built with Eric Cheng, Ohm Panchal, and Esa Abuzar.",
     built: [
-      "Designed the relational schema and queries for users, tweets, follows, and search on SQLite.",
-      "Rebuilt the same feature set over a MongoDB document store, loading data from JSON.",
-      "Split the work across a four-person team behind a shared command-line front end.",
+      "Wrote the tweet-compose feature on SQLite: unique tweet IDs, replies, and hashtag/mention tables kept free of duplicate terms.",
+      "Built the follower features — follower lists, follower/following/tweet counts, and following back from a follower's profile.",
+      "Wrote the compose flow again for the MongoDB version, alongside teammates' search and top-tweets/top-users queries over data loaded from JSON.",
     ],
     insight:
       "Doing the same app twice — once relational, once document — made the trade-offs concrete: what SQL joins hand you for free, MongoDB makes you design for up front.",
   },
   {
     title: "Event Lottery App",
-    tag: "Mobile · Backend",
+    tag: "Mobile · Backend · Team Project",
     tech: ["Java", "Android", "Firebase"],
     status: "shipped",
-    context: "Course Project · Sept – Nov 2024",
+    context: "CMPUT 301 · Sept – Dec 2024 · Team project",
     image: "/assets/eventlottery.jpg",
     brief:
-      "An Android app implementing a fair, lottery-based signup system for high-demand events, backed by Firebase.",
+      "A team-built Android app implementing a lottery-based signup system for high-demand events, backed by Firebase. My part was the notification system.",
     built: [
-      "Built a fair lottery-based signup flow for oversubscribed events, backed by a real-time Firebase Firestore database.",
-      "Added local push notifications and deep linking for entrants and organizers.",
-      "Applied OOP design — CRC cards and UML — with comprehensive JUnit test coverage for maintainability.",
+      "Built the notification feature: Firebase messaging and local notifications telling entrants whether they were selected in the event lottery, with the data stored in Firestore.",
+      "Added a control for users to opt out of event notifications, and fixed delivery and UI-state bugs along the way.",
+      "Wrote JUnit and instrumented UI tests, helped with the UML and CRC-card design, and built profile-update screens in a branch-and-pull-request workflow.",
     ],
     insight:
-      "Fair didn't happen on its own. The lottery only felt fair once the rules were out in the open and I could actually show the draw wasn't rigged — that was as much a design problem as a coding one.",
+      "Notifications sounded simple until I had to reach one specific user's device — getting the right message to the right person took several rounds of fixes.",
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/EventLotteryApp" }],
   },
   {
     title: "pipebus — Pub/Sub over Named Pipes",
+    art: "pipebus",
     tag: "Systems · IPC · C",
     tech: ["C", "Named Pipes (FIFO)", "poll()", "Nonblocking I/O", "Signals"],
     status: "shipped",
@@ -350,7 +412,7 @@ export const projects: Project[] = [
       "The date was sitting in the EXIF the whole time — the project was really about putting it back on the picture the way the old cameras used to.",
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/digicam-datestamp" }],
   },
-  { title: "Group Dining Decision App (Dinnr)", tag: "In Progress · Mobile · Social", tech: ["Java", "Android Studio", "Firebase", "Google Places API"], status: "progress" },
+  { title: "Group Dining Decision App (Dinnr)", art: "swipe", tag: "In Progress · Mobile · Social", tech: ["React Native", "Expo", "TypeScript", "Supabase"], status: "progress" },
   { title: "BMO Build", tag: "Coming Soon · Hardware · Embedded", tech: ["3D Printing", "Embedded C", "CAD"], status: "soon" },
   { title: "Morse Code Decoder", tag: "Planned · Embedded · RTOS", tech: ["C", "FreeRTOS", "RP2040", "Interrupts", "Timers", "Serial"], status: "soon" },
 ];
@@ -359,11 +421,13 @@ export type SkillCategory = { name: string; skills: string[] };
 
 export const skills: SkillCategory[] = [
   { name: "Languages", skills: ["Python", "C", "C++", "Java", "SQL", "VHDL", "MATLAB", "JavaScript", "HTML/CSS", "ARM", "MIPS"] },
-  { name: "Embedded & Hardware", skills: ["Raspberry Pi Pico 2W", "RP2040 PIO", "MicroPython", "Edge Impulse", "TensorFlow Lite", "FreeRTOS", "Vivado", "LTSpice", "Cadence", "WaveForms", "Wokwi", "GDB"] },
-  { name: "Protocols & Interfaces", skills: ["GPIO", "I2C", "SPI", "UART", "I2S", "PWM", "ADC", "DMA", "MQTT/TLS"] },
-  { name: "Cloud & Backend", skills: ["AWS IoT Core", "Lambda", "DynamoDB", "Firebase", "Supabase", "MongoDB", "SQLite"] },
+  { name: "Embedded & Hardware", skills: ["Raspberry Pi Pico 2W", "RP2040 PIO", "MicroPython", "Edge Impulse", "TensorFlow Lite", "FreeRTOS", "Vivado", "LTSpice", "Cadence", "WaveForms", "Wokwi", "GDB", "OpenOCD", "KiCad", "PCB Design"] },
+  { name: "Protocols & Interfaces", skills: ["GPIO", "I2C", "SPI", "UART", "I2S", "PWM", "ADC", "DMA", "MQTT/TLS", "TCP Sockets", "UDP Sockets"] },
+  { name: "Systems & Concurrency", skills: ["pthreads", "Mutexes", "Deadlock Avoidance", "poll()", "Named Pipes (FIFO)", "Signals", "OpenMP", "Make"] },
+  { name: "Signal Processing", skills: ["MATLAB", "FFT / DFT", "Welch PSD", "FIR Filters", "2-D Spectra"] },
+  { name: "Cloud & Backend", skills: ["AWS IoT Core", "Lambda", "DynamoDB", "Firebase", "Supabase", "MongoDB", "SQLite", "SQL"] },
   { name: "Dev Tools", skills: ["Git", "GitHub", "Docker", "Android Studio", "VS Code", "Jupyter", "Linux", "Ubuntu", "Debian"] },
-  { name: "Libraries & Frameworks", skills: ["React Native", "NumPy", "Pandas", "Matplotlib", "Seaborn", "Scikit-learn", "OpenMP"] },
+  { name: "Libraries & Frameworks", skills: ["React Native", "NumPy", "Pandas", "Matplotlib", "Seaborn", "Scikit-learn"] },
 ];
 
 export const interests = ["Film Photography", "Super 8", "Game Boy", "PS1 / PS2", "Vinyl", "Piano", "Fashion", "Anime"];
