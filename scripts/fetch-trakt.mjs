@@ -9,7 +9,8 @@
 // A show is FINISHED when the number of distinct regular episodes you've watched
 // is at least the number it has aired (specials ignored) — no rating needed. Its
 // date is the last episode you watched. Shows you rated but have no watch history
-// for are kept too, dated by the rating. A show is IN PROGRESS when it isn't
+// for are kept too, dated by the rating. Days where several shows all end at once
+// (bulk imports) are ignored unless you rated the show. A show is IN PROGRESS when it isn't
 // finished and you watched an episode in the last CURRENT_DAYS days.
 //
 // Needs a free Trakt API app for the Client ID (trakt.tv/oauth/applications) and a
@@ -22,6 +23,7 @@ const OUT = "public/trakt.json";
 const OUT_CURRENT = "public/trakt-current.json";
 const MAX = 12;            // finished shows kept
 const CANDIDATES = 40;     // most recently watched shows to examine
+const BULK_DAY = 4;        // this many shows ending on one day = a bulk import, not real viewing
 const CURRENT_DAYS = 45;   // "in progress" = watched an episode this recently
 const KEY = process.env.TRAKT_CLIENT_ID;
 
@@ -89,6 +91,13 @@ try {
   }
   const ratingById = new Map(ratings.map((r) => [r.show.ids.trakt, r]));
 
+  // Days on which many shows "ended" at once are history imports (e.g. marking a
+  // back catalog as watched), so their dates say nothing about when you finished.
+  const day = (iso) => iso.slice(0, 10);
+  const perDay = new Map();
+  for (const w of watched) perDay.set(day(w.last_watched_at), (perDay.get(day(w.last_watched_at)) ?? 0) + 1);
+  const isBulk = (iso) => (perDay.get(day(iso)) ?? 0) >= BULK_DAY;
+
   const finished = [];
   const current = [];
   const cutoff = Date.now() - CURRENT_DAYS * 86400000;
@@ -121,13 +130,16 @@ try {
 
     console.log(`trakt:   "${entry.show.title}": watched ${distinct}/${aired} aired, last ${latest.at}`);
     if (aired > 0 && distinct >= aired) {
-      finished.push({
-        title: entry.show.title,
-        rating: rating ? `${rating}/10` : undefined,
-        date: monthYear(entry.last_watched_at),
-        href: showHref(entry.show),
-        at: entry.last_watched_at,
-      });
+      const rated = ratingById.get(id);
+      if (isBulk(entry.last_watched_at)) {
+        // Imported history: only keep it if you rated it, dated by the rating.
+        if (!rated) continue;
+        finished.push({ title: entry.show.title, rating: `${rated.rating}/10`, date: monthYear(rated.rated_at),
+          href: showHref(entry.show), at: rated.rated_at });
+      } else {
+        finished.push({ title: entry.show.title, rating: rating ? `${rating}/10` : undefined,
+          date: monthYear(entry.last_watched_at), href: showHref(entry.show), at: entry.last_watched_at });
+      }
     } else if (new Date(latest.at).getTime() >= cutoff) {
       const sn = String(latest.season).padStart(2, "0");
       const en = String(latest.number).padStart(2, "0");
