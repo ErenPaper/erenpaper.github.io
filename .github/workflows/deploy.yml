@@ -30,6 +30,9 @@ jobs:
       - run: npm ci
       - run: node scripts/fetch-letterboxd.mjs
       - run: node scripts/fetch-letterboxd-watchlist.mjs
+      - run: node scripts/fetch-trakt.mjs
+        env:
+          TRAKT_CLIENT_ID: ${{ secrets.TRAKT_CLIENT_ID }}
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:

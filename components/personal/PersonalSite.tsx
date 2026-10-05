@@ -77,9 +77,21 @@ const finDate = (c?: { year: number | null; month: number | null }) =>
 function RecentlyWatched() {
   const [films, setFilms] = useState<Watch[]>([]);
   const [anime, setAnime] = useState<Watch[]>([]);
+  const [shows, setShows] = useState<Watch[]>([]);
 
   useEffect(() => {
     let ok = true;
+    // Trakt shows: /trakt.json is generated at build time (needs TRAKT_CLIENT_ID);
+    // ignore if it isn't there.
+    fetch("/trakt.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (ok && Array.isArray(d)) {
+          setShows(d.slice(0, 4).map((f: { title: string; rating?: string; date: string; href?: string }) => ({ ...f, kind: "tv" as const })));
+        }
+      })
+      .catch(() => {});
+
     // Letterboxd films: /letterboxd.json is generated at build time from the RSS
     // (may not exist locally) — ignore if it isn't there.
     fetch("/letterboxd.json")
@@ -102,7 +114,7 @@ function RecentlyWatched() {
         type AniEntry = { score: number; completedAt: { year: number | null; month: number | null }; media: { title: { english?: string; romaji?: string }; siteUrl: string } };
         const entries: AniEntry[] = (d?.data?.MediaListCollection?.lists ?? []).flatMap((l: { entries: AniEntry[] }) => l.entries);
         if (!ok || !entries.length) return;
-        setAnime(entries.slice(0, 2).map((e) => ({
+        setAnime(entries.slice(0, 4).map((e) => ({
           title: e.media.title.english || e.media.title.romaji || "Untitled",
           kind: "anime" as const,
           rating: e.score ? `${e.score}/10` : undefined,
@@ -115,9 +127,15 @@ function RecentlyWatched() {
     return () => { ok = false; };
   }, []);
 
-  // Manual TV/docuseries first (Suits, Loki, …), then films — I finish those
-  // more often — then anime fills the remainder. Weighted toward film/TV.
-  const items = [...recentlyWatched, ...films, ...anime].slice(0, 6);
+  // Round-robin across sources so no single one (films, say) crowds the rest out
+  // of the six slots: typed TV/docs, Trakt shows, Letterboxd films, then anime.
+  const sources = [recentlyWatched, shows, films, anime];
+  const items: Watch[] = [];
+  for (let i = 0; items.length < 6 && sources.some((src) => i < src.length); i++) {
+    for (const src of sources) {
+      if (i < src.length && items.length < 6) items.push(src[i]);
+    }
+  }
   if (items.length === 0) return null;
 
   return (
