@@ -7,7 +7,7 @@ export const sideB = {
   kicker: "SIDE B",
   title: "hi, it's raph",
   intro:
-    "go ahead and snoop around :P see what i'm cooking, what i'm listening to, and my super based opinions.",
+    "see what else i can do",
 };
 
 // Living lists I actually keep. These are links because they're real and
