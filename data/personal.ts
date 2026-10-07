@@ -7,7 +7,7 @@ export const sideB = {
   kicker: "SIDE B",
   title: "hi, it's raph",
   intro:
-    "see what else i can do",
+    "see what else i can do...and find the easter egg to see what you can do :O",
 };
 
 // Living lists I actually keep. These are links because they're real and
