@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono, Unbounded, DM_Serif_Display, Caveat } from "next/font/google";
+import { Space_Grotesk, JetBrains_Mono, Unbounded, VT323, Big_Shoulders_Display } from "next/font/google";
 import "../styles/global.css";
 
 const space = Space_Grotesk({
@@ -18,17 +18,17 @@ const unbounded = Unbounded({
   weight: ["700"],
   variable: "--font-unbounded",
 });
-// Warm display serif + handwriting — the "Side B" personal space.
-const dmSerif = DM_Serif_Display({
+// "Side B" type: VT323 is the camcorder on-screen display (channel numbers,
+// REC, labels); Big Shoulders is the tall condensed film-title-card face.
+const osd = VT323({
   subsets: ["latin"],
   weight: ["400"],
-  style: ["normal", "italic"],
-  variable: "--font-serif",
+  variable: "--font-osd",
 });
-const caveat = Caveat({
+const filmTitle = Big_Shoulders_Display({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-hand",
+  weight: ["700", "800"],
+  variable: "--font-film",
 });
 
 export const metadata: Metadata = {
@@ -59,7 +59,7 @@ export default function RootLayout({
       suppressHydrationWarning
       /* Font variables must live on <html>: :root's --font-sans/--font-mono
          reference them, and var() resolves where the property is defined. */
-      className={`${space.variable} ${jetbrains.variable} ${unbounded.variable} ${dmSerif.variable} ${caveat.variable}`}
+      className={`${space.variable} ${jetbrains.variable} ${unbounded.variable} ${osd.variable} ${filmTitle.variable}`}
     >
       <head>
         {/* Apply persisted persona/theme before paint to avoid a flash. */}

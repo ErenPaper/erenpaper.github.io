@@ -5,9 +5,9 @@
 
 export const sideB = {
   kicker: "SIDE B",
-  title: "Off the clock",
+  title: "hi, it's raph",
   intro:
-    "The other half — what I'm watching, the music my family makes, and how I spend time when I'm not at a bench.",
+    "go ahead and snoop around :P see what i'm cooking, what i'm listening to, and my super based opinions.",
 };
 
 // Living lists I actually keep. These are links because they're real and
@@ -34,7 +34,9 @@ export const band = {
 
 // Your own music — piano recordings, Cubase productions, whatever you make.
 // Give ONE source per track: youtube (id), soundcloud (track URL), or audio
-// (an mp3 in /public/assets). Empty entries are skipped.
+// (an mp3 in /public/assets). Audio tracks show as cassettes; a track with a
+// youtube video (e.g. a screen recording of a DAW session) shows as a VHS tape.
+// Empty entries are skipped.
 export type Track = {
   title: string;
   kind?: string;    // "piano" · "original" · "cover" · "demo" …
@@ -108,4 +110,27 @@ export const feed: FeedEntry[] = [
     tag: "TRAVEL",
     soon: true,
   },
+];
+
+// The build log — the fun builds, shown on Side B as a PS2 memory-card browser.
+// `title` must match a project in data/portfolio.ts (that's where the media,
+// tech and links come from); `note` is the casual one-liner for this side.
+// Order = order on the card. The rest of the catalog lives on Side A.
+export type Build = { title: string; note: string };
+export const buildLog: Build[] = [
+  // on the bench now
+  { title: "BMO Build", note: "A 3D-printed BMO with real electronics inside. It's next on the bench." },
+  { title: "RP2040 Motor-Controller Carrier Board", note: "Taking the motor controller off the breadboard and onto a board I designed myself." },
+  { title: "Morse Code Decoder", note: "Tap out Morse and watch it turn into text, on an RP2040 running FreeRTOS. Planned next." },
+  // embedded & hardware
+  { title: "Voice-Controlled Fan", note: "Say “yes” and the fan turns on. Say “no” and it stops. Fully offline." },
+  { title: "Russian Roulette HMI", note: "Six chambers, twelve LEDs, one knob. A class project that turned into a game." },
+  { title: "DC Motor Speed Controller", note: "Turn a knob and the motor speeds up, while an LED ring fills like a tachometer." },
+  { title: "16-bit CPU Design", note: "A CPU I designed from scratch on an FPGA, running 13 instructions I made up." },
+  { title: "Continuing Care Home Activity Monitor", note: "The big one: my capstone. A stove-safety system that helps seniors keep living on their own." },
+  // the rest of the fun stuff
+  { title: "digicam-datestamp", note: "My old Nikon Coolpix shots never got that orange datestamp, so I wrote something that puts it back." },
+  { title: "Group Dining Decision App (Dinnr)", note: "An app for the eternal group-chat question: where are we eating?" },
+  { title: "pulse — UDP Heartbeat Failure Detector", note: "A tiny C program whose whole job is noticing when a computer goes quiet." },
+  { title: "pipebus — Pub/Sub over Named Pipes", note: "A mini message broker built out of named pipes, because why not." },
 ];

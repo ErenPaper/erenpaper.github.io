@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
-  profile, bio, links, experience, extracurriculars,
-  projects, skills, certifications, type Project,
+  profile, bio, links, experience,
+  projects, skills, certifications, keyFeatures, availability, type Project,
 } from "../../data/portfolio";
 import { useOS } from "../../store/windows";
 import ProjectMedia from "../ProjectMedia";
 import ProjectGraphic from "../ProjectGraphic";
+import SerialConsole from "./SerialConsole";
+import SignalGenerator from "./SignalGenerator";
+
 
 // GitHub-style mark for the "has a repo" row flag.
 function GitMark() {
@@ -56,11 +59,10 @@ function projFlags(proj: Project, onVideo?: () => void) {
 // cards). Content comes from data/portfolio.ts. Personal keeps the retro OS.
 
 const NAV = [
-  { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
+  { id: "experience", label: "Experience" },
   { id: "skills", label: "Skills" },
   { id: "certs", label: "Certs" },
-  { id: "beyond", label: "Beyond" },
 ];
 
 // Active + planned builds power the "currently building" section.
@@ -79,6 +81,19 @@ function rowThumb(proj: Project) {
   if (proj.video) return <img src={`https://img.youtube.com/vi/${proj.video}/mqdefault.jpg`} alt="" loading="lazy" />;
   if (proj.image) return <img className="ds-thumb-shot" src={proj.image} alt="" loading="lazy" />;
   return <ProjectGraphic project={proj} className="pg-thumb" />;
+}
+
+// The word "piano" in the bio is a hidden door to the RR-02 synth.
+function withPianoEgg(text: string, onPlay: () => void) {
+  const i = text.indexOf("piano");
+  if (i < 0) return text;
+  return (
+    <>
+      {text.slice(0, i)}
+      <button className="ps-egg-word" onClick={onPlay} title="♪">piano</button>
+      {text.slice(i + 5)}
+    </>
+  );
 }
 
 function SilkDivider({ label }: { label: string }) {
@@ -120,6 +135,9 @@ export default function ProSite() {
   const [autoPlayIdx, setAutoPlayIdx] = useState<number | null>(null);
   const [skillFilter, setSkillFilter] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [consoleOpen, setConsoleOpen] = useState(false);
+  const [synthOpen, setSynthOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
   const go = (id: string) => (e: React.MouseEvent) => {
@@ -127,6 +145,7 @@ export default function ProSite() {
     document.getElementById(`ps-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
   const toMenu = () => window.dispatchEvent(new Event("os-exit"));
+  const flip = () => window.dispatchEvent(new CustomEvent("os-flip", { detail: "personal" }));
 
   // Click a skill → highlight matching projects and open the first one. `scroll`
   // jumps to the catalog (from the far-away Skills section); the in-place
@@ -146,14 +165,30 @@ export default function ProSite() {
   const toggle = (i: number) => { setAutoPlayIdx(null); setOpenProj((cur) => (cur === i ? null : i)); };
   // Open a row with its demo already playing (from the ▶ flag).
   const openVideo = (i: number) => { setOpenProj(i); setAutoPlayIdx(i); };
+  const foldedCount = projects.filter((p) => p.folded).length;
 
-  // Close the About popover on Escape.
+  // Serial console → page: open a project's datasheet (unfolding it if needed)
+  // and bring its row into view, or jump to a section.
+  const openFromConsole = (i: number) => {
+    if (projects[i].folded) setShowAll(true);
+    setAutoPlayIdx(null);
+    setOpenProj(i);
+    setTimeout(() => document.getElementById(`ps-proj-${i}`)?.scrollIntoView({ behavior: "smooth", block: "start" }), 60);
+  };
+  const scrollTo = (id: string) => document.getElementById(`ps-${id}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // Close the About / synth popovers on Escape.
   useEffect(() => {
-    if (!aboutOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setAboutOpen(false); };
+    if (!aboutOpen && !synthOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { setAboutOpen(false); setSynthOpen(false); } };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [aboutOpen]);
+  }, [aboutOpen, synthOpen]);
+
+  // A breadcrumb for the curious ones who open devtools.
+  useEffect(() => {
+    console.log("%cRR-01 · rev C\n%cyou found the debug port. press ` to open the serial console.", "color:#57ff8a;font:bold 14px monospace", "color:#8fa;font:12px monospace");
+  }, []);
 
   // Scroll-reveal: sections rise in as they enter view (skipped for reduced motion).
   useEffect(() => {
@@ -188,8 +223,8 @@ export default function ProSite() {
           <button className="ps-btn ghost" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label="Toggle theme">
             {theme === "dark" ? "☾" : "☀"}
           </button>
-          <a className="ps-btn ghost" href={profile.resume} target="_blank" rel="noreferrer">Résumé ↗</a>
           <a className="ps-btn solid" href={`mailto:${links.email}`}>Get in touch</a>
+          <button className="ps-btn ghost ps-flip" onClick={flip} title="Flip to Side B — the personal side">↻ Side B</button>
           <button className="ps-btn" onClick={toMenu}>⌂ Menu</button>
         </div>
       </nav>
@@ -204,14 +239,23 @@ export default function ProSite() {
               {profile.title}
               <span className="ps-eit" title="Engineer-in-Training · APEGA">EIT</span>
             </p>
+            <p className="ps-avail">
+              <span className="ps-avail-pill"><span className="ps-led on" /> {availability.status.toUpperCase()}</span>
+              <span className="ps-avail-roles">{availability.roles}</span>
+            </p>
             <p className="ps-tagline">{profile.tagline}</p>
+            <div className="ps-features">
+              <div className="ps-features-head">KEY FEATURES</div>
+              <ul>{keyFeatures.map((f) => <li key={f}>{f}</li>)}</ul>
+            </div>
+            <div className="ps-cta">
+              <a className="ps-btn solid" href={profile.resume} target="_blank" rel="noreferrer">Résumé ↗</a>
+              <a className="ps-btn ghost" href="#ps-projects" onClick={go("projects")}>View projects</a>
+            </div>
             <div className="ps-status">
               <span className="ps-led on" /> BUILD OK
               <span className="ps-sep">·</span> CLASS OF 2026
               <span className="ps-sep">·</span> EDMONTON, AB
-            </div>
-            <div className="ps-cta">
-              <a className="ps-btn solid" href="#ps-projects" onClick={go("projects")}>View projects</a>
             </div>
           </div>
           <aside className="ps-hero-spec">
@@ -223,27 +267,9 @@ export default function ProSite() {
           </aside>
         </header>
 
-        {/* ── experience ── */}
-        <section className="ps-section" id="ps-experience">
-          <SilkDivider label="01 · EXPERIENCE" />
-          {experience.map((x) => (
-            <article className="ps-xp" key={x.company + x.role}>
-              <div className="ps-xp-head">
-                <div>
-                  <h3>{x.company}</h3>
-                  <p className="ps-xp-role">{x.role}</p>
-                </div>
-                <div className="ps-xp-meta">{x.date}<br />{x.location}</div>
-              </div>
-              <ul>{x.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
-              <div className="ps-tags">{x.tags.map((t) => <span key={t}>{t}</span>)}</div>
-            </article>
-          ))}
-        </section>
-
         {/* ── projects · catalog + datasheet (currently-building leads it off) ── */}
         <section className="ps-section" id="ps-projects">
-          <SilkDivider label="02 · PROJECTS" />
+          <SilkDivider label="01 · PROJECTS" />
           {currentWork.length > 0 && (
             <div className="ps-bench" id="ps-now">
               <span className="ps-bench-label"><span className="ps-led on" /> ON THE BENCH NOW</span>
@@ -277,8 +303,10 @@ export default function ProSite() {
             </div>
             {projects.map((proj, i) => {
               const match = skillFilter ? proj.tech.includes(skillFilter) : null;
+              // Folded rows stay hidden unless expanded, matched by a skill trace, or open.
+              if (proj.folded && !showAll && !match && openProj !== i) return null;
               return (
-              <div key={proj.title} className={match === false ? "ds-dim" : match ? "ds-match" : undefined}>
+              <div key={proj.title} id={`ps-proj-${i}`} className={match === false ? "ds-dim" : match ? "ds-match" : undefined}>
                 <div
                   className="ds-row"
                   role="button"
@@ -351,6 +379,29 @@ export default function ProSite() {
               );
             })}
           </div>
+          {foldedCount > 0 && !skillFilter && (
+            <button className="ps-fold" onClick={() => setShowAll((v) => !v)} aria-expanded={showAll}>
+              {showAll ? "▴ Show fewer" : `▾ Show ${foldedCount} more — coursework, side builds & planned`}
+            </button>
+          )}
+        </section>
+
+        {/* ── experience ── */}
+        <section className="ps-section" id="ps-experience">
+          <SilkDivider label="02 · EXPERIENCE" />
+          {experience.map((x) => (
+            <article className="ps-xp" key={x.company + x.role}>
+              <div className="ps-xp-head">
+                <div>
+                  <h3>{x.company}</h3>
+                  <p className="ps-xp-role">{x.role}</p>
+                </div>
+                <div className="ps-xp-meta">{x.date}<br />{x.location}</div>
+              </div>
+              <ul>{x.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
+              <div className="ps-tags">{x.tags.map((t) => <span key={t}>{t}</span>)}</div>
+            </article>
+          ))}
         </section>
 
         {/* ── skills · instrument bars (click to trace where a skill was used) ── */}
@@ -405,25 +456,6 @@ export default function ProSite() {
           </div>
         </section>
 
-        {/* ── beyond engineering ── */}
-        <section className="ps-section" id="ps-beyond">
-          <SilkDivider label="05 · BEYOND ENGINEERING" />
-          <p className="ps-lead">Leadership, community, and performance — the work that happens off the bench.</p>
-          {extracurriculars.map((x) => (
-            <article className="ps-xp" key={x.company + x.role}>
-              <div className="ps-xp-head">
-                <div>
-                  <h3>{x.company}</h3>
-                  <p className="ps-xp-role">{x.role}</p>
-                </div>
-                <div className="ps-xp-meta">{x.date}<br />{x.location}</div>
-              </div>
-              <ul>{x.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
-              <div className="ps-tags">{x.tags.map((t) => <span key={t}>{t}</span>)}</div>
-            </article>
-          ))}
-        </section>
-
         {/* ── footer (contact lives here now) ── */}
         <footer className="ps-footer" id="ps-contact">
           <div className="ps-foot-contact">
@@ -433,7 +465,11 @@ export default function ProSite() {
           </div>
           <div className="ps-foot-meta">
             <span>RR-01 · RAPHAEL RAMOS</span>
-            <span>© 2026 · REV C · ALL SYSTEMS NOMINAL</span>
+            <span>
+              © 2026 · REV C · ALL SYSTEMS NOMINAL
+              <button className="ps-cursor" onClick={() => setConsoleOpen(true)} aria-label="Open serial console" title="_">▍</button>
+            </span>
+            <button className="ps-flip-link" onClick={flip}>flip to Side B ↻</button>
           </div>
         </footer>
       </main>
@@ -444,10 +480,33 @@ export default function ProSite() {
             <button className="ps-about-close" onClick={() => setAboutOpen(false)} aria-label="Close">✕</button>
             <p className="ps-about-eyebrow">{"// ABOUT"}</p>
             <h3>{profile.name}</h3>
-            {bio.map((p, i) => <p key={i} className="ps-about-p">{p}</p>)}
+            {bio.map((p, i) => <p key={i} className="ps-about-p">{withPianoEgg(p, () => { setAboutOpen(false); setSynthOpen(true); })}</p>)}
           </div>
         </div>
       )}
+
+      {synthOpen && (
+        <div className="ps-about-modal" role="dialog" aria-modal="true" aria-label="RR-02 signal generator" onClick={() => setSynthOpen(false)}>
+          <div className="ps-synth-card" onClick={(e) => e.stopPropagation()}>
+            <button className="ps-about-close" onClick={() => setSynthOpen(false)} aria-label="Close">✕</button>
+            <p className="ps-about-eyebrow">{"// HIDDEN PART FOUND · RR-02"}</p>
+            <p className="ps-about-p">
+              Off the bench I play piano and make music — and in ECE 340 I took signals apart with FFTs and
+              filters. This is both at once: play a few notes and watch the waveform and its harmonics live.
+            </p>
+            <SignalGenerator />
+          </div>
+        </div>
+      )}
+
+      <SerialConsole
+        open={consoleOpen}
+        setOpen={setConsoleOpen}
+        onOpenProject={openFromConsole}
+        onSection={scrollTo}
+        onAbout={() => setAboutOpen(true)}
+        onSynth={() => { setConsoleOpen(false); setSynthOpen(true); }}
+      />
     </div>
   );
 }

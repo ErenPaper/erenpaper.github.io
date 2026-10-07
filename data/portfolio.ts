@@ -17,6 +17,20 @@ export const bio = [
   "Outside of engineering, I play piano with my family, volunteer at events, and have watched probably too much anime — the GitHub handle is proof. I'm outgoing and love to talk (maybe too much), take my faith seriously, and genuinely believe a well-timed dad joke is a life skill.",
 ];
 
+// Hero "key features" strip — the datasheet's at-a-glance bullet list.
+export const keyFeatures = [
+  "Capstone stove-safety monitor — on-device ML at 97.73% accuracy",
+  "RP2040 firmware: PIO, DMA, I2S, WS2812, quadrature decode",
+  "Systems C: pthreads, poll(), TCP/UDP sockets, named pipes",
+  "Engineer-in-Training (EIT), APEGA",
+];
+
+export const availability = {
+  status: "Available now",
+  roles: "Open to firmware, embedded systems & hardware roles",
+};
+
+
 export const links = {
   email: "rcurtisramos@gmail.com",
   linkedin: { label: "/raphael-ramos1", url: "https://www.linkedin.com/in/raphael-ramos1/" },
@@ -137,6 +151,7 @@ export type Project = {
   insight?: string;       // the one takeaway
   linksOut?: ProjectLink[]; // GitHub / external links
   art?: string;           // key of a hand-made animated graphic (components/ProjectGraphic.tsx)
+  folded?: boolean;       // hidden behind "show more" in the Professional catalog
 };
 
 export const projects: Project[] = [
@@ -252,6 +267,7 @@ export const projects: Project[] = [
   },
   {
     title: "Anomaly Detection System",
+    folded: true,
     art: "anomaly",
     tag: "ML · Data Science",
     tech: ["Python", "Scikit-learn", "Pandas", "Matplotlib"],
@@ -288,6 +304,7 @@ export const projects: Project[] = [
   },
   {
     title: "Multi-Client Object Server",
+    folded: true,
     art: "objserver",
     tag: "Systems · Networking · C",
     tech: ["C", "TCP Sockets", "poll()", "Nonblocking I/O"],
@@ -306,6 +323,7 @@ export const projects: Project[] = [
   },
   {
     title: "Spectrum Analysis & Filtering (MATLAB)",
+    folded: true,
     art: "spectrum",
     tag: "Signal Processing · MATLAB",
     tech: ["MATLAB", "FFT / DFT", "Welch PSD", "FIR Filters", "2-D Spectra"],
@@ -344,6 +362,7 @@ export const projects: Project[] = [
   },
   {
     title: "Social-Media Database Apps",
+    folded: true,
     art: "dbapps",
     tag: "Databases · Data · Python",
     tech: ["Python", "SQLite", "MongoDB", "SQL"],
@@ -361,6 +380,7 @@ export const projects: Project[] = [
   },
   {
     title: "Event Lottery App",
+    folded: true,
     tag: "Mobile · Backend · Team Project",
     tech: ["Java", "Android", "Firebase"],
     status: "shipped",
@@ -397,6 +417,7 @@ export const projects: Project[] = [
   },
   {
     title: "digicam-datestamp",
+    folded: true,
     tag: "Tools · Python · Imaging",
     tech: ["Python", "Pillow", "EXIF", "Batch Processing"],
     status: "shipped",
@@ -412,9 +433,9 @@ export const projects: Project[] = [
       "The date was sitting in the EXIF the whole time — the project was really about putting it back on the picture the way the old cameras used to.",
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/digicam-datestamp" }],
   },
-  { title: "Group Dining Decision App (Dinnr)", art: "swipe", tag: "In Progress · Mobile · Social", tech: ["React Native", "Expo", "TypeScript", "Supabase"], status: "progress" },
-  { title: "BMO Build", tag: "Coming Soon · Hardware · Embedded", tech: ["3D Printing", "Embedded C", "CAD"], status: "soon" },
-  { title: "Morse Code Decoder", tag: "Planned · Embedded · RTOS", tech: ["C", "FreeRTOS", "RP2040", "Interrupts", "Timers", "Serial"], status: "soon" },
+  { title: "Group Dining Decision App (Dinnr)", folded: true, art: "swipe", tag: "In Progress · Mobile · Social", tech: ["React Native", "Expo", "TypeScript", "Supabase"], status: "progress" },
+  { title: "BMO Build", folded: true, tag: "Coming Soon · Hardware · Embedded", tech: ["3D Printing", "Embedded C", "CAD"], status: "soon" },
+  { title: "Morse Code Decoder", folded: true, tag: "Planned · Embedded · RTOS", tech: ["C", "FreeRTOS", "RP2040", "Interrupts", "Timers", "Serial"], status: "soon" },
 ];
 
 export type SkillCategory = { name: string; skills: string[] };

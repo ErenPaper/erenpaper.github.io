@@ -197,6 +197,29 @@ export default function Experience() {
     return () => window.removeEventListener("os-exit", onExit);
   }, [reduce, exitToDesk]);
 
+  // "Flip the record": jump between Side A (pro) and Side B (personal) with the
+  // same power-cycle beat, skipping the menu. Keeps ?v= in sync for reloads.
+  useEffect(() => {
+    const onFlip = (e: Event) => {
+      const to = (e as CustomEvent<"pro" | "personal">).detail;
+      const swap = () => {
+        window.history.replaceState(null, "", `${window.location.pathname}?v=${to === "pro" ? "pro" : "os"}`);
+        enterDirect(to);
+        window.scrollTo(0, 0);
+      };
+      if (reduce) { swap(); return; }
+      playPowerDown();
+      setCycle("out");
+      window.setTimeout(() => {
+        swap();
+        setCycle("in");
+        window.setTimeout(() => setCycle("idle"), 450);
+      }, 500);
+    };
+    window.addEventListener("os-flip", onFlip);
+    return () => window.removeEventListener("os-flip", onFlip);
+  }, [reduce, enterDirect]);
+
   // Jump straight to the destination, cancelling whatever transition is mid-flight.
   const transitioning = phase === "entering" || phase === "leaving" || post;
   const skipTransition = useCallback(() => {

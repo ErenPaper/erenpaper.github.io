@@ -1,15 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { sideB, shelves, band, recentlyWatched, currentlyWatching, tracks, type Watch, type Track } from "../../data/personal";
-import { links, profile, experience, projects } from "../../data/portfolio";
+import { links, profile } from "../../data/portfolio";
+import BeatMaker from "./BeatMaker";
+import BuildLog from "./BuildLog";
+import Credits from "./Credits";
+import SectionHead, { SubHead } from "./SectionHead";
+import { playChannelChange } from "../intro/sound";
 import ProjectMedia from "../ProjectMedia";
 
-// "Side B" — the warm, analog personal space: the human counterpart to the
-// engineering datasheet. A mobile-first magazine/scrapbook that shows both the
-// life stuff (a growing feed: music / vlogs / photos / notes) AND the work
-// (experience + projects), all in a film/vinyl aesthetic. Content is data-
-// driven (data/personal.ts + data/portfolio.ts) so it grows by adding entries.
+// "Side B" — the personal side: the human counterpart to the engineering
+// datasheet, styled like a Super 8 reel shot on a camcorder and browsed on a
+// PS2 (VT323 on-screen-display type, scanlines, film sprockets, a memory-card
+// browser for builds, end credits for the résumé). Content is data-driven
+// (data/personal.ts + data/portfolio.ts) so it grows by adding entries.
 
 /* ── decorative filmstrip divider ── */
 function Filmstrip() {
@@ -20,38 +25,21 @@ function Filmstrip() {
   );
 }
 
-/* ── projects, warm "instant photo" cards that expand ── */
-function ProjectsShowcase() {
-  const [open, setOpen] = useState<number | null>(null);
-  const shown = projects.filter((p) => p.status !== "soon");
+/* ── camcorder viewfinder over the hero photo: REC + a running timecode
+   (the photo already carries its own orange datestamp) ── */
+function Viewfinder() {
+  const [secs, setSecs] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = window.setInterval(() => setSecs((s) => s + 1), 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  const tc = `${Math.floor(secs / 3600)}:${String(Math.floor(secs / 60) % 60).padStart(2, "0")}:${String(secs % 60).padStart(2, "0")}`;
   return (
-    <div className="sb-proj-grid">
-      {shown.map((p) => {
-        const idx = projects.indexOf(p);
-        const isOpen = open === idx;
-        return (
-          <div className={`sb-proj${isOpen ? " open" : ""}`} key={p.title}>
-            <button className="sb-proj-head" onClick={() => setOpen(isOpen ? null : idx)} aria-expanded={isOpen}>
-              <span className="sb-proj-title">{p.title}</span>
-              <span className="sb-proj-tag">{p.tag}</span>
-            </button>
-            {isOpen && (
-              <div className="sb-proj-body">
-                <ProjectMedia project={p} />
-                {p.brief && <p>{p.brief}</p>}
-                <div className="sb-proj-tech">{p.tech.map((t) => <span key={t}>{t}</span>)}</div>
-                {p.linksOut && (
-                  <div className="sb-proj-links">
-                    {p.linksOut.map((l) => (
-                      <a key={l.href} href={l.href} target="_blank" rel="noreferrer">{l.label}</a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        );
-      })}
+    <div className="sb-vf" aria-hidden>
+      <span className="sb-vf-c tl" /><span className="sb-vf-c tr" /><span className="sb-vf-c bl" /><span className="sb-vf-c br" />
+      <span className="sb-vf-rec"><i /> REC</span>
+      <span className="sb-vf-tc">SP {tc}</span>
     </div>
   );
 }
@@ -154,8 +142,8 @@ function RecentlyWatched() {
   if (items.length === 0) return null;
 
   return (
-    <section className="sb-section" id="sb-watched">
-      <h2 className="sb-h2">recently finished <span className="sb-h2-note">latest i&apos;ve wrapped</span></h2>
+    <div className="sb-block" id="sb-watched">
+      <SubHead title="just finished" note="latest i've wrapped" />
       <div className="sb-watched">
         {items.map((w, i) => (
           <div className={`sb-watch k-${w.kind}`} key={w.title + i}>
@@ -173,7 +161,7 @@ function RecentlyWatched() {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -219,8 +207,8 @@ function CurrentlyWatching() {
   if (items.length === 0) return null;
 
   return (
-    <section className="sb-section" id="sb-watching">
-      <h2 className="sb-h2">currently watching <span className="sb-h2-note">mid-way through</span></h2>
+    <div className="sb-block" id="sb-watching">
+      <SubHead title="mid-way through" note="currently watching" />
       <div className="sb-watched">
         {items.map((w, i) => (
           <div className={`sb-watch k-${w.kind}`} key={w.title + i}>
@@ -237,7 +225,7 @@ function CurrentlyWatching() {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
@@ -261,10 +249,8 @@ function Watchlist() {
   if (!films.length) return null;
 
   return (
-    <section className="sb-section" id="sb-watchlist">
-      <h2 className="sb-h2">
-        up next <span className="sb-h2-note">what&apos;s on my watchlist</span>
-      </h2>
+    <div className="sb-block" id="sb-watchlist">
+      <SubHead title="up next" note="what's on my watchlist" />
       <div className="sb-watchlist">
         {films.map((f, i) => (
           <a className="sb-wl" key={f.href + i} href={f.href} target="_blank" rel="noreferrer">
@@ -273,67 +259,147 @@ function Watchlist() {
           </a>
         ))}
       </div>
-    </section>
+    </div>
   );
 }
 
-/* ── music I make — piano / Cubase, via SoundCloud / YouTube / mp3 ── */
-function TrackCard({ t }: { t: Track }) {
+/* ── music I make — audio tracks are cassettes (label + spinning reels) over a
+   J-card that holds the note and player (SoundCloud / mp3); tracks with a video
+   (e.g. a DAW session) are VHS tapes whose sleeve holds the video ── */
+function TrackCard({ t, side }: { t: Track; side: string }) {
+  const [playing, setPlaying] = useState(false);
   const sc = t.soundcloud
     ? `https://w.soundcloud.com/player/?url=${encodeURIComponent(t.soundcloud)}&color=%23e07a4a&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&visual=false`
     : null;
+  const hasPlayer = !!(t.youtube || sc || t.audio);
   return (
-    <article className="sb-track">
-      <div className="sb-track-head">
-        {t.kind && <span className="sb-track-kind">{t.kind}</span>}
-        <span className="sb-track-title">{t.title}</span>
-        {t.date && <span className="sb-track-date">{t.date}</span>}
+    <article className={`sb-mix${t.youtube ? " vhs" : ""}${playing ? " playing" : ""}${hasPlayer ? "" : " blank"}`}>
+      <div className="sb-cass">
+        <div className="sb-cass-label">
+          <span className="sb-cass-side">{t.youtube ? "VHS" : side}</span>
+          <span className="sb-cass-title">{t.title}</span>
+          <span className="sb-cass-meta">{[t.kind, t.date].filter(Boolean).join(" · ")}</span>
+        </div>
+        <div className="sb-cass-window" aria-hidden>
+          <span className="sb-cass-reel" />
+          <span className="sb-cass-ribbon" />
+          <span className="sb-cass-reel" />
+        </div>
+        <span className="sb-cass-foot" aria-hidden><i /><i /><i /><i /></span>
       </div>
-      {t.youtube && <ProjectMedia project={{ title: t.title, tag: "", tech: [], video: t.youtube }} />}
-      {sc && <iframe className="sb-track-sc" title={t.title} height="120" scrolling="no" frameBorder="no" allow="autoplay" src={sc} />}
-      {t.audio && <audio className="sb-track-audio" controls src={t.audio} />}
-      {t.note && <p className="sb-track-note">{t.note}</p>}
-      {!t.youtube && !sc && !t.audio && t.href && (
-        <a className="sb-link" href={t.href} target="_blank" rel="noreferrer">Listen ↗</a>
-      )}
+      <div className="sb-jcard">
+        {t.youtube && <ProjectMedia project={{ title: t.title, tag: "", tech: [], video: t.youtube }} />}
+        {sc && <iframe className="sb-jcard-sc" title={t.title} height="120" scrolling="no" frameBorder="no" allow="autoplay" src={sc} />}
+        {t.audio && (
+          <audio className="sb-jcard-audio" controls src={t.audio} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} />
+        )}
+        {t.note && <p className="sb-jcard-note">{t.note}</p>}
+        {!hasPlayer && t.href && <a className="sb-link" href={t.href} target="_blank" rel="noreferrer">Listen ↗</a>}
+      </div>
     </article>
   );
 }
 
-function MusicTracks() {
-  const shown = tracks.filter((t) => t.title);
-  if (!shown.length) return null;
+// The easter egg: an unlabelled blank tape at the end of the row. "Insert" it
+// and the beat maker opens underneath (its label flips to ● REC).
+function BlankTape({ open, onInsert }: { open: boolean; onInsert: () => void }) {
   return (
-    <section className="sb-section" id="sb-music">
-      <h2 className="sb-h2">music i make <span className="sb-h2-note">piano &amp; cubase</span></h2>
-      <div className="sb-tracks">
-        {shown.map((t, i) => <TrackCard t={t} key={t.title + i} />)}
+    <button className={`sb-mix sb-blank-tape${open ? " playing rec" : ""}`} onClick={onInsert} aria-expanded={open} title={open ? "Recording…" : "A blank tape?"}>
+      <div className="sb-cass">
+        <div className="sb-cass-label">
+          <span className="sb-cass-side">{open ? "●" : ""}</span>
+          <span className="sb-cass-title">{open ? "REC — your tape" : ""}</span>
+          <span className="sb-cass-meta">C-60</span>
+        </div>
+        <div className="sb-cass-window" aria-hidden>
+          <span className="sb-cass-reel" />
+          <span className="sb-cass-ribbon" />
+          <span className="sb-cass-reel" />
+        </div>
+        <span className="sb-cass-foot" aria-hidden><i /><i /><i /><i /></span>
       </div>
-    </section>
+    </button>
   );
 }
 
+function MusicTracks({ beatOpen, onInsert }: { beatOpen: boolean; onInsert: () => void }) {
+  const shown = tracks.filter((t) => t.title);
+  return (
+    <div className="sb-block" id="sb-music">
+      <SubHead title="music i make" note="piano & cubase" />
+      <div className="sb-tracks">
+        {shown.map((t, i) => <TrackCard t={t} side={i % 2 ? "B" : "A"} key={t.title + i} />)}
+        <BlankTape open={beatOpen} onInsert={onInsert} />
+      </div>
+    </div>
+  );
+}
+
+// On wide screens the whole window becomes a camcorder viewfinder: corner
+// brackets, ▶ PLAY, battery, the channel you're on, and a datestamp — it fills
+// the side margins with something that actually says where you are.
+const MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+function ScreenFrame({ channel }: { channel: string }) {
+  const d = new Date();
+  return (
+    <div className="sb-frame" aria-hidden>
+      <span className="sb-frame-c tl" /><span className="sb-frame-c tr" /><span className="sb-frame-c bl" /><span className="sb-frame-c br" />
+      <span className="sb-frame-play">▶ PLAY</span>
+      <span className="sb-frame-batt"><i /><i /><i /><i /></span>
+      <span className="sb-frame-ch">{channel}</span>
+      <span className="sb-frame-date">{MONTHS[d.getMonth()]} {String(d.getDate()).padStart(2, "0")} {d.getFullYear()}</span>
+    </div>
+  );
+}
+
+type Channel = "watching" | "music" | "builds" | "credits";
+const CHANNELS: { id: Channel; label: string }[] = [
+  { id: "watching", label: "watching" },
+  { id: "music", label: "music" },
+  { id: "builds", label: "build log" },
+  { id: "credits", label: "credits" },
+];
+
 export default function PersonalSite() {
   const toMenu = () => window.dispatchEvent(new Event("os-exit"));
-  const go = (id: string) => (ev: React.MouseEvent) => {
-    ev.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  const flip = () => window.dispatchEvent(new CustomEvent("os-flip", { detail: "pro" }));
+  // The page is a TV: one channel on screen at a time, with a burst of static between.
+  const [ch, setCh] = useState<Channel>("watching");
+  const [flash, setFlash] = useState(false);
+  const [beatOpen, setBeatOpen] = useState(false);
+  const tvRef = useRef<HTMLDivElement>(null);
+  const tune = (c: Channel) => {
+    // switching from the sticky bar while deep in a channel jumps back to its top
+    const el = tvRef.current;
+    if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (c === ch) return;
+    playChannelChange();
+    setFlash(true);
+    window.setTimeout(() => setFlash(false), 320);
+    setCh(c);
+  };
+  // A shared beat link (?beat=…) tunes straight to Music with the blank tape in.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("beat")) { setCh("music"); setBeatOpen(true); }
+  }, []);
+  const insertTape = () => {
+    setBeatOpen((v) => !v);
+    if (!beatOpen) window.setTimeout(() => document.getElementById("sb-beats")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
   };
 
   return (
     <div className="personal-site">
       <div className="sb-grain" aria-hidden />
+      <div className="sb-scan" aria-hidden />
+      <div className="sb-leak sb-leak-a" aria-hidden />
+      <div className="sb-leak sb-leak-b" aria-hidden />
       <div className="sb-vignette" aria-hidden />
+      <ScreenFrame channel={`CH ${String(CHANNELS.findIndex((c) => c.id === ch) + 1).padStart(2, "0")} · ${CHANNELS.find((c) => c.id === ch)!.label}`} />
 
       <nav className="sb-nav">
         <button className="sb-brand" onClick={toMenu} title="Back to main menu">rr</button>
         <span className="sb-nav-label">{sideB.kicker}</span>
-        <ul className="sb-nav-links">
-          <li><a href="#sb-watching" onClick={go("sb-watching")}>Watching</a></li>
-          <li><a href="#sb-watched" onClick={go("sb-watched")}>Finished</a></li>
-          <li><a href="#sb-watchlist" onClick={go("sb-watchlist")}>Up Next</a></li>
-          <li><a href="#sb-work" onClick={go("sb-work")}>The Work</a></li>
-        </ul>
+        <button className="sb-btn sb-nav-push" onClick={flip} title="Flip to Side A — the professional side">↻ Side A</button>
         <button className="sb-btn" onClick={toMenu}>⌂ Menu</button>
       </nav>
 
@@ -342,7 +408,10 @@ export default function PersonalSite() {
         <header className="sb-hero">
           <div className="sb-hero-photo">
             <span className="sb-sprockets" aria-hidden>{Array.from({ length: 7 }).map((_, i) => <i key={i} />)}</span>
-            <img src={profile.aboutPhoto} alt={profile.name} />
+            <div className="sb-hero-frame">
+              <img src={profile.aboutPhoto} alt={profile.name} />
+              <Viewfinder />
+            </div>
             <span className="sb-sprockets" aria-hidden>{Array.from({ length: 7 }).map((_, i) => <i key={i} />)}</span>
             <span className="sb-tape sb-tape-tl" aria-hidden />
             <span className="sb-tape sb-tape-br" aria-hidden />
@@ -350,7 +419,7 @@ export default function PersonalSite() {
           </div>
           <div className="sb-hero-text">
             <p className="sb-kicker">{sideB.kicker} · {new Date().getFullYear()}</p>
-            <h1 className="sb-title">{sideB.title}</h1>
+            <h1 className="sb-title" data-text={sideB.title}>{sideB.title}</h1>
             <p className="sb-intro">{sideB.intro}</p>
             <a className="sb-vinyl" href={band.href} target="_blank" rel="noreferrer">
               <span className="sb-disc" aria-hidden><i /></span>
@@ -364,78 +433,74 @@ export default function PersonalSite() {
 
         <Filmstrip />
 
-        {/* shelves — living lists (real, not claims) */}
-        <section className="sb-section" id="sb-shelves">
-          <h2 className="sb-h2">on my shelves <span className="sb-h2-note">the lists I actually keep</span></h2>
-          <div className="sb-shelves">
-            {shelves.map((s) => (
-              <a className="sb-shelf" key={s.label} href={s.href} target="_blank" rel="noreferrer">
-                <span className="sb-shelf-label">{s.label}</span>
-                <span className="sb-shelf-handle">{s.handle}</span>
-                <span className="sb-shelf-arrow" aria-hidden>↗</span>
-              </a>
+        {/* the TV: channel switcher + one channel on screen at a time */}
+        <div className="sb-tv" id="sb-tv" ref={tvRef}>
+          <div className="sb-tv-bar" role="tablist" aria-label="Channels">
+            {CHANNELS.map((c, i) => (
+              <button key={c.id} role="tab" aria-selected={ch === c.id} className={`sb-tv-ch${ch === c.id ? " on" : ""}`} onClick={() => tune(c.id)}>
+                <span className="sb-tv-num">CH {String(i + 1).padStart(2, "0")}</span>
+                <span className="sb-tv-name">{c.label}</span>
+              </button>
             ))}
           </div>
-        </section>
 
-        <CurrentlyWatching />
+          <div className="sb-tv-screen" role="tabpanel">
+            {flash && <div className="sb-static" aria-hidden />}
 
-        <RecentlyWatched />
-
-        <Watchlist />
-
-        {/* the family band — real, featured */}
-        <section className="sb-section" id="sb-band">
-          <div className="sb-band">
-            {band.photo ? (
-              <div className="sb-band-photo">
-                <span className="sb-sprockets" aria-hidden>{Array.from({ length: 10 }).map((_, i) => <i key={i} />)}</span>
-                <img src={band.photo} alt={`${band.name} performing live`} />
-                <span className="sb-sprockets" aria-hidden>{Array.from({ length: 10 }).map((_, i) => <i key={i} />)}</span>
-                <span className="sb-tape sb-tape-tl" aria-hidden />
-                <span className="sb-tape sb-tape-br" aria-hidden />
-                <span className="sb-band-cap">the band · &rsquo;{band.since.slice(2)}</span>
-              </div>
-            ) : (
-              <span className="sb-band-disc" aria-hidden><i /></span>
-            )}
-            <div className="sb-band-text">
-              <span className="sb-band-kicker">FAMILY BAND · SINCE {band.since}</span>
-              <h3 className="sb-band-name">{band.name}</h3>
-              <p>{band.blurb}</p>
-              <a className="sb-link" href={band.href} target="_blank" rel="noreferrer">Watch on YouTube ↗</a>
-            </div>
-          </div>
-        </section>
-
-        <MusicTracks />
-
-        <Filmstrip />
-
-        {/* the work — experience + projects, warm-styled */}
-        <section className="sb-section" id="sb-work">
-          <h2 className="sb-h2">the work <span className="sb-h2-note">yes, i build things too</span></h2>
-
-          <h3 className="sb-h3">where i&apos;ve been</h3>
-          <div className="sb-xp-list">
-            {experience.map((x) => (
-              <article className="sb-xp" key={x.company + x.role}>
-                <div className="sb-xp-dot" aria-hidden />
-                <div className="sb-xp-main">
-                  <div className="sb-xp-head">
-                    <span className="sb-xp-co">{x.company}</span>
-                    <span className="sb-xp-date">{x.date}</span>
+            {/* kept mounted (just hidden) so the live watch lists don't re-fetch on every switch */}
+            <section className="sb-section" id="sb-ch-watching" hidden={ch !== "watching"}>
+                <SectionHead ch={1} title="watching" note="what's on my screen" />
+                <div className="sb-block">
+                  <SubHead title="my lists" note="the ones i actually keep" />
+                  <div className="sb-shelves">
+                    {shelves.map((s) => (
+                      <a className="sb-shelf" key={s.label} href={s.href} target="_blank" rel="noreferrer">
+                        <span className="sb-shelf-label">{s.label}</span>
+                        <span className="sb-shelf-handle">{s.handle}</span>
+                        <span className="sb-shelf-arrow" aria-hidden>↗</span>
+                      </a>
+                    ))}
                   </div>
-                  <div className="sb-xp-role">{x.role} · {x.location}</div>
-                  <p>{x.bullets[0]}</p>
                 </div>
-              </article>
-            ))}
-          </div>
+                <CurrentlyWatching />
+                <RecentlyWatched />
+                <Watchlist />
+              </section>
 
-          <h3 className="sb-h3">things i&apos;ve made</h3>
-          <ProjectsShowcase />
-        </section>
+            {ch === "music" && (
+              <section className="sb-section" id="sb-ch-music">
+                <SectionHead ch={2} title="music" note="the band, piano & cubase" />
+                <div className="sb-block" id="sb-band">
+                  <SubHead title="the band" note={`the family band, since ${band.since}`} />
+                  <div className="sb-band">
+                    {band.photo ? (
+                      <div className="sb-band-photo">
+                        <span className="sb-sprockets" aria-hidden>{Array.from({ length: 10 }).map((_, i) => <i key={i} />)}</span>
+                        <img src={band.photo} alt={`${band.name} performing live`} />
+                        <span className="sb-sprockets" aria-hidden>{Array.from({ length: 10 }).map((_, i) => <i key={i} />)}</span>
+                        <span className="sb-tape sb-tape-tl" aria-hidden />
+                        <span className="sb-tape sb-tape-br" aria-hidden />
+                        <span className="sb-band-cap">the band · &rsquo;{band.since.slice(2)}</span>
+                      </div>
+                    ) : (
+                      <span className="sb-band-disc" aria-hidden><i /></span>
+                    )}
+                    <div className="sb-band-text">
+                      <h4 className="sb-band-name">{band.name}</h4>
+                      <p>{band.blurb}</p>
+                      <a className="sb-link" href={band.href} target="_blank" rel="noreferrer">Watch on YouTube ↗</a>
+                    </div>
+                  </div>
+                </div>
+                <MusicTracks beatOpen={beatOpen} onInsert={insertTape} />
+                {beatOpen && <BeatMaker />}
+              </section>
+            )}
+
+            {ch === "builds" && <BuildLog onFlip={flip} />}
+            {ch === "credits" && <Credits onFlip={flip} />}
+          </div>
+        </div>
 
         {/* footer */}
         <footer className="sb-footer">
@@ -445,7 +510,7 @@ export default function PersonalSite() {
             <a href={links.linkedin.url} target="_blank" rel="noreferrer">LinkedIn</a>
             <a href={links.github.url} target="_blank" rel="noreferrer">GitHub</a>
           </div>
-          <p className="sb-foot-sub">Side B · more soon</p>
+          <p className="sb-foot-sub">Side B · <button className="sb-flip-link" onClick={flip}>flip to Side A ↻</button></p>
         </footer>
       </main>
     </div>
