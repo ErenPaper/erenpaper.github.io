@@ -4,9 +4,10 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-  # Daily rebuild so the Letterboxd "recently watched" data refreshes on its own.
+  # Rebuild every 2 hours so the Trakt / Letterboxd watch lists refresh on their own.
+  # (GitHub can delay scheduled runs, so the real gap is sometimes longer.)
   schedule:
-    - cron: "0 9 * * *"
+    - cron: "17 */2 * * *"
 
 permissions:
   contents: read
