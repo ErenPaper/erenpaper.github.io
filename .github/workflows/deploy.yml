@@ -34,7 +34,17 @@ jobs:
       - run: node scripts/fetch-trakt.mjs
         env:
           TRAKT_CLIENT_ID: ${{ secrets.TRAKT_CLIENT_ID }}
-      - run: npm run build
+      # Google Fonts is fetched at build time and occasionally fails; retry so one
+      # blip doesn't skip a deploy.
+      - name: Build (retry on transient font fetch failures)
+        run: |
+          n=0
+          until npm run build; do
+            n=$((n+1))
+            if [ "$n" -ge 3 ]; then echo "build failed after $n attempts"; exit 1; fi
+            echo "build failed, retrying ($n/3)..."
+            sleep 20
+          done
       - uses: actions/upload-pages-artifact@v3
         with:
           path: out
