@@ -174,6 +174,7 @@ export const projects: Project[] = [
     ],
     insight:
       "A hot stove on its own didn't mean much — a hot stove with nobody in the room did. I couldn't trust the heat model or the motion sensor on their own, and only fusing them finally killed the false alarms.",
+    linksOut: [{ label: "Stove subsystem on GitHub ↗", href: "https://github.com/ErenPaper/stove-safety-monitor" }],
   },
   {
     title: "Voice-Controlled Fan",
