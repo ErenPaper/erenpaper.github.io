@@ -27,6 +27,21 @@ const decode = (s = "") =>
   s.replace(/&amp;/g, "&").replace(/&#0?39;|&apos;/g, "'")
    .replace(/&quot;/g, '"').replace(/&#0?38;/g, "&");
 
+// Review text from an RSS <description>: drop the poster paragraph, turn the
+// remaining paragraphs into plain text, and trim to a short snippet.
+const NOTE_MAX = 160;
+const reviewText = (desc = "") => {
+  const text = decode(
+    desc
+      .replace(/<p>\s*<img[^>]*>\s*<\/p>/g, "")
+      .replace(/<\/p>\s*<p>/g, " ")
+      .replace(/<[^>]+>/g, "")
+      .replace(/&#8217;/g, "\u2019").replace(/&#8220;|&#8221;/g, '"')
+  ).replace(/\s+/g, " ").trim();
+  if (text.length <= NOTE_MAX) return text;
+  return text.slice(0, NOTE_MAX).replace(/\s+\S*$/, "") + "\u2026";
+};
+
 const attr = (block, name) => {
   const m = block.match(new RegExp(`data-${name}="([^"]*)"`));
   return m ? decode(m[1]) : undefined;
@@ -35,6 +50,7 @@ const attr = (block, name) => {
 try {
   // 1) Watched dates from the RSS diary, keyed by film slug (link ends /film/<slug>/…).
   const dateBySlug = {};
+  const noteBySlug = {};
   try {
     const rss = await fetch(FEED, { headers: { "User-Agent": "portfolio-build" } });
     if (rss.ok) {
@@ -43,6 +59,13 @@ try {
         const link = (item.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || "";
         const slug = (link.match(/\/film\/([^/]+)\//) || [])[1];
         const watched = (item.match(/<letterboxd:watchedDate>([^<]*)/) || [])[1];
+        // Newest review text per film; spoiler-flagged reviews are never shown.
+        const title = (item.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "";
+        const desc = (item.match(/<description><!\[CDATA\[([\s\S]*?)\]\]>/) || [])[1];
+        if (slug && !noteBySlug[slug] && !/contains spoilers/i.test(title)) {
+          const note = reviewText(desc);
+          if (note) noteBySlug[slug] = note;
+        }
         if (slug && watched && !dateBySlug[slug]) {
           dateBySlug[slug] = new Date(watched)
             .toLocaleDateString("en-US", { month: "short", year: "numeric" }).toUpperCase();
@@ -67,6 +90,7 @@ try {
       title: attr(li, "item-name") || slug,
       rating: half ? stars(half) : undefined,
       date: dateBySlug[slug] || "",
+      ...(noteBySlug[slug] && { note: noteBySlug[slug] }),
       href: `https://letterboxd.com${attr(li, "item-link") || `/film/${slug}/`}`,
     });
     if (films.length >= MAX) break;

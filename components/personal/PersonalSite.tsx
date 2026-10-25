@@ -96,7 +96,7 @@ function RecentlyWatched() {
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (ok && Array.isArray(d)) {
-          setFilms(d.slice(0, 5).map((f: { title: string; rating?: string; date: string; href?: string }) => ({ ...f, kind: "film" as const })));
+          setFilms(d.slice(0, 5).map((f: { title: string; rating?: string; date: string; note?: string; href?: string }) => ({ ...f, kind: "film" as const })));
         }
       })
       .catch(() => {});
