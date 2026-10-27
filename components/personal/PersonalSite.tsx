@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { sideB, shelves, band, recentlyWatched, currentlyWatching, tracks, type Watch, type Track } from "../../data/personal";
+import { sideB, shelves, band, recentlyWatched, currentlyWatching, tracks, filmRoll, places, type Watch, type Track } from "../../data/personal";
 import { links, profile } from "../../data/portfolio";
 import BeatMaker from "./BeatMaker";
 import BuildLog from "./BuildLog";
-import Credits from "./Credits";
 import SectionHead, { SubHead } from "./SectionHead";
 import { playChannelChange } from "../intro/sound";
 import ProjectMedia from "../ProjectMedia";
@@ -41,6 +40,46 @@ function Viewfinder() {
       <span className="sb-vf-rec"><i /> REC</span>
       <span className="sb-vf-tc">SP {tc}</span>
     </div>
+  );
+}
+
+/* ── film roll: my own 35mm scans as a contact sheet; click a frame to "project" it ── */
+function FilmRoll() {
+  const [open, setOpen] = useState<number | null>(null);
+  const close = () => setOpen(null);
+  useEffect(() => {
+    if (open === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowRight") setOpen((i) => (i === null ? i : (i + 1) % filmRoll.length));
+      if (e.key === "ArrowLeft") setOpen((i) => (i === null ? i : (i - 1 + filmRoll.length) % filmRoll.length));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+  const f = open === null ? null : filmRoll[open];
+  return (
+    <section className="sb-section" id="sb-ch-film">
+      <SectionHead ch={4} title="film roll" note="35mm, LA · toronto · honolulu" />
+      <div className="sb-contact">
+        {filmRoll.map((x, i) => (
+          <button key={x.n} className="sb-frame-btn" onClick={() => setOpen(i)} aria-label={`Open frame ${x.frame}: ${x.cap}`}>
+            <img src={`/assets/film/${x.n}-t.jpg`} alt={x.cap} loading="lazy" />
+            <span className="sb-frame-no">▸{x.frame}</span>
+            <span className="sb-frame-place">{x.place}</span>
+          </button>
+        ))}
+      </div>
+      {f && (
+        <div className="sb-lightbox" role="dialog" aria-modal="true" aria-label={f.cap} onClick={close}>
+          <figure onClick={(e) => e.stopPropagation()}>
+            <img src={`/assets/film/${f.n}.jpg`} alt={f.cap} />
+            <figcaption><span>{places[f.place]} · FRAME {f.frame}</span><span>{f.cap}</span></figcaption>
+          </figure>
+          <button className="sb-lb-x" onClick={close} aria-label="Close">✕</button>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -125,7 +164,7 @@ function RecentlyWatched() {
     return () => { ok = false; };
   }, []);
 
-  // Six slots with a guaranteed share per type (2 TV, 2 film, 2 anime) so none
+  // Seven slots with a guaranteed share per type (2 TV, 3 film, 2 anime) so none
   // can crowd out another; any slot a type can't fill goes to the others.
   const seen = new Set<string>();
   const fresh = (list: Watch[]) => list.filter((w) => {
@@ -135,9 +174,10 @@ function RecentlyWatched() {
     return true;
   });
   const groups = [fresh([...recentlyWatched, ...shows]), fresh(films), fresh(anime)];
-  const items: Watch[] = groups.flatMap((g) => g.slice(0, 2));
+  const share = [2, 3, 2];   // films get the extra slot — they're reviewed most
+  const items: Watch[] = groups.flatMap((g, i) => g.slice(0, share[i]));
   for (const g of groups) {
-    for (const w of g.slice(2)) if (items.length < 6) items.push(w);
+    for (const w of g.slice(share[groups.indexOf(g)])) if (items.length < 7) items.push(w);
   }
   if (items.length === 0) return null;
 
@@ -352,12 +392,12 @@ function ScreenFrame({ channel }: { channel: string }) {
   );
 }
 
-type Channel = "watching" | "music" | "builds" | "credits";
+type Channel = "watching" | "music" | "builds" | "film";
 const CHANNELS: { id: Channel; label: string }[] = [
   { id: "watching", label: "watching" },
   { id: "music", label: "music" },
   { id: "builds", label: "build log" },
-  { id: "credits", label: "credits" },
+  { id: "film", label: "film roll" },
 ];
 
 export default function PersonalSite() {
@@ -431,6 +471,18 @@ export default function PersonalSite() {
           </div>
         </header>
 
+        {/* a few frames up front — the full roll is a channel */}
+        <div className="sb-strip">
+          {filmRoll.filter((f) => ["01", "05", "08", "12", "14"].includes(f.n)).map((f) => (
+            <button key={f.n} className="sb-frame-btn" onClick={() => { tune("film"); window.setTimeout(() => document.getElementById("sb-tv")?.scrollIntoView({ behavior: "smooth", block: "start" }), 80); }} aria-label={`Open the film roll: ${f.cap}`}>
+              <img src={`/assets/film/${f.n}-t.jpg`} alt={f.cap} loading="lazy" />
+              <span className="sb-frame-no">▸{f.frame}</span>
+              <span className="sb-frame-place">{f.place}</span>
+            </button>
+          ))}
+          <button className="sb-strip-more" onClick={() => tune("film")}>see the<br />full roll ▸</button>
+        </div>
+
         <Filmstrip />
 
         {/* the TV: channel switcher + one channel on screen at a time */}
@@ -488,6 +540,7 @@ export default function PersonalSite() {
                     <div className="sb-band-text">
                       <h4 className="sb-band-name">{band.name}</h4>
                       <p>{band.blurb}</p>
+                      <p className="sb-band-extra">also: music director &amp; pianist at North Pointe Community Church (playing there since 2017).</p>
                       <a className="sb-link" href={band.href} target="_blank" rel="noreferrer">Watch on YouTube ↗</a>
                     </div>
                   </div>
@@ -498,7 +551,7 @@ export default function PersonalSite() {
             )}
 
             {ch === "builds" && <BuildLog onFlip={flip} />}
-            {ch === "credits" && <Credits onFlip={flip} />}
+            {ch === "film" && <FilmRoll />}
           </div>
         </div>
 

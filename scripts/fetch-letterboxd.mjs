@@ -38,6 +38,7 @@ const reviewText = (desc = "") => {
       .replace(/<[^>]+>/g, "")
       .replace(/&#8217;/g, "\u2019").replace(/&#8220;|&#8221;/g, '"')
   ).replace(/\s+/g, " ").trim();
+  if (/^Watched on /i.test(text)) return "";   // Letterboxd's auto-text for unreviewed logs
   if (text.length <= NOTE_MAX) return text;
   return text.slice(0, NOTE_MAX).replace(/\s+\S*$/, "") + "\u2026";
 };
@@ -51,6 +52,7 @@ try {
   // 1) Watched dates from the RSS diary, keyed by film slug (link ends /film/<slug>/…).
   const dateBySlug = {};
   const noteBySlug = {};
+  const diary = [];   // RSS items, newest first — includes rewatches and fresh logs
   try {
     const rss = await fetch(FEED, { headers: { "User-Agent": "portfolio-build" } });
     if (rss.ok) {
@@ -62,10 +64,15 @@ try {
         // Newest review text per film; spoiler-flagged reviews are never shown.
         const title = (item.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "";
         const desc = (item.match(/<description><!\[CDATA\[([\s\S]*?)\]\]>/) || [])[1];
-        if (slug && !noteBySlug[slug] && !/contains spoilers/i.test(title)) {
-          const note = reviewText(desc);
+        const spoiler = /contains spoilers/i.test(title);
+        if (slug && !noteBySlug[slug]) {
+          // spoiler-flagged reviews are never quoted — just point at Letterboxd
+          const note = spoiler ? "review has spoilers — read it on Letterboxd" : reviewText(desc);
           if (note) noteBySlug[slug] = note;
         }
+        const fm = item.match(/<letterboxd:filmTitle>([^<]*)/), fy = item.match(/<letterboxd:filmYear>([^<]*)/);
+        const mr = (item.match(/<letterboxd:memberRating>([^<]*)/) || [])[1];
+        if (slug && fm) diary.push({ slug, title: decode(fm[1]) + (fy ? ` (${fy[1]})` : ""), half: mr ? Number(mr) * 2 : 0 });
         if (slug && watched && !dateBySlug[slug]) {
           dateBySlug[slug] = new Date(watched)
             .toLocaleDateString("en-US", { month: "short", year: "numeric" }).toUpperCase();
@@ -81,6 +88,19 @@ try {
 
   const films = [];
   const seen = new Set();
+  // Diary first: the /films/ grid isn't ordered by when I watched, so a fresh
+  // log or a rewatch could be missing from its top 12.
+  for (const d of diary) {
+    if (seen.has(d.slug) || films.length >= MAX) continue;
+    seen.add(d.slug);
+    films.push({
+      title: d.title,
+      rating: d.half ? stars(d.half) : undefined,
+      date: dateBySlug[d.slug] || "",
+      ...(noteBySlug[d.slug] && { note: noteBySlug[d.slug] }),
+      href: `https://letterboxd.com/film/${d.slug}/`,
+    });
+  }
   for (const [, li] of html.matchAll(/<li class="griditem">([\s\S]*?)<\/li>/g)) {
     const slug = attr(li, "item-slug");
     if (!slug || seen.has(slug)) continue;

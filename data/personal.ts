@@ -51,7 +51,6 @@ export type Track = {
 export const tracks: Track[] = [
   // Add a real track by giving ONE source (youtube / soundcloud / audio). Until
   // then this placeholder reads as a note to visitors, not a note to myself.
-  { title: "Recordings on the way", kind: "piano", date: "2026", note: "Piano takes and a few Cubase sketches will land here as I finish them." },
 ];
 
 // The watch logs are fully automatic — nothing is typed by hand:
@@ -119,18 +118,31 @@ export const feed: FeedEntry[] = [
 export type Build = { title: string; note: string };
 export const buildLog: Build[] = [
   // on the bench now
+  { title: "paradis — Self-Hosted Home Lab", note: "My home server: 18 containers in 12 stacks, reachable only over Tailscale, and a push notification when anything looks off." },
   { title: "BMO Build", note: "A 3D-printed BMO with real electronics inside. It's next on the bench." },
   { title: "RP2040 Motor-Controller Carrier Board", note: "Taking the motor controller off the breadboard and onto a board I designed myself." },
   { title: "Morse Code Decoder", note: "Tap out Morse and watch it turn into text, on an RP2040 running FreeRTOS. Planned next." },
-  // embedded & hardware
-  { title: "Voice-Controlled Fan", note: "Say “yes” and the fan turns on. Say “no” and it stops. Fully offline." },
-  { title: "Russian Roulette HMI", note: "Six chambers, twelve LEDs, one knob. A class project that turned into a game." },
-  { title: "DC Motor Speed Controller", note: "Turn a knob and the motor speeds up, while an LED ring fills like a tachometer." },
-  { title: "16-bit CPU Design", note: "A CPU I designed from scratch on an FPGA, running 13 instructions I made up." },
-  { title: "Continuing Care Home Activity Monitor", note: "The big one: my capstone. A stove-safety system that helps seniors keep living on their own." },
-  // the rest of the fun stuff
   { title: "digicam-datestamp", note: "My old Nikon Coolpix shots never got that orange datestamp, so I wrote something that puts it back." },
   { title: "Group Dining Decision App (Dinnr)", note: "An app for the eternal group-chat question: where are we eating?" },
-  { title: "pulse — UDP Heartbeat Failure Detector", note: "A tiny C program whose whole job is noticing when a computer goes quiet." },
-  { title: "pipebus — Pub/Sub over Named Pipes", note: "A mini message broker built out of named pipes, because why not." },
 ];
+
+// Film roll — scans from my own 35mm shots. `n` matches /assets/film/NN.jpg
+// (full) and NN-t.jpg (thumb). `frame` is the number on the negative.
+export type Frame = { n: string; frame: string; place: "LA" | "TOR" | "HNL"; cap: string; wide?: boolean };
+export const filmRoll: Frame[] = [
+  { n: "01", frame: "26A", place: "LA", cap: "rain on highland" },
+  { n: "02", frame: "29A", place: "LA", cap: "hollywood blvd, red light" },
+  { n: "03", frame: "15", place: "TOR", cap: "old city hall, down the canyon" },
+  { n: "04", frame: "31", place: "TOR", cap: "wrong side of the signal" },
+  { n: "05", frame: "29", place: "TOR", cap: "spadina, wires everywhere" },
+  { n: "06", frame: "30", place: "TOR", cap: "flight path" },
+  { n: "07", frame: "23", place: "TOR", cap: "kensington market" },
+  { n: "08", frame: "24", place: "HNL", cap: "mid-hop" },
+  { n: "09", frame: "27", place: "HNL", cap: "no stopping or standing" },
+  { n: "10", frame: "34", place: "HNL", cap: "dusk, waikiki" },
+  { n: "11", frame: "35", place: "HNL", cap: "one way (x2)" },
+  { n: "12", frame: "11", place: "HNL", cap: "everyone filming the sunset" },
+  { n: "13", frame: "25", place: "HNL", cap: "stringing shells" },
+  { n: "14", frame: "31", place: "HNL", cap: "after the rain" },
+];
+export const places = { LA: "Los Angeles", TOR: "Toronto", HNL: "Honolulu" } as const;

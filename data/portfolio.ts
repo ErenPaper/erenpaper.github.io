@@ -25,6 +25,29 @@ export const keyFeatures = [
   "Engineer-in-Training (EIT), APEGA",
 ];
 
+// What I'm aiming at. Mixes career and life on purpose — the Pro page shows
+// the first few, the full list lives on Side B.
+export const goals = {
+  career: [
+    "Land a firmware / embedded / hardware role",
+    "Get deeper on the Raspberry Pi Pico (RP2040/RP2350), Arduino and other embedded tooling",
+    "Build my robot",
+  ],
+  life: [
+    "Keep writing and producing music; learn more piano pieces",
+    "Make the short film I keep sketching",
+    "Read my Bible more and keep showing up to Bible study",
+    "Train for a half marathon",
+    "Get better at tennis, basketball and golf",
+  ],
+};
+
+export const howIWork = [
+  "Datasheet first, code second — the stuck-button bug in the HMI project was a wiring fact I hadn't read.",
+  "Prove the logic somewhere cheap (Wokwi, simulation) before blaming the hardware.",
+  "Wrap noisy parts in boring guards: thresholds, gates, cooldowns.",
+];
+
 export const availability = {
   status: "Available now",
   roles: "Open to firmware, embedded systems & hardware roles",
@@ -44,11 +67,14 @@ export type Experience = {
   location: string;
   bullets: string[];
   tags: string[];
+  compact?: boolean; // minor entry: shown as a one-line row (no bullets) on the Professional page
+  logo?: string;   // path under /assets/logos/ — a monogram shows until one is added
 };
 
 export const experience: Experience[] = [
   {
     company: "Turbine-X Energy Inc.",
+    logo: "/assets/logos/turbine-x.png",
     role: "Product Development Intern",
     date: "May 2024 – Aug 2024",
     location: "Nisku, AB",
@@ -62,6 +88,7 @@ export const experience: Experience[] = [
   },
   {
     company: "Vertical City",
+    logo: "/assets/logos/vertical-city.png",
     role: "Software Deployment Intern",
     date: "Jul 2023 – Sep 2023",
     location: "Edmonton, AB",
@@ -83,12 +110,26 @@ export const experience: Experience[] = [
     ],
     tags: ["Mathematics", "English", "Social Studies", "One-on-one Instruction"],
   },
+  {
+    company: "North Pointe Community Church",
+    logo: "/assets/logos/north-pointe.png",
+    role: "Sound & Media Mixer (Internship & Freelance)",
+    date: "May 2021 – Jan 2023",
+    location: "Edmonton, AB",
+    bullets: [
+      "Summer intern (2021 and 2022): mixed video and sound for live music and for recorded videos published on the church's media.",
+      "Ran media control: video camera recording, light design for services, and editing photos and videos for social media.",
+      "Freelanced sound for fundraising dinners, funerals and weddings, setting up microphones, cameras, slides and stage lights, and adjusting on the fly when plans changed.",
+    ],
+    tags: ["Live Sound", "Video Mixing", "Video Editing", "Light Design"],
+  },
 ];
 
 export const extracurriculars: Experience[] = [
   {
     company: "Computer Engineering Club",
-    role: "VP Academics",
+    logo: "/assets/logos/compe-club.png",
+    role: "Vice President",
     date: "Apr 2025 – June 2026",
     location: "University of Alberta",
     bullets: [
@@ -98,7 +139,21 @@ export const extracurriculars: Experience[] = [
     tags: ["Leadership", "Event Planning", "Faculty Relations"],
   },
   {
+    company: "Computer Engineering Club",
+    logo: "/assets/logos/compe-club.png",
+    role: "Junior Executive (Social Services)",
+    date: "Sep 2023 – Apr 2025",
+    location: "University of Alberta",
+    compact: true,
+    bullets: [
+      "Organized the shared space, represented the club and managed the supply inventory.",
+      "Set up a systematic approach to designing, buying and distributing club merchandise.",
+    ],
+    tags: ["Organization", "Inventory", "Procurement"],
+  },
+  {
     company: "AlbertaSat",
+    logo: "/assets/logos/albertasat.png",
     role: "Ground Station Software Team",
     date: "Sept 2023 – Sept 2024",
     location: "University of Alberta",
@@ -109,26 +164,78 @@ export const extracurriculars: Experience[] = [
     tags: ["CubeSat", "Ground Station Software", "Team Collaboration"],
   },
   {
+    company: "PhilSA, University of Alberta",
+    logo: "/assets/logos/philsa.png",
+    role: "Student Mentor",
+    date: "Sep 2023 – Sep 2024",
+    location: "University of Alberta",
+    bullets: [
+      "Mentored first-year students: shared my own experiences and kept in regular contact with mentees.",
+      "Built an open feedback culture and learned from mentees' different backgrounds.",
+    ],
+    tags: ["Mentorship", "Communication"],
+  },
+  {
     company: "North Pointe Community Church",
-    role: "Worship Leader & Pianist",
+    logo: "/assets/logos/north-pointe.png",
+    role: "Music Director & Pianist",
     date: "Oct 2017 – Present",
     location: "Edmonton, AB",
     bullets: [
-      "Lead piano for Sunday services, youth services, and special events including Christmas and Easter.",
-      "Coordinate the team during rehearsals and keep everything prepared for performance.",
+      "Music director for the worship team: run team rehearsals and keep everyone prepared for performance.",
+      "Play piano for Sunday services, youth services, and special events including Christmas and Easter.",
     ],
-    tags: ["Piano", "Team Leadership", "Performance"],
+    tags: ["Music Direction", "Piano", "Team Leadership", "Performance"],
+  },
+  {
+    company: "PhilSA, University of Alberta",
+    logo: "/assets/logos/philsa.png",
+    role: "Sponsorship Scout",
+    date: "Sep 2022 – Apr 2023",
+    location: "University of Alberta",
+    compact: true,
+    bullets: [
+      "Reached out to companies and organizations by email, phone and in person for funding for club events.",
+      "Presented our events clearly to sponsors and planned the meetings.",
+    ],
+    tags: ["Sponsorship", "Outreach", "Presenting"],
+  },
+  {
+    company: "North Pointe Community Church",
+    role: "Youth Volunteer",
+    date: "Jun 2018 – Jul 2022",
+    location: "Edmonton, AB",
+    compact: true,
+    bullets: [
+      "Helped organize events, games and food stands for a youth service of 200+ kids under 16.",
+      "Played piano in the youth worship team during services.",
+    ],
+    tags: ["Event Help", "Piano"],
   },
   {
     company: "Lupus Society of Alberta",
+    logo: "/assets/logos/lupus.png",
     role: "Music & Event Volunteer",
     date: "Sept 2012 – Sept 2020",
     location: "Edmonton, AB",
+    compact: true,
     bullets: [
       "Performed live music at the annual Edmonton Lupus Charity Run to raise awareness and funds for research.",
       "Assisted with event organization and gave out food to runners and fundraisers participating in the run.",
     ],
     tags: ["Music Performance", "Event Volunteering", "Community"],
+  },
+  {
+    company: "Shepherd's Care",
+    role: "Food & Entertainment Volunteer",
+    date: "Jun 2016 – Jun 2019",
+    location: "Edmonton, AB",
+    compact: true,
+    bullets: [
+      "Handed out food to elderly residents and helped care for them however I could.",
+      "Played music for them and helped nurse them as they saw fit.",
+    ],
+    tags: ["Elder Care", "Music"],
   },
 ];
 
@@ -213,6 +320,26 @@ export const projects: Project[] = [
     insight:
       "I burned an afternoon chasing an 'always pressed' button in code before I found it was wired to 3.3V instead of ground. The datasheet had the answer the whole time — I just hadn't read it closely enough.",
     linksOut: [{ label: "GitHub ↗", href: "https://github.com/ErenPaper/russian-roulette-hmi" }],
+  },
+  {
+    title: "paradis — Self-Hosted Home Lab",
+    tag: "Linux · Docker · Networking · Self-Hosting",
+    stats: ["18 containers", "Tailscale-only remote access", "3-drive storage", "Restores tested"],
+    tech: ["Linux", "Docker", "Tailscale", "WireGuard", "MQTT/TLS", "Home Assistant", "ESPHome", "Jellyfin", "Uptime Kuma", "ntfy", "UFW", "Pi-hole", "Bash", "rsync", "Kopia"],
+    status: "shipped",
+    context: "Personal project · Ubuntu Server 26.04 · Lenovo ThinkCentre M75q",
+    brief:
+      "A home server I run and maintain: 18 containers across 12 Docker Compose stacks, with secrets kept out of the config repo and remote access only through Tailscale. It's also the groundwork for a planned Raspberry Pi Pico 2 W desk controller over MQTT.",
+    built: [
+      "Security: UFW is active, SSH is limited to the LAN and Tailscale, and a stale firewall rule for a removed service was cleaned up. Mosquitto rejects anonymous connections and uses a password file. Minecraft is shared with friends through Tailscale node sharing, not port forwarding.",
+      "Backups: a nightly tar of Vaultwarden, Uptime Kuma and Pi-hole data plus the stacks directory. Containers restart even if a step fails, archives older than 14 days are deleted, and Healthchecks.io gets success or fail pings. Off-host Kopia backups, with restores tested.",
+      "Monitoring: Uptime Kuma, Scrutiny SMART checks, Healthchecks.io heartbeats and Diun image-update alerts, all sent to self-hosted ntfy.",
+      "Networking: the torrent client shares a Gluetun WireGuard container's network, so its only route is through the VPN. The forwarded port is set automatically.",
+      "Home automation: Home Assistant with an authenticated Mosquitto broker and ESPHome.",
+      "Media: Jellyfin with AMD hardware transcoding and per-library access, plus a Hyprland instant-replay pipeline.",
+    ],
+    insight:
+      "Docker-published ports bypass UFW, but host-network containers don't — so Home Assistant needed explicit firewall rules. Ports 6052 and 8123 are now allowed from the LAN and Docker only.",
   },
   {
     title: "DC Motor Speed Controller",
@@ -448,6 +575,8 @@ export const skills: SkillCategory[] = [
   { name: "Systems & Concurrency", skills: ["pthreads", "Mutexes", "Deadlock Avoidance", "poll()", "Named Pipes (FIFO)", "Signals", "OpenMP", "Make"] },
   { name: "Signal Processing", skills: ["MATLAB", "FFT / DFT", "Welch PSD", "FIR Filters", "2-D Spectra"] },
   { name: "Cloud & Backend", skills: ["AWS IoT Core", "Lambda", "DynamoDB", "Firebase", "Supabase", "MongoDB", "SQLite", "SQL"] },
+  { name: "Linux & Self-Hosting", skills: ["Linux", "Ubuntu Server", "Arch (CachyOS)", "systemd", "cron", "SSH keys", "UFW", "Bash", "Docker", "Docker Compose", "Tailscale", "WireGuard", "Pi-hole", "Home Assistant"] },
+  { name: "Storage & Reliability", skills: ["rsync", "Kopia", "SMART monitoring", "3-2-1 backups", "Uptime Kuma", "Scrutiny", "Healthchecks.io", "ntfy"] },
   { name: "Dev Tools", skills: ["Git", "GitHub", "Docker", "Android Studio", "VS Code", "Jupyter", "Linux", "Ubuntu", "Debian"] },
   { name: "Libraries & Frameworks", skills: ["React Native", "NumPy", "Pandas", "Matplotlib", "Seaborn", "Scikit-learn"] },
 ];
@@ -460,6 +589,7 @@ export type Certification = {
   date: string;
   credentialId?: string;
   note?: string;
+  logo?: string;        // issuer logo path under /assets/logos/
   tag?: string;         // e.g. "LICENSE" for a professional designation
   credential?: string;  // path to the certificate image/PDF, if available
 };
@@ -468,6 +598,7 @@ export const certifications: Certification[] = [
   {
     name: "Engineer-in-Training (EIT)",
     issuer: "APEGA",
+    logo: "/assets/logos/apega.png",
     date: "Registered",
     tag: "LICENSE",
     note: "Registered member on the path to Professional Engineer (P.Eng.).",
@@ -475,6 +606,7 @@ export const certifications: Certification[] = [
   {
     name: "ProTect Security Staff Certificate",
     issuer: "AGLC",
+    logo: "/assets/logos/aglc.png",
     date: "Mar 2023 – Mar 2028",
     credentialId: "202303040124",
     credential: "/assets/1696231729435.png",
@@ -482,14 +614,16 @@ export const certifications: Certification[] = [
   {
     name: "Systems Tool Kit (STK) Certification — Level 1",
     issuer: "Ansys",
+    logo: "/assets/logos/ansys.png",
     date: "Sep 2023",
     credential: "/assets/1695007946251.jpeg",
   },
   {
     name: "Elko Engineering Garage Orientation",
     issuer: "University of Alberta",
+    logo: "/assets/logos/ualberta.png",
     date: "Sep 2023",
     credential: "/assets/1696231851417.jpeg",
   },
-  { name: "WHMIS", issuer: "University of Alberta", date: "Sep 2021" },
+  { name: "WHMIS", issuer: "University of Alberta", logo: "/assets/logos/ualberta.png", date: "Sep 2021" },
 ];

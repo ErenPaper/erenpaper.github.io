@@ -3,12 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import {
   profile, bio, links, experience,
-  projects, skills, certifications, keyFeatures, availability, type Project,
+  projects, skills, certifications, extracurriculars, keyFeatures, availability, goals, howIWork, type Project,
 } from "../../data/portfolio";
 import { useOS } from "../../store/windows";
 import ProjectMedia from "../ProjectMedia";
 import ProjectGraphic from "../ProjectGraphic";
 import SerialConsole from "./SerialConsole";
+import StackGraph from "./StackGraph";
 import SignalGenerator from "./SignalGenerator";
 
 
@@ -61,8 +62,10 @@ function projFlags(proj: Project, onVideo?: () => void) {
 const NAV = [
   { id: "projects", label: "Projects" },
   { id: "experience", label: "Experience" },
+  { id: "lead", label: "Leadership" },
   { id: "skills", label: "Skills" },
   { id: "certs", label: "Certs" },
+  { id: "roadmap", label: "Goals" },
 ];
 
 // Active + planned builds power the "currently building" section.
@@ -93,6 +96,32 @@ function withPianoEgg(text: string, onPlay: () => void) {
       <button className="ps-egg-word" onClick={onPlay} title="♪">piano</button>
       {text.slice(i + 5)}
     </>
+  );
+}
+
+// Org / issuer mark: the logo file if there is one, else a monogram chip.
+function Logo({ src, name }: { src?: string; name: string }) {
+  if (src) return <img className={`ps-logo${/north-pointe/.test(src) ? " ps-logo-inv" : ""}`} src={src} alt="" loading="lazy" />;
+  const mono = name.replace(/[^A-Za-z ]/g, "").split(" ").filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+  return <span className="ps-logo ps-logo-mono" aria-hidden>{mono}</span>;
+}
+
+function XpCard({ x }: { x: (typeof experience)[number] }) {
+  return (
+    <article className="ps-xp">
+      <div className="ps-xp-head">
+        <div className="ps-xp-id">
+          <Logo src={x.logo} name={x.company} />
+          <div>
+            <h3>{x.company}</h3>
+            <p className="ps-xp-role">{x.role}</p>
+          </div>
+        </div>
+        <div className="ps-xp-meta">{x.date}<br />{x.location}</div>
+      </div>
+      <ul>{x.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
+      <div className="ps-tags">{x.tags.map((t) => <span key={t}>{t}</span>)}</div>
+    </article>
   );
 }
 
@@ -135,6 +164,7 @@ export default function ProSite() {
   const [autoPlayIdx, setAutoPlayIdx] = useState<number | null>(null);
   const [skillFilter, setSkillFilter] = useState<string | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [skillView, setSkillView] = useState<"map" | "list">("map");
   const [showAll, setShowAll] = useState(false);
   const [consoleOpen, setConsoleOpen] = useState(false);
   const [synthOpen, setSynthOpen] = useState(false);
@@ -184,6 +214,9 @@ export default function ProSite() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [aboutOpen, synthOpen]);
+
+  // The map is cramped on a phone — start those visitors on the list.
+  useEffect(() => { if (window.innerWidth < 640) setSkillView("list"); }, []);
 
   // A breadcrumb for the curious ones who open devtools.
   useEffect(() => {
@@ -389,26 +422,35 @@ export default function ProSite() {
         {/* ── experience ── */}
         <section className="ps-section" id="ps-experience">
           <SilkDivider label="02 · EXPERIENCE" />
-          {experience.map((x) => (
-            <article className="ps-xp" key={x.company + x.role}>
-              <div className="ps-xp-head">
-                <div>
-                  <h3>{x.company}</h3>
-                  <p className="ps-xp-role">{x.role}</p>
-                </div>
-                <div className="ps-xp-meta">{x.date}<br />{x.location}</div>
+          {experience.map((x) => <XpCard key={x.company + x.role} x={x} />)}
+        </section>
+
+        {/* ── leadership & volunteering ── */}
+        <section className="ps-section" id="ps-lead">
+          <SilkDivider label="03 · LEADERSHIP & VOLUNTEERING" />
+          {extracurriculars.filter((x) => !x.compact).map((x) => <XpCard key={x.company + x.role} x={x} />)}
+          <div className="ps-mini">
+            <div className="ps-mini-head">ALSO</div>
+            {extracurriculars.filter((x) => x.compact).map((x) => (
+              <div className="ps-mini-row" key={x.company + x.role}>
+                <span className="ps-mini-role">{x.role}</span>
+                <span className="ps-mini-co">{x.company}</span>
+                <span className="ps-mini-date">{x.date}</span>
               </div>
-              <ul>{x.bullets.map((b, i) => <li key={i}>{b}</li>)}</ul>
-              <div className="ps-tags">{x.tags.map((t) => <span key={t}>{t}</span>)}</div>
-            </article>
-          ))}
+            ))}
+          </div>
         </section>
 
         {/* ── skills · instrument bars (click to trace where a skill was used) ── */}
         <section className="ps-section" id="ps-skills">
-          <SilkDivider label="03 · SKILLS" />
-          <p className="ps-lead">Tap a skill to trace it back to the projects that use it.</p>
-          <div className="ps-skill-grid">
+          <SilkDivider label="04 · SKILLS" />
+          <p className="ps-lead">Tap a part to trace it back to the projects that use it.</p>
+          <div className="ps-viewtoggle" role="group" aria-label="Skills view">
+            <button className={skillView === "map" ? "on" : ""} aria-pressed={skillView === "map"} onClick={() => setSkillView("map")}>◉ Map</button>
+            <button className={skillView === "list" ? "on" : ""} aria-pressed={skillView === "list"} onClick={() => setSkillView("list")}>☰ List</button>
+          </div>
+          {skillView === "map" && <StackGraph onPick={(t) => pickSkill(t, true)} active={skillFilter} />}
+          {skillView === "list" && <div className="ps-skill-grid">
             {skills.map((c) => (
               <div className="ps-skill-panel" key={c.name}>
                 <div className="ps-skill-head">
@@ -432,16 +474,17 @@ export default function ProSite() {
                 </div>
               </div>
             ))}
-          </div>
+          </div>}
         </section>
 
         {/* ── certifications & licenses ── */}
         <section className="ps-section" id="ps-certs">
-          <SilkDivider label="04 · CERTIFICATIONS & LICENSES" />
+          <SilkDivider label="05 · CERTIFICATIONS & LICENSES" />
           <div className="ps-cert-grid">
             {certifications.map((c) => (
               <div className={`ps-cert${c.tag ? " lic" : ""}`} key={c.name}>
                 <div className="ps-cert-top">
+                  <Logo src={c.logo} name={c.issuer} />
                   <span className="ps-cert-name">{c.name}</span>
                   {c.tag && <span className="ps-cert-badge">{c.tag}</span>}
                 </div>
@@ -453,6 +496,26 @@ export default function ProSite() {
                 )}
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* ── goals + how I work ── */}
+        <section className="ps-section" id="ps-roadmap">
+          <SilkDivider label="06 · ROADMAP" />
+          <div className="ps-road">
+            <div className="ps-skill-panel">
+              <div className="ps-skill-head"><span>Career</span><span className="ps-led on" /></div>
+              <ul className="ps-bullets">{goals.career.map((g) => <li key={g}>{g}</li>)}</ul>
+            </div>
+            <div className="ps-skill-panel">
+              <div className="ps-skill-head"><span>Life</span><span className="ps-led on" /></div>
+              <ul className="ps-bullets">{goals.life.map((g) => <li key={g}>{g}</li>)}</ul>
+              <button className="ps-flip-link" onClick={flip}>more on Side B ↻</button>
+            </div>
+            <div className="ps-skill-panel">
+              <div className="ps-skill-head"><span>How I work</span><span className="ps-led on" /></div>
+              <ul className="ps-bullets">{howIWork.map((g) => <li key={g}>{g}</li>)}</ul>
+            </div>
           </div>
         </section>
 
