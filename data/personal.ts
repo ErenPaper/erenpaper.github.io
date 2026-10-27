@@ -128,11 +128,11 @@ export const buildLog: Build[] = [
 
 // Film roll — scans from my own 35mm shots. `n` matches /assets/film/NN.jpg
 // (full) and NN-t.jpg (thumb). `frame` is the number on the negative.
-export type Frame = { n: string; frame: string; place: "LA" | "TOR" | "HNL"; cap: string; wide?: boolean };
+export type Frame = { n: string; frame: string; place: "LA" | "TOR" | "HNL"; cap: string; portrait?: boolean };
 export const filmRoll: Frame[] = [
   { n: "01", frame: "26A", place: "LA", cap: "rain on highland" },
   { n: "02", frame: "29A", place: "LA", cap: "hollywood blvd, red light" },
-  { n: "03", frame: "15", place: "TOR", cap: "old city hall, down the canyon" },
+  { n: "03", frame: "15", place: "TOR", cap: "old city hall, down the canyon", portrait: true },
   { n: "04", frame: "31", place: "TOR", cap: "wrong side of the signal" },
   { n: "05", frame: "29", place: "TOR", cap: "spadina, wires everywhere" },
   { n: "06", frame: "30", place: "TOR", cap: "flight path" },

@@ -57,24 +57,34 @@ function FilmRoll() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
+  // preload the neighbouring frames so next/prev is instant
+  useEffect(() => {
+    if (open === null) return;
+    for (const d of [1, -1]) new Image().src = `/assets/film/${filmRoll[(open + d + filmRoll.length) % filmRoll.length].n}.jpg`;
+  }, [open]);
+  const touchX = useRef<number | null>(null);
+  const step = (d: number) => setOpen((i) => (i === null ? i : (i + d + filmRoll.length) % filmRoll.length));
   const f = open === null ? null : filmRoll[open];
   return (
     <section className="sb-section" id="sb-ch-film">
       <SectionHead ch={4} title="film roll" note="35mm, LA · toronto · honolulu" />
       <div className="sb-contact">
         {filmRoll.map((x, i) => (
-          <button key={x.n} className="sb-frame-btn" onClick={() => setOpen(i)} aria-label={`Open frame ${x.frame}: ${x.cap}`}>
+          <button key={x.n} className="sb-frame-btn" style={{ "--ar": x.portrait ? 2 / 3 : 3 / 2 } as React.CSSProperties} onClick={() => setOpen(i)} aria-label={`Open frame ${x.frame}: ${x.cap}`}>
             <img src={`/assets/film/${x.n}-t.jpg`} alt={x.cap} loading="lazy" />
             <span className="sb-frame-no">▸{x.frame}</span>
             <span className="sb-frame-place">{x.place}</span>
           </button>
         ))}
+        <span className="sb-contact-fill" aria-hidden />
       </div>
       {f && (
-        <div className="sb-lightbox" role="dialog" aria-modal="true" aria-label={f.cap} onClick={close}>
+        <div className="sb-lightbox" role="dialog" aria-modal="true" aria-label={f.cap} onClick={close}
+          onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }}
+          onTouchEnd={(e) => { if (touchX.current === null) return; const dx = e.changedTouches[0].clientX - touchX.current; touchX.current = null; if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1); }}>
           <figure onClick={(e) => e.stopPropagation()}>
             <img src={`/assets/film/${f.n}.jpg`} alt={f.cap} />
-            <figcaption><span>{places[f.place]} · FRAME {f.frame}</span><span>{f.cap}</span></figcaption>
+            <figcaption><span>{open! + 1} / {filmRoll.length} · {places[f.place]} · FRAME {f.frame}</span><span>{f.cap}</span></figcaption>
           </figure>
           <button className="sb-lb-x" onClick={close} aria-label="Close">✕</button>
         </div>

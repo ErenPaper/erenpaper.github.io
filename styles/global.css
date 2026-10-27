@@ -1954,10 +1954,12 @@ a.sb-vinyl:hover { border-color: color-mix(in srgb, var(--sb-accent) 55%, transp
 @media (max-width: 640px) { .sg-label { font-size: 13px; } .sg-abbr { font-size: 13px; } }
 
 /* ── Side B · film roll contact sheet + projector lightbox ── */
-.sb-contact { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; padding: 18px 14px; background: #0e0e0d; border-radius: 4px; border-top: 8px dashed #1c1813; border-bottom: 8px dashed #1c1813; }
-.sb-frame-btn { position: relative; padding: 0; border: 0; background: #14100b; cursor: pointer; aspect-ratio: 3 / 2; overflow: hidden; border-radius: 2px; }
-.sb-frame-btn img { width: 100%; height: 100%; object-fit: cover; display: block; filter: sepia(.12) saturate(1.1) contrast(1.04); transition: transform .35s, filter .35s; }
-.sb-frame-btn:hover img, .sb-frame-btn:focus-visible img { transform: scale(1.05); filter: saturate(1.25) contrast(1.08); }
+/* justified rows: each frame keeps its own aspect ratio (--ar); sits above the VHS scanlines */
+.sb-contact { position: relative; z-index: 5; display: flex; flex-wrap: wrap; gap: 14px; padding: 18px 14px; background: #0e0e0d; border-radius: 4px; border-top: 8px dashed #1c1813; border-bottom: 8px dashed #1c1813; }
+.sb-frame-btn { position: relative; padding: 0; border: 0; background: #14100b; cursor: pointer; aspect-ratio: var(--ar, 1.5); flex: var(--ar, 1.5) 1 calc(var(--ar, 1.5) * 200px); min-width: 0; overflow: hidden; border-radius: 2px; }
+.sb-frame-btn img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .25s; }
+.sb-frame-btn:hover img, .sb-frame-btn:focus-visible img { opacity: .88; }
+.sb-contact-fill { flex: 100 1 0; height: 0; }
 .sb-frame-btn:focus-visible { outline: 2px solid var(--sb-accent); outline-offset: 2px; }
 .sb-frame-no, .sb-frame-place { position: absolute; bottom: 5px; font-family: var(--sb-osd); font-size: 16px; letter-spacing: 1px; color: #ffb347; text-shadow: 0 0 6px rgba(255,140,40,.7), 0 1px 2px #000; }
 .sb-frame-no { left: 7px; } .sb-frame-place { right: 7px; }
@@ -1971,8 +1973,8 @@ a.sb-vinyl:hover { border-color: color-mix(in srgb, var(--sb-accent) 55%, transp
 .sb-btn { transition: border-color .15s, color .15s, transform .12s, box-shadow .15s; }
 .sb-btn:hover { transform: translateY(-1px); box-shadow: 0 0 14px -3px var(--sb-accent); }
 .sb-btn:active { transform: translateY(1px); box-shadow: none; }
-.sb-strip { display: grid; grid-template-columns: repeat(5, 1fr) auto; gap: 8px; margin: 30px 0 0; align-items: stretch; }
-.sb-strip .sb-frame-btn { aspect-ratio: 3 / 2; }
+.sb-strip { position: relative; z-index: 5; display: grid; grid-template-columns: repeat(5, 1fr) auto; gap: 8px; margin: 30px 0 0; align-items: stretch; }
+.sb-strip .sb-frame-btn { aspect-ratio: 3 / 2; flex: none; }
 .sb-strip-more { font-family: var(--sb-osd); font-size: 17px; letter-spacing: 1px; line-height: 1.1; text-align: left; color: var(--sb-accent); background: none; border: 1px dashed rgba(224,122,74,.45); border-radius: 3px; padding: 0 14px; cursor: pointer; }
 .sb-strip-more:hover { background: rgba(224,122,74,.08); }
 .sb-band-extra { margin: 8px 0 10px; font-size: 14px; color: rgba(232,220,203,.65); }
