@@ -439,11 +439,6 @@ export default function PersonalSite() {
 
   return (
     <div className="personal-site">
-      <div className="sb-grain" aria-hidden />
-      <div className="sb-scan" aria-hidden />
-      <div className="sb-leak sb-leak-a" aria-hidden />
-      <div className="sb-leak sb-leak-b" aria-hidden />
-      <div className="sb-vignette" aria-hidden />
       <ScreenFrame channel={`CH ${String(CHANNELS.findIndex((c) => c.id === ch) + 1).padStart(2, "0")} · ${CHANNELS.find((c) => c.id === ch)!.label}`} />
 
       <nav className="sb-nav">
@@ -454,6 +449,12 @@ export default function PersonalSite() {
       </nav>
 
       <main className="sb-main">
+        {/* analog overlays live inside .sb-main so the film photos (z-index 6) can sit above them, raw */}
+        <div className="sb-grain" aria-hidden />
+        <div className="sb-scan" aria-hidden />
+        <div className="sb-leak sb-leak-a" aria-hidden />
+        <div className="sb-leak sb-leak-b" aria-hidden />
+        <div className="sb-vignette" aria-hidden />
         {/* hero */}
         <header className="sb-hero">
           <div className="sb-hero-photo">
